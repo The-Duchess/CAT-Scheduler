@@ -6,7 +6,7 @@ this is a remodeled, new, built from the ground up, revision for the https://git
 The Apache Version 2 License requires files, and the repository, to be labeled as such.
 
 The Following Boilerplate is provided for you and MUST be placed on the header of all source
-in the correct comment style for your langauge. the below example is done in ruby.
+in the correct comment style for your language. the below example is done in ruby.
 
 ```ruby
 
