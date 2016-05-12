@@ -50,7 +50,7 @@ under the License.
 
 ```
 
-This points out that we are the owner in terms of creation o the project but the code is being licensed and provided
+This points out that we are the owner in terms of creation of the project but the code is being licensed and provided
 to the CAT, which is similar to the previous version. however this will be verified with the sponsor.
 
 This header, like i stated before, MUST be present on all source.
