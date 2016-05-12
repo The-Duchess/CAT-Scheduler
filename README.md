@@ -1,6 +1,11 @@
 # CAT-Scheduler
 this is a remodeled, new, built from the ground up, revision for the https://github.com/pdxcat/schedule
 
+# License
+
+This software is licensed under the Apache V2 license by the Cat Capstone Team and is
+Licensed to the CAT to use and modify.
+
 # **License Guidelines**
 
 The Apache Version 2 License requires files, and the repository, to be labeled as such.
