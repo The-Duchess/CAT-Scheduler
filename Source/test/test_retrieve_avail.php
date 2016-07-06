@@ -10,7 +10,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 include "../Query/Availability.php";
 //  Database connection
-if (!($CONNECTION = pg_connect("host=localhost port=5432 dbname=Cat user=guest password=Fido"))) {
+if (!($CONNECTION = pg_connect("host=db.cecs.pdx.edu port=5432 dbname=simca user=simca password=hk8#9Yyced"))) {
+//if (!($CONNECTION = pg_connect("host=localhost port=5432 dbname=Cat user=guest password=Fido"))) {
     echo "<p>Connection Failed</p>\n";
     exit();
 }
@@ -19,10 +20,10 @@ $kwargs2 = array("block_hour" => (8));
 //$kwargs3 = array("block_day" => ('Monday');
 //$kwargs4 = array("block_day" => ('Monday'), "block_hour" => (8));
 
-$student_id = 4;
+$student_id = 3;
 $term_id = 2;
 
-if (!($result = retrieve_availability_for_student($student_id, $term_id, $kwargs2))) {
+if (!($result = retrieve_availability_for_student($student_id, $term_id))) {
         return false;
     } else if (!($students = pg_fetch_all($result))) {
         return false;
