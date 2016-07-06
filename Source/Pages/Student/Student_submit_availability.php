@@ -1,11 +1,47 @@
 <?php
+// this first php block initializes the variables used by the page
 
-require_once('Dropdown_select_term.php');
+require_once('../../Dropdown_select_term.php');
+require_once('../../Query/Availability.php');
+require_once('../../Query/Student.php');
+require_once('../../Query_retrieve_shift_preference.php');
 
-if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
+//if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
+if (!($CONNECTION = pg_connect("host=db.cecs.pdx.edu port=5432 dbname=simca user=simca password=hk8#9Yyced"))) {
     echo "<p>Connection Failed</p>\n";
     exit();
 }
+
+//TODO: remove this line once auth is in place, it will be automatically populated
+$_SERVER['PHP_AUTH_USER'] = "simca";
+
+
+//these arrays will be used for generating the calendar grid
+$hours = array(
+    '8'  => '8:00AM - 9:00AM',
+    '9'  => '9:00AM - 10:00AM',
+    '10' => '10:00AM - 11:00AM',
+    '11' => '11:00AM - 12:00PM',
+    '12' => '12:00PM - 1:00PM',
+    '13'  => '1:00PM - 2:00PM',
+    '14'  => '2:00PM - 3:00PM',
+    '15'  => '3:00PM - 4:00PM',
+    '16'  => '4:00PM - 5:00PM',
+    '17'  => '5:00PM - 6:00PM'
+);
+$days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+
+?>
+
+<html>
+    <head>
+        <title>Submit Availability</title>
+    </head>
+    <body>
+        <div class='container'>
+            <h1>USING simca's DB</h1>
+
+<?php
 
 //generate the dropdown form for selecting a term to submit availability for
 echo "<form action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
@@ -17,48 +53,38 @@ echo "</form>\n";
 // page wrapper statement, we dont want to load the availability blocks until a term is selected
 if (!empty($selected_term)) {
 
+    $student_id = (int)pg_fetch_row(get_student_id_by_username($_SERVER['PHP_AUTH_USER']))[0];
+    $term_id = (int)$selected_term['term_id'];
+    //$db_info['mon9a'] = 'A';
+
+
+    // TODO: This formatting step should be done in a API function, make a Story about it
+    $result = retrieve_availability_for_student($student_id, $term_id);
+    $rows = pg_fetch_all($result);
+
+    $db_info = array();
+    if ($rows) {
+        foreach ($rows as $row) {
+            $id = $row['block_day'] . $row['block_hour'];
+            $val = "";
+            if ($row['block_preference'] == 'Available') {
+                $val .= 'A';
+            } else if ($row['block_preference'] == 'Preferred') {
+                $val .= 'P';
+            }
+            $db_info[$id] = $val;
+        }
+    }
+    // till here
+
+    $start_date = strtotime($selected_term['start_date']);
+    $end_date = strtotime($selected_term['end_date']);
+
+    echo "<h1>User: " . $_SERVER['PHP_AUTH_USER'] . "</h1>";
     echo "<h1>" . $selected_term['term_name'] . "</h1>";
-    echo "<h2>" . $selected_term['start_date'] . " - " . $selected_term['end_date'] . "</h2>";
-
-//this array will have to be populated via the information in the database once the script is in place
-//TODO: change source of this array to data retrieved from script of US125
-$db_info = array();
-function format_term_submissions($term) {
-    //$data = getTermSubmission($term, $user);
-
-    //the parts below this will need to be removed once the database section is implemented
-    $db_info['mon9a'] = 'A';
-    $db_info['wed9a'] = 'P';
-    $db_info['wed10a'] = 'P';
-    return $db_info;
-}
-
-$db_info = format_term_submissions($selected_term['term_id']);
-
-//these arrays will be used for generating the calendar grid
-$hours = array(
-    '8a'  => '8:00AM - 9:00AM',
-    '9a'  => '9:00AM - 10:00AM',
-    '10a' => '10:00AM - 11:00AM',
-    '11a' => '11:00AM - 12:00PM',
-    '12p' => '12:00PM - 1:00PM',
-    '1p'  => '1:00PM - 2:00PM',
-    '2p'  => '2:00PM - 3:00PM',
-    '3p'  => '3:00PM - 4:00PM',
-    '4p'  => '4:00PM - 5:00PM',
-    '5p'  => '5:00PM - 6:00PM'
-);
-
-$days = array('mon', 'tues', 'wed', 'thu', 'fri', 'sat');
+    echo "<h2>" . date('Y-m-d', $start_date) . " - " . date('Y-m-d', $end_date) . "</h2>";
 
 ?>
-
-<html>
-    <head>
-        <title>Submit Availability</title>
-    </head>
-    <body>
-        <div class='container'>
 
             <div class='main_form'>
                 <form action='process_availability_submission.php' method='POST'>
@@ -82,8 +108,8 @@ $days = array('mon', 'tues', 'wed', 'thu', 'fri', 'sat');
                                     echo "<td>$label</td>";
                                     foreach($days as $day) {
                                         //saturday has less hours so we want to skip creating blocks for those hours
-                                        if ($day == 'sat') {
-                                            if ($hour == '8a' || $hour == '9a' || $hour == '10a' || $hour == '11a' || $hour == '5p') {
+                                        if ($day == 'Saturday') {
+                                            if ($hour == '8' || $hour == '9' || $hour == '10' || $hour == '11' || $hour == '17') {
                                                 continue;
                                             }
                                         }
@@ -96,7 +122,7 @@ $days = array('mon', 'tues', 'wed', 'thu', 'fri', 'sat');
 
                                         //check if the current time block has any info from the database
                                         $default = "NA";
-                                        if(array_key_exists($cur_id, $db_info)) {
+                                        if(isset($db_info) && array_key_exists($cur_id, $db_info)) {
                                             $default = $db_info[$cur_id];
                                         }
 
@@ -118,12 +144,35 @@ $days = array('mon', 'tues', 'wed', 'thu', 'fri', 'sat');
                             ?>
                         </tbody>
                     </table>
-
-                    <div>
-                        <h3>KEY:</h3>
+<div> <h3>KEY:</h3>
                         <p>A  - Available</p>
                         <p>P  - Prefered</p>
                         <p>NA - Not Available</p>
+                    </div>
+
+                    <div>
+                            <h2>Shift Preference</h2>
+                            <?php
+                            //'One 4-Hour', 'Two 2-Hour', 'No Preference'
+                            $shift_pref_results = retrieve_shift_preference($student_id, $term_id);
+                            $pref = '0h';
+                            $shift_pref = pg_fetch_row($shift_pref_results);
+                            if ($shift_pref) {
+                                if ($shift_pref[0] == 'One 4-Hour') {
+                                    $pref = '4h';
+                                } else if ($shift_pref[0] == 'Two 2-Hour') {
+                                    $pref = '2h';
+                                }
+                            }
+                            ?>
+                            <input type='radio' id='4h' value='One 4-Hour' name='shift_pref' <?= ($pref == '4h' ? ' checked ' :' ')?>>
+                            <label for='4h'>One 4 Hour Shift</label>
+                            <br>
+                            <input type='radio' id='2h' value='Two 2-Hour' name='shift_pref' <?= ($pref == '2h' ? ' checked ' :' ')?>>
+                            <label for='2h'>Two 2 Hour Shifts</label>
+                            <br>
+                            <input type='radio' id='0h' value='No Preference' name='shift_pref' <?= ($pref == '0h' ? ' checked ' :' ')?>>
+                            <label for='0h'>No Preference</label>
                     </div>
 
                     <input type='submit' value='Submit' />
