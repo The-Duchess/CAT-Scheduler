@@ -43,3 +43,29 @@ CREATE TABLE Student (
 	Leave_Date  		timestamp  	default NULL,
 	Visible   	 	boolean    	default true
 );
+
+
+/* Availability
+Contents:
+  Student PSUID
+  Term ID
+  Monday Preference
+	Tuseday Preference
+	Wednesday Preference
+	Thursday Preference
+	Friday Preference
+	Saturday Preference
+*/
+DROP TABLE IF EXISTS Availability;
+CREATE TABLE Availability
+(
+  student_id integer REFERENCES Student(Student_id),
+  term_id bigint REFERENCES Term(Term_id),
+  mon_pref character(10)[] NOT NULL DEFAULT '{nnnnnnnnnn}'::bpchar[],
+  tue_pref character(10)[] NOT NULL DEFAULT '{nnnnnnnnnn}'::bpchar[],
+  wed_pref character(10)[] NOT NULL DEFAULT '{nnnnnnnnnn}'::bpchar[],
+  thu_pref character(10)[] NOT NULL DEFAULT '{nnnnnnnnnn}'::bpchar[],
+  fri_pref character(10)[] NOT NULL DEFAULT '{nnnnnnnnnn}'::bpchar[],
+  sat_pref character(10)[] NOT NULL DEFAULT '{nnnnnnnnnn}'::bpchar[],
+  PRIMARY KEY (student_id, term_id)
+)
