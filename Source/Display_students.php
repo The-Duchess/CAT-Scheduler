@@ -25,7 +25,9 @@ function get_student_array($result=null) {
 //  Echos an html list of all students in the database.
 //  Returns TRUE if successful, otherwise FALSE 
 function display_students_list($students=null) {
-    if (!$students and !($students = get_student_array())) { return false; }
+    if (!$students and !($students = get_student_array())) {
+        return false;
+    }
 
     echo "<ul>";
     foreach ($students as $student) {
@@ -34,5 +36,7 @@ function display_students_list($students=null) {
         echo "</li>";
     }
     echo "</ul>";
+
+    return true;
 }
 ?>
