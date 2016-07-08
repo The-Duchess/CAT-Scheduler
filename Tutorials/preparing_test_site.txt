@@ -1,0 +1,9 @@
+First you will need to clone the project repository into your public_html folder in your students homedir
+ cd ~/public_html
+ git clone git@github.com:The-Duchess/CAT-Scheduler.git
+change directory to the root of the repository, and run the bash script "fix_perms" inside the 'b directory
+ cd CAT-Scheduler
+ ./bin/fix_perms
+ (this will set the permissions of the directories inside the repository to 755 and files to 644)
+To view the content in your web browser go to the following url
+ web.cecs.pdx.edu/~$USERNAME/CAT-Schedular/$pathtofile

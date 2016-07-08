@@ -1,0 +1,12 @@
+To setup your own database with the table schema we have pushed to the repository, you will
+need to import the scripts into your postgres database. If you are using the CATs provided one,
+you can use the information in the link below for connecting to your database.
+
+To import the scripts, simply run the following command:
+ psql -h db.cecs.pdx.edu -U $username $databasename < $schemafile.sql
+
+If you are using the CAT provided database, the databasename is defaulted to your username
+Run the command against all of the .sql files in the schema directory located in the root of
+the repository
+
+http://cat.pdx.edu/web/connect-to-postgresql.html
