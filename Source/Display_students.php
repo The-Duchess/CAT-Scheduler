@@ -31,8 +31,8 @@ function display_students_list($students=null) {
 
     echo "<ul>";
     foreach ($students as $student) {
-        echo "<li>";
-        echo $student['student_firstname'] . " " . $student['student_lastname'];
+	echo "<li>";
+        echo $student['student_firstname'] . " " . $student['student_lastname']; 
         echo "</li>";
     }
     echo "</ul>";
