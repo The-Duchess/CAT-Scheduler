@@ -1,0 +1,8 @@
+If you need to run a test on functions that require db interaction, if a global php variable
+$CONNECTIONS is not set, you will need to run the "pg_connect" command before you execute your test.
+An excellent example on how to setup the test can be found in "CAT-Scheduler/Source/test/test_Dropdown_select_term.php".
+
+Using the connection string in the example is fine for testing scripts that simply retrieve information from
+the database cody set up, but if you are running queries that make modifactions to data I strongly recommend
+pointing the connection to your copy of the database. Simply update the host, user, and password information
+in the connection string to do so.
