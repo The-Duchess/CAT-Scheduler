@@ -66,6 +66,7 @@ CREATE TABLE Availability
   wed_pref character(10)[] NOT NULL DEFAULT '{nnnnnnnnnn}'::bpchar[],
   thu_pref character(10)[] NOT NULL DEFAULT '{nnnnnnnnnn}'::bpchar[],
   fri_pref character(10)[] NOT NULL DEFAULT '{nnnnnnnnnn}'::bpchar[],
-  sat_pref character(10)[] NOT NULL DEFAULT '{nnnnnnnnnn}'::bpchar[],
+  sat_pref character(5)[] NOT NULL DEFAULT '{nnnnn}'::bpchar[],
+  shift_pref smallint NOT NULL DEFAULT 0,
   PRIMARY KEY (student_id, term_id)
-)
+);
