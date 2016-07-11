@@ -227,10 +227,6 @@ function term_update($id, $fields) {
         $counter++;
     }
     $query = "UPDATE Term SET " . implode(", ", $field_arr) . " WHERE term_id=$1";
-    echo $query . "\n";
-    foreach ($params as $param) {
-        echo $param . "\n";
-    }
 
     return pg_query_params($GLOBALS['CONNECTION'], $query, $params);
 }
