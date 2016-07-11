@@ -3,23 +3,25 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
-include "Query_retrieve_active_terms.php";
+include "term.php";
 
 //  Creates a dropdown menu with a list of visible and editable terms
 //  and returns an associative array of that terms data fields from
 //  the database, otherwise FALSE.
 //  PARAMETERS:
-//      $subIdent is the identifying name of the submission button
+//      subIdent: identifier of submission button
+//      --All other parameters are passed to term.php::term_retrieve_by_start,
+//          see its documentation for a description
 //  OTHER:
 //      See test/test_Dropdown_student_term.php for an example of use
-function dropdown_select_term($subIdent) {
+function dropdown_select_term($subIdent, $start=null, $ascend=false, $limit=null) {
     //  This variable ensures that multiple calls in
     //  the same form or file won't interfere
     static $id = 0;
     $id++;
 
     //  First we father the terms and convert them to an array
-    if (!($result = retrieve_active_terms())) {
+    if (!($result = term_retrieve_visible_by_start($start, $ascend, $limit))) {
         return false;
     } else if (!($terms = pg_fetch_all($result))) {
         return false;

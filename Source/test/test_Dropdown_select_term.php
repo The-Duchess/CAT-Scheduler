@@ -9,7 +9,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
-include "Dropdown_select_term.php";
+include "../Dropdown_select_term.php";
 
 //  Database connection
 if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
@@ -19,7 +19,7 @@ if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=
 
 //  Caller is responsible for form initialization
 echo "<form action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
-echo "<label>Select Two Terms</label><br>\n";
+echo "<label>Select Three Terms</label><br>\n";
 $term1 = dropdown_select_term("formSubmit");
 $term2 = dropdown_select_term("formSubmit");
 $term3 = dropdown_select_term("formSubmit");
