@@ -187,14 +187,27 @@ function term_retrieve_visible_by_start($kwargs=null) {
 //      check:  whether to verify there are no invalid fields in
 //              the fields parameter, small hit to performance.
 //              default TRUE
-function term_update($id, $fields, $check=true) {
-    //  Check that all fields are valid if required
-    if ($check) {
-        $valid_fields = array("term_name", "start_date", "end_date", "due_date", "visible", "editable");
-        foreach ($fields as $field => $val) {
-            if (!in_array(strtolower($field), $valid_fields)) {
-                return false;
-            }
+function term_update($id, $fields) {
+    //  Check for validity
+    if (!is_int($id)) {
+        return false;
+    }
+    $check_string = function ($var) { return ((is_string($var)) ? true : false); };
+    $check_DateTime = function ($var) { return (($var instanceof DateTime) ? true : false); };
+    $check_boolean = function ($var) { return ((is_bool($var)) ? true : false); };
+    $valid_fields = array(
+        "term_name" => $check_string,
+        "start_date" => $check_DateTime,
+        "end_date" => $check_DateTime,
+        "due_date" => $check_DateTime,
+        "visible" => $check_boolean,
+        "editable" => $check_boolean);
+    foreach ($fields as $field => $val) {
+        if (!$check_string($field) and
+            !array_key_exists(strtolower($field), $valid_fields) and
+            !is_null($val) and
+            !($valid_fields[$field]($val))) {
+            return false;
         }
     }
 
@@ -204,7 +217,13 @@ function term_update($id, $fields, $check=true) {
     $counter = 2;
     foreach ($fields as $field => $val) {
         array_push($field_arr, $field . "=$" . $counter);
-        array_push($params, $val);
+        if ($val instanceof DateTime) {
+            array_push($params, $val->format("Y-m-d"));
+        } else if (is_bool($val)) {
+            array_push($params, var_export($val, true));
+        } else {
+            array_push($params, $val);
+        }
         $counter++;
     }
     $query = "UPDATE Term SET " . implode(", ", $field_arr) . " WHERE term_id=$1";
