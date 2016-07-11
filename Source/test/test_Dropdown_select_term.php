@@ -9,7 +9,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
-include "Dropdown_select_term.php";
+include "../Dropdown_select_term.php";
 
 //  Database connection
 if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
@@ -17,12 +17,17 @@ if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=
     exit();
 }
 
+$kwargs2 = array(
+    "start" => ((new DateTime("2016-08-01"))->format("Y-m-d")));
+$kwargs3 = array(
+    "ascend" => true);
+
 //  Caller is responsible for form initialization
 echo "<form action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
-echo "<label>Select Two Terms</label><br>\n";
+echo "<label>Select Three Terms</label><br>\n";
 $term1 = dropdown_select_term("formSubmit");
-$term2 = dropdown_select_term("formSubmit");
-$term3 = dropdown_select_term("formSubmit");
+$term2 = dropdown_select_term("formSubmit", $kwargs2);
+$term3 = dropdown_select_term("formSubmit", $kwargs3);
 //  Caller is responsible for submission button, notice that the
 //  calls to dropdown_select_term() pass the name of the submission
 //  button so that the generated dropdown menus will function
