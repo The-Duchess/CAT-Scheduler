@@ -45,28 +45,42 @@ CREATE TABLE Student (
 );
 
 
-/* Availability
+/* Shift_Preference
 Contents:
   Student PSUID
   Term ID
-  Monday Preference
-	Tuseday Preference
-	Wednesday Preference
-	Thursday Preference
-	Friday Preference
-	Saturday Preference
+	Schedule Preference
+  
 */
-DROP TABLE IF EXISTS Availability;
-CREATE TABLE Availability
+DROP TABLE IF EXISTS Shift_Preference;
+CREATE TABLE Shift_Preference
 (
-  student_id integer REFERENCES Student(Student_id),
-  term_id bigint REFERENCES Term(Term_id),
-  mon_pref character(10)[] NOT NULL DEFAULT '{nnnnnnnnnn}'::bpchar[],
-  tue_pref character(10)[] NOT NULL DEFAULT '{nnnnnnnnnn}'::bpchar[],
-  wed_pref character(10)[] NOT NULL DEFAULT '{nnnnnnnnnn}'::bpchar[],
-  thu_pref character(10)[] NOT NULL DEFAULT '{nnnnnnnnnn}'::bpchar[],
-  fri_pref character(10)[] NOT NULL DEFAULT '{nnnnnnnnnn}'::bpchar[],
-  sat_pref character(5)[] NOT NULL DEFAULT '{nnnnn}'::bpchar[],
-  shift_pref smallint NOT NULL DEFAULT 0,
-  PRIMARY KEY (student_id, term_id)
+	student_id integer REFERENCES Student(Student_id),
+	term_id bigint REFERENCES Term(Term_id),
+	shift_preference smallint NOT NULL DEFAULT 0,
+	PRIMARY KEY (student_id, term_id)
+);
+
+/*ENUM Types for Hour_Block*/
+CREATE TYPE days AS ENUM ('mon','tue','wed','thu','fri','sat');
+CREATE TYPE hours AS ENUM('8','9','10','11','12','13','14','15','16','17');
+CREATE TYPE preferences AS ENUM ('P','A','N');
+
+/* Hour_Block
+Contents:
+  Student PSUID
+  Term ID
+  Day
+  Hour
+  Block Preference
+*/
+DROP TABLE IF EXISTS Hour_Block;
+CREATE TABLE Hour_Block
+(
+	student_id integer REFERENCES Student(Student_id),
+	term_id bigint REFERENCES Term(Term_id),
+	block_day days NOT NULL,
+	block_hour hours NOT NULL,
+	block_preference preferences NOT NULL,
+	PRIMARY KEY (student_id, term_id, block_day, block_preference)
 );
