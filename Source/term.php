@@ -178,8 +178,17 @@ function term_retrieve_visible_by_start($kwargs=null) {
 }
 
 
-//  
-function term_update($id, $fields, $check=false) {
+//  Updates a term in the database, returns FALSE on a failure
+//  PARAMETERS:
+//      id:     the id of the term to update
+//      fields: an associative array of db data fields and their
+//              updated values. only fields passed as keys in
+//              this array will be updated
+//      check:  whether to verify there are no invalid fields in
+//              the fields parameter, small hit to performance.
+//              default TRUE
+function term_update($id, $fields, $check=true) {
+    //  Check that all fields are valid if required
     if ($check) {
         $valid_fields = array("term_name", "start_date", "end_date", "due_date", "visible", "editable");
         foreach ($fields as $field => $val) {
@@ -189,6 +198,7 @@ function term_update($id, $fields, $check=false) {
         }
     }
 
+    //  Generate the query and its parameters
     $field_arr = array();
     $params = array($id);
     $counter = 2;
