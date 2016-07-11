@@ -177,4 +177,32 @@ function term_retrieve_visible_by_start($kwargs=null) {
 
 }
 
+
+//  
+function term_update($id, $fields, $check=false) {
+    if ($check) {
+        $valid_fields = array("term_name", "start_date", "end_date", "due_date", "visible", "editable");
+        foreach ($fields as $field => $val) {
+            if (!in_array(strtolower($field), $valid_fields)) {
+                return false;
+            }
+        }
+    }
+
+    $field_arr = array();
+    $params = array($id);
+    $counter = 2;
+    foreach ($fields as $field => $val) {
+        array_push($field_arr, $field . "=$" . $counter);
+        array_push($params, $val);
+        $counter++;
+    }
+    $query = "UPDATE Term SET " . implode(", ", $field_arr) . " WHERE term_id=$1";
+    echo $query . "\n";
+    foreach ($params as $param) {
+        echo $param . "\n";
+    }
+
+    return pg_query_params($GLOBALS['CONNECTION'], $query, $params);
+}
 ?>
