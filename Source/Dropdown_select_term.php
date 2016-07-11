@@ -14,14 +14,14 @@ include "term.php";
 //          see its documentation for a description
 //  OTHER:
 //      See test/test_Dropdown_student_term.php for an example of use
-function dropdown_select_term($subIdent, $start=null, $ascend=false, $limit=null) {
+function dropdown_select_term($subIdent, $kwargs=null) {
     //  This variable ensures that multiple calls in
     //  the same form or file won't interfere
     static $id = 0;
     $id++;
 
     //  First we father the terms and convert them to an array
-    if (!($result = term_retrieve_visible_by_start($start, $ascend, $limit))) {
+    if (!($result = term_retrieve_visible_by_start($kwargs))) {
         return false;
     } else if (!($terms = pg_fetch_all($result))) {
         return false;
