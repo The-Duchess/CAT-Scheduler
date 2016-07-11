@@ -203,9 +203,9 @@ function term_update($id, $fields) {
         "visible" => $check_boolean,
         "editable" => $check_boolean);
     foreach ($fields as $field => $val) {
-        if (!$check_string($field) and
-            !array_key_exists(strtolower($field), $valid_fields) and
-            !is_null($val) and
+        if (!$check_string($field) or
+            !array_key_exists(strtolower($field), $valid_fields) or
+            is_null($val) or
             !($valid_fields[$field]($val))) {
             return false;
         }
