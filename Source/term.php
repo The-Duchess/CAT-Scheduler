@@ -112,12 +112,12 @@ function term_retrieve_by_start($kwargs=null) {
 
     //  Initialize start to default value if not passed
     if (!$start) {
-        $start = (new DateTime("now"))->modify("-1 year")->format("Y-m-d");
+        $start = (new DateTime("now"))->modify("-1 year");
     }
 
     //  Create the query and querys params without limit clause
     $query = "SELECT * FROM Term WHERE start_date >= $1 ORDER BY start_date " . ($ascend ? "ASC" : "DESC");
-    $params = array($start);
+    $params = array($start->format("Y-m-d"));
 
     //  Add limit clause and limit param if necessary
     if ($limit) {
@@ -159,12 +159,12 @@ function term_retrieve_visible_by_start($kwargs=null) {
 
     //  Initialize start to default value if not passed
     if (!$start) {
-        $start = (new DateTime("now"))->modify("-1 year")->format("Y-m-d");
+        $start = (new DateTime("now"))->modify("-1 year");
     }
 
     //  Create the query and querys params without limit clause
     $query = "SELECT * FROM Term WHERE visible IS true AND start_date >= $1 ORDER BY start_date " . ($ascend ? "ASC" : "DESC");
-    $params = array($start);
+    $params = array($start->format("Y-m-d"));
 
     //  Add limit clause and limit param if necessary
     if ($limit) {
