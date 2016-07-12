@@ -42,10 +42,10 @@
 		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $new));
 	}
 
-	function edit_student_visible($id, $new) {
-		// this will edit the student's state s visible
+	function edit_student_active($id, $new) {
+		// this will edit the student's state s active
 
-		$query = 'UPDATE Student SET Visible=$2 WHERE Student_id=$1';
+		$query = 'UPDATE Student SET Active=$2 WHERE Student_id=$1';
 
 		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $new));
 	}
