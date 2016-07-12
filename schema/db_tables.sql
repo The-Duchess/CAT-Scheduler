@@ -1,3 +1,7 @@
+-- Change every reference to big to normal
+--Use timestamp with timezone
+
+
 -- term --
 -- contents:
 -- 	name
@@ -15,7 +19,7 @@ End_Date   timestamp   default NULL,
 Visible    boolean     default true,
 Editable   boolean     default true,
 term_id    bigserial PRIMARY KEY,
-Due_DATE   timestamp default NULL
+Due_DATE   timestamp default NULL 
 );
 
 
@@ -33,9 +37,20 @@ Contents:
 */
 
 DROP TABLE IF EXISTS Student;
+/* Id needs to be a counter
+Add:
+	Username
+Remove:
+	First name
+	Last name
+	cat nickname
+	email
+Modify:
+	Visible --> active
+*/
 CREATE TABLE Student (
 	Student_id		int 		NOT NULL PRIMARY KEY,
-	Student_FirstName	varchar(50)	NOT NULL,
+	Student_FirstName	varchar(50)	NOT NULL,  
 	Student_LastName  	varchar(50)	NOT NULL,
 	Student_Email 		varchar(255) 	NOT NULL,
 	Cat_Nickname 		varchar(50) 	default NULL,
@@ -57,14 +72,14 @@ CREATE TABLE Shift_Preference
 (
 	student_id integer REFERENCES Student(Student_id),
 	term_id bigint REFERENCES Term(Term_id),
-	shift_preference smallint NOT NULL DEFAULT 0,
+	shift_preference smallint NOT NULL DEFAULT 0,   --change smallint to enum  
 	PRIMARY KEY (student_id, term_id)
 );
 
 /*ENUM Types for Hour_Block*/
-CREATE TYPE days AS ENUM ('mon','tue','wed','thu','fri','sat');
+CREATE TYPE days AS ENUM ('mon','tue','wed','thu','fri','sat');  --Use Capital Letters and use full name for days
 CREATE TYPE hours AS ENUM('8','9','10','11','12','13','14','15','16','17');
-CREATE TYPE preferences AS ENUM ('P','A','N');
+CREATE TYPE preferences AS ENUM ('P','A','N');    ----Use Capital Letters and use full name // remove "not available"
 
 /* Hour_Block
 Contents:
@@ -74,13 +89,14 @@ Contents:
   Hour
   Block Preference
 */
+
 DROP TABLE IF EXISTS Hour_Block;
 CREATE TABLE Hour_Block
 (
-	student_id integer REFERENCES Student(Student_id),
+	student_id integer REFERENCES Student(Student_id), 
 	term_id bigint REFERENCES Term(Term_id),
 	block_day days NOT NULL,
 	block_hour hours NOT NULL,
 	block_preference preferences NOT NULL,
-	PRIMARY KEY (student_id, term_id, block_day, block_preference)
+	PRIMARY KEY (student_id, term_id, block_day, block_preference)   --Change "block_preference" to "block_hour"
 );
