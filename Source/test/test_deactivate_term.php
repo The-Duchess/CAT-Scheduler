@@ -19,19 +19,7 @@ if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=
 
 $t_id = 1;
 
-$query = "select term_id, editable from term where term_id = $t_id";
-
-$res = pg_query($GLOBALS['CONNECTION'], $query);
-
-print($res);
-
 $res = deactivate_term($t_id);
-
-print($res);
-
-$res = pg_query($GLOBALS['CONNECTION'], $query);
-
-print($res);
 
 ?>
 </body>
