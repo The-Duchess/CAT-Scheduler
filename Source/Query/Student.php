@@ -15,7 +15,7 @@ function deactivate_student($id) {
 	    return false;
 	}
 	//Throw an error if the student is already activated
-	$query = "SELECT * FROM student WHERE student_id = '$id' AND visible is FALSE";
+	$query = "SELECT * FROM student WHERE student_id = '$id' AND active is FALSE";
 	$result = pg_query($GLOBALS['CONNECTION'], $query);
 	if (pg_num_rows($result) != 0) {
 	    echo "Student is already deactivated<br>";
@@ -23,7 +23,7 @@ function deactivate_student($id) {
 	}
 	//The only value is chanhing is the visibily since we are going to keep all
 	//of the student information
-	$query = "UPDATE student SET visible = false WHERE student_id = '$id'";
+	$query = "UPDATE student SET active = false WHERE student_id = '$id'";
 
 	return pg_query($GLOBALS['CONNECTION'], $query);
 }
@@ -31,17 +31,16 @@ function deactivate_student($id) {
 // --
 
 // add a student to the students table
-// set id, first name, last name and email
-// all other values can be default and are not required for entry
-function add_student($id, $firstname, $lastname, $email) {
+//
+// PARAMETERS:
+// 		| - student id
+// 		| - student uname
+// 		| - student's join time
+function add_student($id, $student_uname, $joind) {
 
-	// values assumed to be default
-	// - cat nick
-	// - join / leave date (leave may not be available)
-	// - visible should be defaulted to yes
-	$query = 'INSERT into Students (Student_id, Student_FirstName, Student_LastName, Student_Email) VALUES ($1, $2, $3, $4)';
+	$query = 'INSERT into Students (Student_id, Student_username, join_date) VALUES ($1, $2, $3)';
 
-	return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $firstname, $lastname, $email));
+	return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $student_uname, $joind));
 }
 
 // --
@@ -55,7 +54,8 @@ function add_student($id, $firstname, $lastname, $email) {
 	// parameters:
 	//		id: the student id
 	// 		new: the new value
-
+/*
+	// DEPRECATED
 	function edit_student_email($id, $new) {
 		// this will edit the student's email
 
@@ -64,6 +64,7 @@ function add_student($id, $firstname, $lastname, $email) {
 		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $new));
 	}
 
+	// DEPRECATED
 	function edit_student_firstname($id, $new) {
 		// this will edit the student's first name
 
@@ -72,6 +73,7 @@ function add_student($id, $firstname, $lastname, $email) {
 		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $new));
 	}
 
+	// DEPRECATED
 	function edit_student_lastname($id, $new) {
 		// this will edit the student's last name
 
@@ -80,6 +82,7 @@ function add_student($id, $firstname, $lastname, $email) {
 		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $new));
 	}
 
+	// DEPRECATED
 	function edit_student_nick($id, $new) {
 		// this will edit the student's cat nick
 
@@ -87,13 +90,44 @@ function add_student($id, $firstname, $lastname, $email) {
 
 		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $new));
 	}
+*/
 
 	function edit_student_visible($id, $new) {
 		// this will edit the student's state s visible
 
-		$query = 'UPDATE Student SET Visible=$2 WHERE Student_id=$1';
+		$query = 'UPDATE Student SET Active=$2 WHERE Student_id=$1';
 
 		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $new));
+	}
+
+	function edit_student_uname($id, $new) {
+		// this will edit the student's state s visible
+
+		$query = 'UPDATE Student SET Student_username=$2 WHERE Student_id=$1';
+
+		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $new));
+	}
+
+	// passed a date time
+	function edit_student_join_date($id, $new) {
+		// this will edit the student's state s visible
+
+		$query = 'UPDATE Student SET join_date=$2 WHERE Student_id=$1';
+
+		$newV = $new->format("Y-m-d");
+
+		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $newV));
+	}
+
+	// also passed a date time
+	function edit_student_leave_date($id, $new) {
+		// this will edit the student's state s visible
+
+		$query = 'UPDATE Student SET leave_date=$2 WHERE Student_id=$1';
+
+		$newV = $new->format("Y-m-d");
+
+		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $newV));
 	}
 
 ?>
