@@ -112,12 +112,12 @@ function term_retrieve_by_start($kwargs=null) {
 
     //  Initialize start to default value if not passed
     if (!$start) {
-        $start = (new DateTime("now"))->modify("-1 year")->format("Y-m-d");
+        $start = (new DateTime("now"))->modify("-1 year");
     }
 
     //  Create the query and querys params without limit clause
     $query = "SELECT * FROM Term WHERE start_date >= $1 ORDER BY start_date " . ($ascend ? "ASC" : "DESC");
-    $params = array($start);
+    $params = array($start->format("Y-m-d"));
 
     //  Add limit clause and limit param if necessary
     if ($limit) {
@@ -159,12 +159,12 @@ function term_retrieve_visible_by_start($kwargs=null) {
 
     //  Initialize start to default value if not passed
     if (!$start) {
-        $start = (new DateTime("now"))->modify("-1 year")->format("Y-m-d");
+        $start = (new DateTime("now"))->modify("-1 year");
     }
 
     //  Create the query and querys params without limit clause
     $query = "SELECT * FROM Term WHERE visible IS true AND start_date >= $1 ORDER BY start_date " . ($ascend ? "ASC" : "DESC");
-    $params = array($start);
+    $params = array($start->format("Y-m-d"));
 
     //  Add limit clause and limit param if necessary
     if ($limit) {
@@ -187,14 +187,27 @@ function term_retrieve_visible_by_start($kwargs=null) {
 //      check:  whether to verify there are no invalid fields in
 //              the fields parameter, small hit to performance.
 //              default TRUE
-function term_update($id, $fields, $check=true) {
-    //  Check that all fields are valid if required
-    if ($check) {
-        $valid_fields = array("term_name", "start_date", "end_date", "due_date", "visible", "editable");
-        foreach ($fields as $field => $val) {
-            if (!in_array(strtolower($field), $valid_fields)) {
-                return false;
-            }
+function term_update($id, $fields) {
+    //  Check for validity
+    if (!is_int($id)) {
+        return false;
+    }
+    $check_string = function ($var) { return ((is_string($var)) ? true : false); };
+    $check_DateTime = function ($var) { return (($var instanceof DateTime) ? true : false); };
+    $check_boolean = function ($var) { return ((is_bool($var)) ? true : false); };
+    $valid_fields = array(
+        "term_name" => $check_string,
+        "start_date" => $check_DateTime,
+        "end_date" => $check_DateTime,
+        "due_date" => $check_DateTime,
+        "visible" => $check_boolean,
+        "editable" => $check_boolean);
+    foreach ($fields as $field => $val) {
+        if (!is_string($field) or
+            !array_key_exists(strtolower($field), $valid_fields) or
+            is_null($val) or
+            !($valid_fields[$field]($val))) {
+            return false;
         }
     }
 
@@ -204,68 +217,17 @@ function term_update($id, $fields, $check=true) {
     $counter = 2;
     foreach ($fields as $field => $val) {
         array_push($field_arr, $field . "=$" . $counter);
-        array_push($params, $val);
+        if ($val instanceof DateTime) {
+            array_push($params, $val->format("Y-m-d"));
+        } else if (is_bool($val)) {
+            array_push($params, var_export($val, true));
+        } else {
+            array_push($params, $val);
+        }
         $counter++;
     }
     $query = "UPDATE Term SET " . implode(", ", $field_arr) . " WHERE term_id=$1";
-    echo $query . "\n";
-    foreach ($params as $param) {
-        echo $param . "\n";
-    }
 
     return pg_query_params($GLOBALS['CONNECTION'], $query, $params);
 }
-
-// --
-
-//  Returns result object of query if successful, FALSE otherwise
-function add_term($name, $start, $end, $due) {
-    //  Assumes we want the default values for visible and editable fields
-    $query = 'INSERT into Terms (term_name, start_date, end_date, due_date) VALUES($1, $2, $3, $4)';
-
-    return pg_query_params($GLOBALS['CONNECTION'], $query, array($name, $start, $end, $due));
-}
-
-// --
-
-//  Returns a results object containing the names and unique ids of
-//  visible and editable terms in the database if successful,
-//  otherwise FALSE
-function retrieve_active_terms($kwargs=null) {
-    //  We want to retrieve a list of all terms that are both visibile
-    //  and editable
-    $query = 'SELECT term_name, term_id FROM Term ' .
-             'WHERE visible IS true AND editable IS TRUE';
-
-    return pg_query($GLOBALS['CONNECTION'], $query);
-}
-
-// --
-
-// deactivate a student in the students table
-// set the Visible value to false
-// all other values can be default and are not required to change
-function deactivate_term($id) {
-
-    //Throw an error if student does not exist in the data base
-    $query = "SELECT * FROM term WHERE term_id = '$id'";
-    $result = pg_query($GLOBALS['CONNECTION'], $query);
-    if(pg_num_rows($result) == 0) {
-        echo "Term Does not exist<br>";
-        return false;
-    }
-    //Throw an error if the student is already activated
-    $query = "SELECT * FROM term WHERE term_id = '$id' AND editable is FALSE";
-    $result = pg_query($GLOBALS['CONNECTION'], $query);
-    if (pg_num_rows($result) != 0) {
-        echo "term is already deactivated<br>";
-        return false;
-    }
-    //The only value is chanhing is the visibily since we are going to keep all
-    //of the student information
-    $query = "UPDATE term SET editable = false WHERE term_id = '$id'";
-
-    return pg_query($GLOBALS['CONNECTION'], $query);
-}
-
 ?>
