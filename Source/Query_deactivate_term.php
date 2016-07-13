@@ -25,3 +25,5 @@ function deactivate_term($id) {
 
 	return pg_query($GLOBALS['CONNECTION'], $query);
 }
+
+?>
