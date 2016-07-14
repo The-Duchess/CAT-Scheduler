@@ -30,13 +30,13 @@ $due_v  = "";
 
 
 echo "<form action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">
-Name: <input type="text" name="$name_V"><br>
+Name: <input type="text" name="name_v"><br>
 <input type="submit">
-</form>"
+</form>";
 
 
 
-print($name_V)
+$name_v = $_POST["name_v"];
 
 // fetch values
 // on submit
