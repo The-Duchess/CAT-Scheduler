@@ -38,6 +38,8 @@ Name: <input type="text" name="name_v"><br>
 
 $name_v = $_POST["name_v"];
 
+<p> Term Name: <?php echo $name_v ?>.</p>
+
 // fetch values
 // on submit
 // run query
