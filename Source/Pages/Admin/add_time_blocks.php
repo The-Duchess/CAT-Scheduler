@@ -35,10 +35,11 @@ Name: <input type="text" name="name_v"><br>
 
 $name_v = $_POST["name_v"];
 
-echo "$name_v";
+// echo "$name_v";
 
 ?>
 
+title: <?php echo ($_POST["name_v"]); ?>
 
 </body>
 </html>
