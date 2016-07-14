@@ -15,18 +15,6 @@ function temp_remove_avail($term_id, $student_id) {
     return pg_query_params($GLOBALS['CONNECTION'], $query, array($term_id, $student_id));
 }
 
-/*
-function cleanup_test_students() {
-    $query = "DELETE FROM student WHERE student_username LIKE $1";
-    return pg_query_params($GLOBALS['CONNECTION'], $query, array("RSNA_TEST_STUDENT_%"));
-}
-
-function cleanup_test_hourblocks() {
-    $query = "DELETE FROM hour_block WHERE student_id IN (SELECT student_id FROM student WHERE student_username LIKE $1)";
-    return pg_query_params($GLOBALS['CONNECTION'], $query, array("RSNA_TEST_STUDENT_%"));
-}
- */
-
 if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
     echo "Connection to Database Failed\n";
     exit();
@@ -34,50 +22,18 @@ if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=
     echo "Connection to Database Established\n";
 }
 
-/*
-echo "Adding 3 Students to Database\n";
-if (!temp_add_student("RSNA_TEST_STUDENT_1")) {
-    echo "Adding Student 1 Failed\n";
-    cleanup_test_students();
-    exit();
-} else if (!temp_add_student("RSNA_TEST_STUDENT_2")) {
-    echo "Adding Student 2 Failed\n";
-    cleanup_test_students();
-    exit();
-} else if (!temp_add_student("RSNA_TEST_STUDENT_3")) {
-    echo "Adding Student 3 Failed\n";
-    cleanup_test_students();
-    exit();
-}
- */
-
-
-/*
-$query = "SELECT student_id, student_username FROM Student WHERE student_username LIKE $1 LIMIT 3";
-if (!($result = pg_query_params($CONNECTION, $query, array("RSNA_TEST_STUDENT_%")))) {
-    echo "Failed to pull test students\n";
-    cleanup_test_students();
-    exit();
-}
-$students_initial = pg_fetch_all($results);
- */
-
-$query = "SELECT student_id, student_username FROM student ORDER BY student_id ASC LIMIT 3";
+$query = "SELECT student_id, student_username FROM student WHERE active=true ORDER BY student_id ASC LIMIT 3";
 if (!($results = pg_query($query))) {
     echo "Failed to pull test students\n";
     exit();
 }
 $students_initial = pg_fetch_all($results);
 
-/*
-echo "Test running on the following " . count($students_initial) . " students:\n";
+$arr = array();
 foreach ($students_initial as $student) {
-    echo "    " . $student['student_id'] . " -- " . $student['student_username'] . "\n";
-    temp_remove_avail(1, $student['student_id']);
+    array_push($arr, $student['student_username']);
 }
- */
-
-echo "Test 1, should display all test students:\n";
+echo "Test 1, should a list of students INCLUDING AT LEAST " . implode(", ", $arr) . "\n";
 if (!($results = retrieve_students_no_availability(1))) {
     echo "Failed to retrieve students\n";
     exit();

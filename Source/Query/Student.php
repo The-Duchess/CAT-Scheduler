@@ -164,9 +164,10 @@ function add_student($id, $student_uname, $joind) {
         }
 
         //  Create basic query
-        $query = "SELECT student_id, student_username FROM student " .
-            "WHERE student_id NOT IN (SELECT student_id FROM hour_block WHERE term_id=$1) " .
-            "ORDER BY student_username " . ($ascend ? "ASC" : "DESC");
+        $query = "
+        SELECT student_id, student_username FROM student 
+        WHERE active=true AND student_id NOT IN (SELECT student_id FROM hour_block WHERE term_id=$1)
+        ORDER BY student_username " . ($ascend ? "ASC" : "DESC");
         $params = array($id);
 
         //  Add limit clause and parameter if desired
