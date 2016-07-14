@@ -1,5 +1,15 @@
 <?php
 
+
+// retrieves a student id based on the give username
+// PARAMETERS:
+//      input_username: username of the student you want to get the id of
+function get_student_id_by_username($input_username) {
+    $query = "SELECT student_id FROM student WHERE student_username = $1";
+
+    return pg_query_params($GLOBALS['CONNECTION'], $query, array($input_username));
+}
+
 // deactivate a student in the students table
 // set the Visible value to false
 // all other values can be default and are not required to change
@@ -168,5 +178,4 @@ function add_student($id, $student_uname, $joind) {
         //  Return results object
         return pg_query_params($GLOBALS['CONNECTION'], $query, $params);
     }
-
 ?>
