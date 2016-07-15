@@ -72,7 +72,7 @@ function insert_availability_block($input_term_id, $input_day, $input_hour, $inp
     } else if (isset($_SESSION['PHP_AUTH_USER'])) {
         $student_user = $_SESSION['PHP_AUTH_USER'];
     } else {
-        return flase;
+        return false;
     }
 
     // The table stores a student_id, so we need to extract it from the username if not given
