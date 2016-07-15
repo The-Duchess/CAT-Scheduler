@@ -42,10 +42,10 @@ function dropdown_select_term($subIdent, $kwargs=null) {
         $selected = $_POST['formTerm' . $id];
 
         if (!empty($selected)) {
-            $query = 'SELECT * FROM Term ' .
-                     'WHERE term_id=' . $selected . ' ' .
-                     'LIMIT 1';
-            if (!($result = pg_query($GLOBALS['CONNECTION'], $query))) {
+            $query = "SELECT * FROM term
+            WHERE term_id=$1
+            LIMIT 1";
+            if (!($result = pg_query_params($GLOBALS['CONNECTION'], $query, array($selected)))) {
                 return false;
             }
             $term = pg_fetch_array($result);
