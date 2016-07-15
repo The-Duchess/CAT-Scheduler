@@ -88,7 +88,8 @@ if (!empty($selected_term)) {
 
             <div class='main_form'>
                 <form action='process_availability_submission.php' method='POST'>
-
+                    <input type='hidden' name='term_name' value='<?= $selected_term['term_name']?>' />
+                    <input type='hidden' name='term_id' value='<?= $selected_term['term_id']?>' />
                     <table>
                         <thead>
                             <tr>
