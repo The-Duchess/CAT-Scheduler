@@ -32,6 +32,9 @@ function date_selector($submit_ident, $future=1) {
 
     //  Create month dropdown
     echo "<select name=\"" . $month_ident . "\" onchange=\"this.form.submit()\">\n";
+    if (!isset($_POST[$month_ident])) {
+        $_POST[$month_ident] = 1;
+    }
     foreach ($months as $name => $number) {
         if (isset($_POST[$month_ident]) and $_POST[$month_ident] == $number) {
             echo "<option value=\"" . $number . "\" selected>" . $name . "</option\n>";
