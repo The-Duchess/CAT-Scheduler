@@ -61,9 +61,9 @@ function insert_availability_block($input_term_id, $input_day, $input_hour, $inp
     $pref = $input_pref;
     $params = array();
 
-    // Return null if any of the given parameters are null
+    // Return false if any of the given parameters are null
     if (empty($day) || empty($hour) || empty($pref)) {
-        return null;
+        return false;
     }
 
     // Use the given username if specified in kwargs, defaulting to session username (if set). null otherwise.
@@ -72,7 +72,7 @@ function insert_availability_block($input_term_id, $input_day, $input_hour, $inp
     } else if (isset($_SESSION['PHP_AUTH_USER'])) {
         $student_user = $_SESSION['PHP_AUTH_USER'];
     } else {
-        return null;
+        return flase;
     }
 
     // The table stores a student_id, so we need to extract it from the username if not given
@@ -96,4 +96,63 @@ function insert_availability_block($input_term_id, $input_day, $input_hour, $inp
     return pg_query_params($GLOBALS['CONNECTION'], $query, $params);
 }
 
+//  Updates the hour_block table to contain only the hour blocks specified in the input
+//  PARAMETERS:
+//      input_term_id: the id of the term the availability submission is for
+//      input_blocks: array of hour blocks to be used to edit the hour_block table
+//      kwargs: associative array of keyword arguments
+//          student_username: specify if want to use a username different from the logged in user
+//          student_id: specify if want to use a student id different from the logged in user
+//
+//  NOTE: if specifying kwargs, if both student_username and student_id are specified, student_id will override student_username.
+function update_availability_blocks($input_term_id, $input_blocks, $kwargs=null) {
+    // initializing variables for the query, will take default environment varibles
+    // if kwargs arent given
+    $student_user = null;
+    $student_id = null;
+    $term_id = $input_term_id;
+    $blocks = $input_blocks;
+    $delete_params = array();
+
+
+    // Use the given username if specified in kwargs, defaulting to session username (if set). null otherwise.
+    if (isset($kwargs['student_username'])) {
+        $student_user = $kwargs['student_username'];
+    } else if (isset($_SESSION['PHP_AUTH_USER'])) {
+        $student_user = $_SESSION['PHP_AUTH_USER'];
+    } else {
+        return false;
+    }
+
+    // The table stores a student_id, so we need to extract it from the username if not given
+    // in kwargs
+    if (isset($kwargs['student_id'])) {
+        $student_id = $kwargs['student_id'];
+    } else {
+        $temp_query = 'SELECT student_id FROM student WHERE student_username = $1';
+        $temp = pg_query_params($GLOBALS['CONNECTION'], $temp_query, array($student_user));
+        $student_id = pg_fetch_row($temp)[0];
+    }
+		//BEGIN TRANSACTION before making any changes to ensure atomicity
+		pg_query($GLOBALS['CONNECTION'], "BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+		
+    array_push($delete_params, $student_id);
+    array_push($delete_params, $term_id);
+		$delete_query = 'DELETE FROM hour_block WHERE student_id = $1 AND term_id = $2';
+		
+		pg_query_params($GLOBALS['CONNECTION'], $delete_query, $delete_params);
+		
+		//create an array with the student id specified to be used by insert_availability_block
+		$student_kwarg = array( "student_id" => $student_id);
+		foreach($blocks as $block){
+			if(insert_availability_block($term_id, $block['block_day'], $block['block_hour'], $block['block_preference'], $student_kwarg) == false) {
+				//ROLLBACK to before deletion if there is a problem inserting the hour_blocks
+				pg_query($GLOBALS['CONNECTION'], 'ROLLBACK');
+				return false;
+			}
+		}
+		//COMMIT after deletion and insertion are successful
+		pg_query($GLOBALS['CONNECTION'], "COMMIT");
+		return true;
+}
 ?>
