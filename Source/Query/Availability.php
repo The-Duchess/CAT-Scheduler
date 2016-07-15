@@ -18,7 +18,7 @@ function retrieve_availability_for_student($student_id, $term_id, $kwargs=null) 
         }
     }
 
-	$params = array($student_id, $term_id);
+    $params = array($student_id, $term_id);
     $query = "SELECT student_username, term_name, block_day, block_hour, block_preference
 	FROM hour_block, student, term
 	WHERE student.student_id = hour_block.student_id
@@ -82,7 +82,7 @@ function insert_availability_block($input_term_id, $input_day, $input_hour, $inp
     } else {
         $temp_query = 'SELECT student_id FROM student WHERE student_username = $1';
         $temp = pg_query_params($GLOBALS['CONNECTION'], $temp_query, array($student_user));
-        $student_id = pg_fetch_row($temp)[0]; //this may not work...
+        $student_id = pg_fetch_row($temp)[0];
     }
     array_push($params, $student_id);
 
