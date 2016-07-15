@@ -95,4 +95,5 @@ function insert_availability_block($input_term_id, $input_day, $input_hour, $inp
 
     return pg_query_params($GLOBALS['CONNECTION'], $query, $params);
 }
+
 ?>
