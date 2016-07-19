@@ -1,13 +1,27 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 'on');
+//  Retrieves availibility for select term and select student
+//  PARAMETERS:
+//		student_id: the id of the student to get availability for
+//		term_id: the id of the term that is being selected for availability listing
+//      kwargs: associative array of keyword arguments
+//          block_day: specify if we want only a select day from that term for the student
+//          block_hour: specify if we want only a select hour from that term for the student
+//				Specifying both will allow for selecting a specific day and time for the student
+//
+//  NOTE: if specifying kwargs, if specifying both will allow for selecting a specific day and time for the studentstudent_username.
 function retrieve_availability_for_student($student_id, $term_id, $kwargs=null) {
-	// Default values
+	// initializing variables for the query, will take default environment varibles
+    // if kwargs arent given
+	
+	// Return false if two main given parameters are not integers
 	if (!is_int($student_id) OR (!is_int($term_id))) {
 		return false;
 	}
+
+	//Makes sure the day and hour are null and initialized before setting them
 	$block_day = null;
 	$block_hour = null;
+	
 	//  Read kwargs if necessary
     if ($kwargs) {
         if (isset($kwargs['block_day'])) {
@@ -17,27 +31,41 @@ function retrieve_availability_for_student($student_id, $term_id, $kwargs=null) 
             $block_hour = $kwargs['block_hour'];
         }
     }
-
-    $params = array($student_id, $term_id);
-    $query = "SELECT student_username, term_name, block_day, block_hour, block_preference
-	FROM hour_block, student, term
-	WHERE student.student_id = hour_block.student_id
-	AND term.term_id = hour_block.term_id
+	
+	//Sets the params for base query
+	$params = array($student_id, $term_id);
+	//Query will return:
+		//Student Username: To display which student is which instead of trying to retrieve username later
+		//Term Name: To display current selected term
+		//Block Day: Day of availability
+		//Block Hour: Hour of availability
+		//Block Preference: Either Available or Preferred
+			//NOTE: Not available is not in database so it will not be displayed
+    $query = "SELECT student_username, term_name, block_day, block_hour, block_preference 
+	FROM hour_block, student, term 
+	WHERE student.student_id = hour_block.student_id 
+	AND term.term_id = hour_block.term_id 
 	AND student.student_id = $1
 	AND term.term_id = $2";
 	
-/*	
-	array_push($params, days $block_day);
-	array_push($params, hours $block_hour);
-if ($block_day){
-	$query .= " AND block_day = $3";
+	//Checks if block_day was passed in with the kwargs
+	if ($block_day){
+		array_push($params, $block_day);
+		$query .= " AND block_day = $3";
+		echo "<p>Block Day Selected: ". $block_day ."</p>\n";}
+
+	//Checks if block_hour was passed in with the kwargs
+	if ($block_hour){
+		array_push($params, $block_hour);
+		//If the block_day was not passed in we want to use $3 for the hour instead
+		if (!$block_day){$query .= " AND block_hour = $3";}
+		//Else we will know that both kwargs were passed here and will use $4 for the hour
+		else{$query .= " AND block_hour = $4";}
+		echo "<p>Block Hour Selected: ". $block_hour ."</p>\n";
 }
-if ($block_hour){
-    $query .= " AND block_hour = $4";
-}
-*/
     return pg_query_params($GLOBALS['CONNECTION'], $query, $params);
 }
+
 
 //  Inserts an availibility block into the Hour_Block table
 //  PARAMETERS:
