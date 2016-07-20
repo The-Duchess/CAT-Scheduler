@@ -58,10 +58,10 @@ function submit_availabilities(){
 		} elseif ($entry['name'] == "shift_preference") {
 			// do nothing
 		} else {
-			$input_term_id = $_POST['term_id'];
-			$input_day = substr($_Post['id'], 0, -1);
-			$input_hour = substr($_POST['id'], -1);
-			$input_pref = $_POST['value'];
+			$input_term_id = $entry['term_id'];
+			$input_day = substr($entry['id'], 0, -1);
+			$input_hour = substr($entry['id'], -1);
+			$input_pref = $entry['value'];
 			$args { student_id => $student_id };
 
 			$ret = insert_availability_block($input_term_id, $input_day, $input_hour, $input_pref, $args);
