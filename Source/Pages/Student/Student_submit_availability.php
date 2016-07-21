@@ -7,7 +7,7 @@ require_once('../../Query/Student.php');
 // require_once('../../Query_retrieve_shift_preference.php');
 
 //if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
-if (!($CONNECTION = pg_connect("host=db.cecs.pdx.edu port=5432 dbname=simca user=simca password=hk8#9Yyced"))) {
+if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
     echo "<p>Connection Failed</p>\n";
     exit();
 }

@@ -4,7 +4,7 @@ include "../../Query/Student.php"
 include "../../Query/Availability.php"
 
 function submit_availabilities(){
-	
+
 	$student_uname = $_SERVER['PHP_AUTH_US'];
 	$student_id = get_student_id_by_username(student_uname);
 	$input_term_id = $_POST['term_id'];
