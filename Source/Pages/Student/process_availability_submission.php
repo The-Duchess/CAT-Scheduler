@@ -3,7 +3,7 @@
 include "../../Query/Student.php"
 include "../../Query/Availability.php"
 
-function test($selected_term){
+//function test($selected_term){
 
 // POST KEY VALUES
 // "term_name" => term name
@@ -31,9 +31,9 @@ student_uname = $_SERVER['PHP_AUTH_US']
 student_id = get_student_id_by_username(student_uname)
 */
 
-}
+//}
 
-function submit_availabilities(){
+//function submit_availabilities(){
 	
 	$student_uname = $_SERVER['PHP_AUTH_US'];
 	$student_id = get_student_id_by_username(student_uname);
@@ -76,9 +76,9 @@ function submit_availabilities(){
 			$input_pref    = $val;
 			$args          = array('student_id' => $student_id);
 
-			if ($val == 'A') {
+			if ($val == "A") {
 				array_push($input_blocks, array("block_day" => $input_day, "block_hour" => $input_hour, "block_preference" => 'Available'));
-			} elseif ($val == 'P') {
+			} elseif ($val == "P") {
 				array_push($input_blocks, array("block_day" => $input_day, "block_hour" => $input_hour, "block_preference" => 'Prefered'));
 			} else {
 				// do nothing
@@ -86,9 +86,9 @@ function submit_availabilities(){
 
 		}
 
-		$ret = update_availability_block($input_term_id, $input_bocks, array("student_id" => $student_id));
+		update_availability_block($input_term_id, $input_bocks, array("student_id" => $student_id));
 	}
 
-}
+//}
 
 ?>
