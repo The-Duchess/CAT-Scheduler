@@ -50,15 +50,21 @@ function deactivate_student($id) {
 
 // add a student to the students table
 //
+// DEV NOTE: join date might be simply when user is being inserted into db, might want
+//           to integrate that directly into this function directly
+//
 // PARAMETERS:
 // 		| - student id
 // 		| - student uname
 // 		| - student's join time
-function add_student($id, $student_uname, $joind) {
+// TODO: the formatting of Datetime obj to a string should be done outside of this function, refacter ALL queries...
+function add_student($student_uname, $joind) {
 
-	$query = 'INSERT into Students (Student_id, Student_username, join_date) VALUES ($1, $2, $3)';
+	$query = 'INSERT into student (student_username, join_date) VALUES ($1, $2)';
 
-	return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $student_uname, $joind));
+	$new_joind = $joind->format("Y-m-d");
+
+	return pg_query_params($GLOBALS['CONNECTION'], $query, array($student_uname, $new_joind));
 }
 
 // --
