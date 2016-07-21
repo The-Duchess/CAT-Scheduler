@@ -36,7 +36,7 @@ function submit_availabilities(){
 
         console.log("creating blocks");
 
-        if ($key == "term_name" || $key == "term_id" || $key == "shift_preference") {
+        if ($key == "term_name" || $key == "term_id" || $key == "shift_preference" || $key == "Submit") {
             // do nothing
             if ($key == "shift_preference") {
                 $pref = $val;
@@ -250,7 +250,7 @@ if (!empty($selected_term)) {
                             <label for='0h'>No Preference</label>
                     </div>
 
-                    <input type='submit' value='Submit'/>
+                    <input type='submit' value='Submit' name='Submit'/>
                 </form>
             </div>
 <?php
