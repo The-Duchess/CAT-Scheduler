@@ -181,6 +181,11 @@ if (!empty($selected_term)) {
                 </form>
             </div>
 <?php
+//<?php
+if (isset($_POST['shift_preference'])) {
+    submit_availabilities();
+}
+//?>
 } //closing the page wrapper if statement
 ?>
         </div>
@@ -214,9 +219,3 @@ if (!empty($selected_term)) {
         </script>
     </body>
 </html>
-
-<?php
-if (isset($_POST['shift_preference'])) {
-    submit_availabilities();
-}
-?>
