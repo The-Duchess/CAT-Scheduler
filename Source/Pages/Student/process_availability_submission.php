@@ -5,7 +5,7 @@
 
 function submit_availabilities(){
 
-console.log("in file process");
+	console.log("in file process");
 
 /*
 	if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
@@ -13,7 +13,7 @@ console.log("in file process");
     	exit();
 	}
 */
-	
+
 	console.log("connection succeeded");
 
 	$student_uname = $_SERVER['PHP_AUTH_US'];

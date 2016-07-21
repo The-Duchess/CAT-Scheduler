@@ -4,8 +4,81 @@
 require_once('../../Dropdown_select_term.php');
 require_once('../../Query/Availability.php');
 require_once('../../Query/Student.php');
-require_once('process_availability_submission.php');
+//require_once('process_availability_submission.php');
 // require_once('../../Query_retrieve_shift_preference.php');
+
+function submit_availabilities(){
+
+    console.log("in file process");
+
+/*
+    if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
+        echo "<p>Connection Failed</p>\n";
+        exit();
+    }
+*/
+
+    console.log("connection succeeded");
+
+    $student_uname = $_SERVER['PHP_AUTH_US'];
+    $student_id = get_student_id_by_username(student_uname);
+    $input_term_id = $_POST['term_id'];
+    $pref = "";
+    $input_bocks = array();
+
+    console.log("initialized");
+
+    // things needed for time submission
+    // insert_availability_block($input_term_id, $input_day, $input_hour, $input_pref, $kwargs=null)
+
+    foreach ($_POST as $key => $val) {
+
+
+        console.log("creating blocks");
+
+        if ($key == "term_name" || $key == "term_id" || $key == "shift_preference") {
+            // do nothing
+            if ($key == "shift_preference") {
+                $pref = $val;
+
+                // add shift_preference
+                // $ret = 
+            }
+        } else {
+            // determine split point on $key to get day and number
+            // split $key into day + hour
+            // get term_id
+            // get input pref
+            // get student_id
+
+            // this is sort of a hack
+            // TODO: if it is possible make this clean
+            $pos = strpos($key, 'y');
+            $input_day     = substr($key, 0, $pos);
+            $input_hour    = (int)substr($key, ($pos + 1), strlen($key));
+            $input_pref    = $val;
+            $args          = array('student_id' => $student_id);
+
+            console.log($input_day);
+            console.log($input_hour);
+            console.log($input_pref);
+
+            if ($val == "A") {
+                array_push($input_blocks, array("block_day" => $input_day, "block_hour" => $input_hour, "block_preference" => 'Available'));
+            } elseif ($val == "P") {
+                array_push($input_blocks, array("block_day" => $input_day, "block_hour" => $input_hour, "block_preference" => 'Prefered'));
+            } else {
+                // do nothing
+            }
+
+        }
+
+        console.log("finished creating blocks");
+
+        update_availability_blocks($input_term_id, $input_bocks);
+    }
+
+}
 
 //if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
 if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
