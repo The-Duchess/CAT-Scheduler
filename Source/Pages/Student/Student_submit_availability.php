@@ -21,7 +21,7 @@ function submit_availabilities(){
     //console.log("connection succeeded");
 
     $student_uname = $_SERVER['PHP_AUTH_US'];
-    $student_id = get_student_id_by_username(student_uname);
+    $student_id = get_student_id_by_username($student_uname);
     $input_term_id = $_POST['term_id'];
     $pref = "";
     $input_bocks = array();
