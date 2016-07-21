@@ -4,7 +4,7 @@
 require_once('../../Dropdown_select_term.php');
 require_once('../../Query/Availability.php');
 require_once('../../Query/Student.php');
-//require_once('process_availability_submission.php');
+require_once('process_availability_submission.php');
 // require_once('../../Query_retrieve_shift_preference.php');
 
 //if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
@@ -88,7 +88,7 @@ if (!empty($selected_term)) {
 ?>
 
             <div class='main_form'>
-                <form action='process_availability_submission.php' method='POST'>
+                <form action="<?php htmlentities($_SERVER['PHP_SELF']) ?>" method="POST">
                     <input type='hidden' name='term_name' value='<?= $selected_term['term_name']?>' />
                     <input type='hidden' name='term_id' value='<?= $selected_term['term_id']?>' />
                     <table>
@@ -177,7 +177,7 @@ if (!empty($selected_term)) {
                             <label for='0h'>No Preference</label>
                     </div>
 
-                    <input type='submit' value='Submit' onclick="submit_availabilities();"/>
+                    <input type='submit' value='Submit'/>
                 </form>
             </div>
 <?php
@@ -214,3 +214,9 @@ if (!empty($selected_term)) {
         </script>
     </body>
 </html>
+
+<?php
+if (isset($_POST['shift_preference'])) {
+    submit_availabilities();
+}
+?>
