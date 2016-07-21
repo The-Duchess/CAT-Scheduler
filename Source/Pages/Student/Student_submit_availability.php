@@ -161,7 +161,7 @@ if (!empty($selected_term)) {
 ?>
 
             <div class='main_form'>
-                <form action="<?php htmlentities($_SERVER['PHP_SELF']) ?>" method="POST">
+                <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
                     <input type='hidden' name='term_name' value='<?= $selected_term['term_name']?>' />
                     <input type='hidden' name='term_id' value='<?= $selected_term['term_id']?>' />
                     <table>
