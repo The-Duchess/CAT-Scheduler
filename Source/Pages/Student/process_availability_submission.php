@@ -72,7 +72,7 @@ function submit_availabilities(){
 			$input_pref    = $val;
 			$args          = ('student_id' => $student_id);
 
-			$ret = update_availability_block($input_term_id, $input_day, $input_hour, $input_pref, $args);
+			$ret = update_availability_block($input_term_id, $input_day, $input_hour, $input_pref, null);
 			print ($ret);
 		}
 	}
