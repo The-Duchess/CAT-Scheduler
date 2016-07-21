@@ -59,6 +59,8 @@ function submit_availabilities(){
 			// get input pref
 			// get student_id
 
+			// this is sort of a hack
+			// TODO: if it is possible make this clean
 			$pos = strpos($key, 'y');
 			$input_term_id = $_POST['term_id'];
 			$input_day     = substr($key, 0, $pos);
@@ -69,7 +71,7 @@ function submit_availabilities(){
 			$ret = insert_availability_block($input_term_id, $input_day, $input_hour, $input_pref, $args);
 		}
 	}
-	
+
 }
 
 ?>

@@ -13,7 +13,7 @@ if (!($CONNECTION = pg_connect("host=db.cecs.pdx.edu port=5432 dbname=simca user
 }
 
 //TODO: remove this line once auth is in place, it will be automatically populated
-$_SERVER['PHP_AUTH_USER'] = "simca";
+//$_SERVER['PHP_AUTH_USER'] = "simca";
 
 
 //these arrays will be used for generating the calendar grid
