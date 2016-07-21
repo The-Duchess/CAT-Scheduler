@@ -4,7 +4,7 @@
 require_once('../../Dropdown_select_term.php');
 require_once('../../Query/Availability.php');
 require_once('../../Query/Student.php');
-require_once('process_availability_submission.php');
+//require_once('process_availability_submission.php');
 // require_once('../../Query_retrieve_shift_preference.php');
 
 //if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
@@ -177,7 +177,7 @@ if (!empty($selected_term)) {
                             <label for='0h'>No Preference</label>
                     </div>
 
-                    <input type='submit' value='Submit' onclick="submit_availabilities()"/>
+                    <input type='submit' value='Submit' />
                 </form>
             </div>
 <?php

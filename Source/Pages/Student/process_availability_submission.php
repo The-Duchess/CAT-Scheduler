@@ -3,7 +3,7 @@
 include "../../Query/Student.php"
 include "../../Query/Availability.php"
 
-function submit_availabilities(){
+//function submit_availabilities(){
 
 	if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
     	echo "<p>Connection Failed</p>\n";
@@ -60,6 +60,6 @@ function submit_availabilities(){
 		update_availability_blocks($input_term_id, $input_bocks, array("student_id" => $student_id));
 	}
 
-}
+//}
 
 ?>
