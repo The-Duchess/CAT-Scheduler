@@ -1,7 +1,7 @@
 <?php
 
-include "../../Query/Student.php"
-include "../../Query/Availability.php"
+//include "../../Query/Student.php"
+//include "../../Query/Availability.php"
 
 //function submit_availabilities(){
 
@@ -39,7 +39,7 @@ include "../../Query/Availability.php"
 			// TODO: if it is possible make this clean
 			$pos = strpos($key, 'y');
 			$input_day     = substr($key, 0, $pos);
-			$input_hour    = substr($key, ($pos + 1), strlen($key));
+			$input_hour    = (int)substr($key, ($pos + 1), strlen($key));
 			$input_pref    = $val;
 			$args          = array('student_id' => $student_id);
 
@@ -57,7 +57,7 @@ include "../../Query/Availability.php"
 
 		}
 
-		update_availability_blocks($input_term_id, $input_bocks, array("student_id" => $student_id));
+		update_availability_blocks($input_term_id, $input_bocks);
 	}
 
 //}
