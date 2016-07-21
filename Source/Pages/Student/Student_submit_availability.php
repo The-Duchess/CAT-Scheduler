@@ -9,7 +9,7 @@ require_once('../../Query/Student.php');
 
 function submit_availabilities(){
 
-    console.log("in file process");
+    //console.log("in file process");
 
 /*
     if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
@@ -18,7 +18,7 @@ function submit_availabilities(){
     }
 */
 
-    console.log("connection succeeded");
+    //console.log("connection succeeded");
 
     $student_uname = $_SERVER['PHP_AUTH_US'];
     $student_id = get_student_id_by_username(student_uname);
@@ -26,7 +26,7 @@ function submit_availabilities(){
     $pref = "";
     $input_bocks = array();
 
-    console.log("initialized");
+    //console.log("initialized");
 
     // things needed for time submission
     // insert_availability_block($input_term_id, $input_day, $input_hour, $input_pref, $kwargs=null)
@@ -34,7 +34,7 @@ function submit_availabilities(){
     foreach ($_POST as $key => $val) {
 
 
-        console.log("creating blocks");
+        //console.log("creating blocks");
 
         if ($key == "term_name" || $key == "term_id" || $key == "shift_preference" || $key == "Submit") {
             // do nothing
@@ -59,9 +59,9 @@ function submit_availabilities(){
             $input_pref    = $val;
             $args          = array('student_id' => $student_id);
 
-            console.log($input_day);
-            console.log($input_hour);
-            console.log($input_pref);
+            //console.log($input_day);
+            //console.log($input_hour);
+            //console.log($input_pref);
 
             if ($val == "A") {
                 array_push($input_blocks, array("block_day" => $input_day, "block_hour" => $input_hour, "block_preference" => 'Available'));
@@ -73,7 +73,7 @@ function submit_availabilities(){
 
         }
 
-        console.log("finished creating blocks");
+        //console.log("finished creating blocks");
 
         update_availability_blocks($input_term_id, $input_bocks);
     }
