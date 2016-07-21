@@ -5,10 +5,14 @@
 
 //function submit_availabilities(){
 
+console.log("in file process");
+
 	if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
     	echo "<p>Connection Failed</p>\n";
     	exit();
 	}
+
+	console.log("connection succeeded");
 
 	$student_uname = $_SERVER['PHP_AUTH_US'];
 	$student_id = get_student_id_by_username(student_uname);
@@ -16,10 +20,16 @@
 	$pref = "";
 	$input_bocks = array();
 
+	console.log("initialized");
+
 	// things needed for time submission
 	// insert_availability_block($input_term_id, $input_day, $input_hour, $input_pref, $kwargs=null)
 
 	foreach ($_POST as $key => $val) {
+
+
+		console.log("creating blocks");
+
 		if ($key == "term_name" || $key == "term_id" || $key == "shift_preference") {
 			// do nothing
 			if ($key == "shift_preference") {
@@ -56,6 +66,8 @@
 			}
 
 		}
+
+		console.log("finished creating blocks");
 
 		update_availability_blocks($input_term_id, $input_bocks);
 	}
