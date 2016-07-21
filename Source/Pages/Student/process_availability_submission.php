@@ -49,24 +49,27 @@ function submit_availabilities(){
 	// input_pref = $_POST['value']
 	// create kwargs { student_id => $student_id }
 
-	foreach ($_POST as $entry) {
-
-		if ($entry['name'] == "term_name") {
-			// do nothing
-		} if ($entry['name'] == "term_id") {
-			// do nothing
-		} elseif ($entry['name'] == "shift_preference") {
+	foreach ($_POST as $key => $val) {
+		if ($key == "term_name" || $key == "term_id" || $key == "shift_preference") {
 			// do nothing
 		} else {
-			$input_term_id = $entry['term_id'];
-			$input_day = substr($entry['id'], 0, -1);
-			$input_hour = substr($entry['id'], -1);
-			$input_pref = $entry['value'];
-			$args { student_id => $student_id };
+			// determine split point on $key to get day and number
+			// split $key into day + hour
+			// get term_id
+			// get input pref
+			// get student_id
+
+			$pos = strpos($key, 'y');
+			$input_term_id = $_POST['term_id'];
+			$input_day     = substr($key, 0, $pos);
+			$input_hour    = substr($key, ($pos + 1), strlen($key));
+			$input_pref    = $val;
+			$args          = ('student_id' => $student_id);
 
 			$ret = insert_availability_block($input_term_id, $input_day, $input_hour, $input_pref, $args);
 		}
 	}
+	
 }
 
 ?>
