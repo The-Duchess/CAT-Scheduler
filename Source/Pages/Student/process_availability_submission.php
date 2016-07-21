@@ -43,6 +43,10 @@ function submit_availabilities(){
 			$input_pref    = $val;
 			$args          = array('student_id' => $student_id);
 
+			console.log($input_day);
+			console.log($input_hour);
+			console.log($input_pref);
+
 			if ($val == "A") {
 				array_push($input_blocks, array("block_day" => $input_day, "block_hour" => $input_hour, "block_preference" => 'Available'));
 			} elseif ($val == "P") {
