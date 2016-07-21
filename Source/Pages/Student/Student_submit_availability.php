@@ -257,7 +257,7 @@ if (!empty($selected_term)) {
 
 } //closing the page wrapper if statement
 
-if (isset($_POST['shift_preference'])) {
+if (isset($_POST['Submit'])) {
     submit_availabilities();
 }
 
