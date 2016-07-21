@@ -177,7 +177,7 @@ if (!empty($selected_term)) {
                             <label for='0h'>No Preference</label>
                     </div>
 
-                    <input type='submit' value='Submit' />
+                    <input type='submit' value='Submit' onclick="submit_availabilities()"/>
                 </form>
             </div>
 <?php

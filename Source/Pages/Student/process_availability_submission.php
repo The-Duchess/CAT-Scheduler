@@ -3,7 +3,7 @@
 //include "../../Query/Student.php"
 //include "../../Query/Availability.php"
 
-//function submit_availabilities(){
+function submit_availabilities(){
 
 console.log("in file process");
 
@@ -72,6 +72,6 @@ console.log("in file process");
 		update_availability_blocks($input_term_id, $input_bocks);
 	}
 
-//}
+}
 
 ?>
