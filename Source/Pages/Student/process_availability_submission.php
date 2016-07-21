@@ -37,6 +37,7 @@ function submit_availabilities(){
 	
 	$student_uname = $_SERVER['PHP_AUTH_US'];
 	$student_id = get_student_id_by_username(student_uname);
+	$pref = "";
 
 	// things needed for time submission
 	// insert_availability_block($input_term_id, $input_day, $input_hour, $input_pref, $kwargs=null)
@@ -52,6 +53,9 @@ function submit_availabilities(){
 	foreach ($_POST as $key => $val) {
 		if ($key == "term_name" || $key == "term_id" || $key == "shift_preference") {
 			// do nothing
+			if ($key == "shift_preference") {
+				$pref = $val;
+			}
 		} else {
 			// determine split point on $key to get day and number
 			// split $key into day + hour
@@ -69,6 +73,7 @@ function submit_availabilities(){
 			$args          = ('student_id' => $student_id);
 
 			$ret = insert_availability_block($input_term_id, $input_day, $input_hour, $input_pref, $args);
+			print ($ret);
 		}
 	}
 
