@@ -37,7 +37,9 @@ function submit_availabilities(){
 	
 	$student_uname = $_SERVER['PHP_AUTH_US'];
 	$student_id = get_student_id_by_username(student_uname);
+	$input_term_id = $_POST['term_id'];
 	$pref = "";
+	$input_bocks = array();
 
 	// things needed for time submission
 	// insert_availability_block($input_term_id, $input_day, $input_hour, $input_pref, $kwargs=null)
@@ -55,6 +57,9 @@ function submit_availabilities(){
 			// do nothing
 			if ($key == "shift_preference") {
 				$pref = $val;
+
+				// add shift_preference
+				// $ret = 
 			}
 		} else {
 			// determine split point on $key to get day and number
@@ -66,15 +71,22 @@ function submit_availabilities(){
 			// this is sort of a hack
 			// TODO: if it is possible make this clean
 			$pos = strpos($key, 'y');
-			$input_term_id = $_POST['term_id'];
 			$input_day     = substr($key, 0, $pos);
 			$input_hour    = substr($key, ($pos + 1), strlen($key));
 			$input_pref    = $val;
-			$args          = ('student_id' => $student_id);
+			$args          = array('student_id' => $student_id);
 
-			$ret = update_availability_block($input_term_id, $input_day, $input_hour, $input_pref, null);
-			print ($ret);
+			if ($val == 'A') {
+				array_push($input_blocks, array("block_day" => $input_day, "block_hour" => $input_hour, "block_preference" => 'Available'));
+			} elseif ($val == 'P') {
+				array_push($input_blocks, array("block_day" => $input_day, "block_hour" => $input_hour, "block_preference" => 'Prefered'));
+			} else {
+				// do nothing
+			}
+
 		}
+
+		$ret = update_availability_block($input_term_id, $input_bocks, array("student_id" => $student_id));
 	}
 
 }
