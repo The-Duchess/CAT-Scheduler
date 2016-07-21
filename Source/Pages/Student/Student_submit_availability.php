@@ -181,12 +181,13 @@ if (!empty($selected_term)) {
                 </form>
             </div>
 <?php
-//<?php
+
+} //closing the page wrapper if statement
+
 if (isset($_POST['shift_preference'])) {
     submit_availabilities();
 }
-//?>
-} //closing the page wrapper if statement
+
 ?>
         </div>
         <script type='text/javascript' src='../../jquery-3.0.0.min.js'></script>
