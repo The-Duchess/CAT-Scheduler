@@ -51,7 +51,7 @@ function submit_availabilities(){
             $input_day     = substr($key, 0, ($pos + 1));
             $input_hour    = (int)substr($key, ($pos + 1), strlen($key));
             $input_pref    = $val;
-            $args          = array('student_id' => $student_id);
+            $args          = array("student_id" => $student_id);
 
             //console.log($input_day);
             //console.log($input_hour);
@@ -73,16 +73,12 @@ function submit_availabilities(){
     }
 
     print_r($student_id);
-    print_r(" || ");
+    print(" - ");
     print_r($input_blocks);
-
-    $args = array(
-        "student_id" => $student_id;
-    );
 
     $res = update_availability_blocks($input_term_id, $input_blocks, $args);
 
-    print_r(" || ");
+    print(" - ");
     print_r($res);
 
 }
