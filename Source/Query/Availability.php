@@ -79,6 +79,8 @@ function retrieve_availability_for_student($student_id, $term_id, $kwargs=null) 
 //
 //  NOTE: if specifying kwargs, if both student_username and student_id are specified, student_id will override student_username.
 function insert_availability_block($input_term_id, $input_day, $input_hour, $input_pref, $kwargs=null) {
+    // REMOVE THIS PRINT
+    //print("insert availability");
     // initializing variables for the query, will take default environment varibles
     // if kwargs arent given
     $student_user = null;
@@ -134,6 +136,7 @@ function insert_availability_block($input_term_id, $input_day, $input_hour, $inp
 //
 //  NOTE: if specifying kwargs, if both student_username and student_id are specified, student_id will override student_username.
 function update_availability_blocks($input_term_id, $input_blocks, $kwargs=null) {
+    //print("update availability");// REMOVE THIS PRINT
     // initializing variables for the query, will take default environment varibles
     // if kwargs arent given
     $student_user = null;

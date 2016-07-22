@@ -1,9 +1,10 @@
 <?php
 // this first php block initializes the variables used by the page
 
-require_once('../../Dropdown_select_term.php');
-require_once('../../Query/Availability.php');
-require_once('../../Query/Student.php');
+require_once dirname(__FILE__) . "/../../Query/Student.php";
+require_once dirname(__FILE__) . "/../../Query/Availability.php";
+require_once dirname(__FILE__) . "/../../Dropdown_select_term.php";
+
 //require_once('process_availability_submission.php');
 // require_once('../../Query_retrieve_shift_preference.php');
 
@@ -18,6 +19,14 @@ function submit_availabilities(){
     //console.log("in file process");
 
     //console.log("connection succeeded");
+
+    //simulating user session
+    // TODO: remove this when we have a true user auth
+    $_SESSION['PHP_AUTH_USER'] = "dog01";
+
+    $kwargs2 = array(
+        "student_username" => 'dog01'
+    );
 
     // TO DO: set this to get the USER with PHP AUTH US;
     $student_uname = "dog01"; //$_SERVER['PHP_AUTH_US'];
@@ -38,11 +47,22 @@ function submit_availabilities(){
 
         //console.log("creating blocks");
 
-        if ($key == "term_name" || $key == "term_id" || $key == "shift_preference" || $key == "Submit") {
+        if ($key == "term_name" || $key == "term_id" || $key == "shift_pref" || $key == "Submit") {
             // do nothing
-            if ($key == "shift_preference") {
-                $pref = $val;
 
+            if ($key == "shift_pref") {
+                /*
+                if ($val == "2h") {
+                    $pref = "Two 2-Hour";
+                } elseif ($val == "4h" ) {
+                    $pref = "One 4-Hour";
+                } elseif ($val == "0h") {
+                    $pref = "No Prerence";
+                } else {
+                    
+                }
+                */
+                $pref = $val;
                 // add shift_preference
                 // $ret = 
             }
@@ -84,14 +104,18 @@ function submit_availabilities(){
     print(" - ");
     print_r($input_blocks);
 
-    $res = update_availability_blocks($input_term_id, $input_blocks, $args);
+    if(update_availability_blocks($input_term_id, $input_blocks, $kwargs2)){
+            print("succeeded");
+    } else {
+            print("something went wrong");
+    }
 
     print(" - ");
     print_r($res);
     print(" end");
 
     // when add_student_shift_preference is QA TEST
-    //$res = add_student_shift_preference($student_id, $pref);
+    $res = add_student_shift_preference($student_id, $input_term_id, $pref);
 
 }
 
