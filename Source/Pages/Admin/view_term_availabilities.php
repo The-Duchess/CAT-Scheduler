@@ -44,7 +44,7 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
     <body>
         <div class='container'>
             <h1>USING Cody's DB</h1>
-						
+            
 <?php
 
 //generate the dropdown form for selecting a term to submit availability for
@@ -60,20 +60,20 @@ if (!empty($selected_term)) {
     $term_id = (int)$selected_term['term_id'];
     $info = retrieve_availability_for_term($term_id);
     $db_blocks = array();
-		//get all the availabilities ready to be echoed
+    //get all the availabilities ready to be echoed
     if ($info) {
         foreach ($info as $data) {
-					if(pg_fetch_all($data)){
-						foreach(pg_fetch_all($data) as $student){
-							$id = $student['block_day'] . $student['block_hour'];
-							$uname = $student['student_username'];
-							$pref = $student['block_preference'];
-							if(!array_key_exists($id, $db_blocks)) {
-								$db_blocks[$id] = array();	
-							}
-							$db_blocks[$id][$uname] = $pref;
-						}
-					}
+          if(pg_fetch_all($data)){
+            foreach(pg_fetch_all($data) as $student){
+              $id = $student['block_day'] . $student['block_hour'];
+              $uname = $student['student_username'];
+              $pref = $student['block_preference'];
+              if(!array_key_exists($id, $db_blocks)) {
+                $db_blocks[$id] = array();  
+              }
+              $db_blocks[$id][$uname] = $pref;
+            }
+          }
         }
     }
 
@@ -115,22 +115,22 @@ if (!empty($selected_term)) {
                                         //generate the id string for the table element
                                         $cur_id = $day . $hour;
                                         echo "<td id=$cur_id>";
-																				//populate the table element with names of available students if there are any
+                                        //populate the table element with names of available students if there are any
                                         if(array_key_exists($cur_id, $db_blocks)){
-																					$block = $db_blocks[$cur_id];
-																					//display preffered availabilities first
-																					foreach($block as $name => $pref){
-																						if($pref == 'Preferred') {
-																							echo "<font color = 'blue'>$name</font><br>";
-																						}
-																					}
-																					//then display normal availabilities
-																					foreach($block as $name => $pref){
-																						if($pref == 'Available') {
-																							echo "<font color = 'green'>$name</font><br>";
-																						}
-																					}
-																				}
+                                          $block = $db_blocks[$cur_id];
+                                          //display preffered availabilities first
+                                          foreach($block as $name => $pref){
+                                            if($pref == 'Preferred') {
+                                              echo "<font color = 'blue'>$name</font><br>";
+                                            }
+                                          }
+                                          //then display normal availabilities
+                                          foreach($block as $name => $pref){
+                                            if($pref == 'Available') {
+                                              echo "<font color = 'green'>$name</font><br>";
+                                            }
+                                          }
+                                        }
                                         echo "</td>";
                                     }
                                     echo "</tr>";
@@ -145,11 +145,11 @@ if (!empty($selected_term)) {
 
 ?>
         </div>
-				<div> <h3>KEY:</h3>
+        <div> <h3>KEY:</h3>
                         <p><font color = 'blue'>Blue - Preferred</font></p>
                         <p><font color = 'green'>Green - Available</font></p>
         </div>
     </body>
 </html>
-						
-						
+            
+            
