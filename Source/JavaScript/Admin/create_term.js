@@ -53,6 +53,6 @@ $(document).ready( function() {
     });
 
     dueObj.change( function() {
-        if ($(this)/val() != "") { updateStats(); }
+        if ($(this).val() != "") { updateStats(); }
     });
 });
