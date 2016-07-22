@@ -76,7 +76,7 @@ function submit_availabilities(){
 
         //console.log("finished creating blocks");
 
-        update_availability_blocks($input_term_id, $input_bocks);
+        update_availability_blocks($input_term_id, $input_blocks);
     }
 
 }
