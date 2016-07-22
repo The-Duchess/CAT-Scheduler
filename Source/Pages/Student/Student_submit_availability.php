@@ -7,6 +7,12 @@ require_once('../../Query/Student.php');
 //require_once('process_availability_submission.php');
 // require_once('../../Query_retrieve_shift_preference.php');
 
+//if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
+if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
+    echo "<p>Connection Failed</p>\n";
+    exit();
+}
+
 function submit_availabilities(){
 
     //console.log("in file process");
@@ -84,12 +90,9 @@ function submit_availabilities(){
     print_r($res);
     print(" end");
 
-}
+    // when add_student_shift_preference is QA TEST
+    //$res = add_student_shift_preference($student_id, $pref);
 
-//if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
-if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
-    echo "<p>Connection Failed</p>\n";
-    exit();
 }
 
 //TODO: remove this line once auth is in place, it will be automatically populated
