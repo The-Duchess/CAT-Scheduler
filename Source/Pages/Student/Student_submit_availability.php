@@ -7,22 +7,23 @@ require_once('../../Query/Student.php');
 //require_once('process_availability_submission.php');
 // require_once('../../Query_retrieve_shift_preference.php');
 
+//if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
+if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
+    echo "<p>Connection Failed</p>\n";
+    exit();
+}
+
 function submit_availabilities(){
 
     //console.log("in file process");
-
-/*
-    if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
-        echo "<p>Connection Failed</p>\n";
-        exit();
-    }
-*/
 
     //console.log("connection succeeded");
 
     // TO DO: set this to get the USER with PHP AUTH US;
     $student_uname = "dog01"; //$_SERVER['PHP_AUTH_US'];
-    $student_id = get_student_id_by_username($student_uname);
+    $res = get_student_id_by_username($student_uname);
+    $arr = pg_fetch_array($res);
+    $student_id = $arr['student_id'];
     $input_term_id = $_POST['term_id'];
     $pref = "";
     $input_blocks = array();
@@ -55,10 +56,10 @@ function submit_availabilities(){
             // this is sort of a hack
             // TODO: if it is possible make this clean
             $pos = strpos($key, 'y');
-            $input_day     = substr($key, 0, $pos);
+            $input_day     = substr($key, 0, ($pos + 1));
             $input_hour    = (int)substr($key, ($pos + 1), strlen($key));
             $input_pref    = $val;
-            $args          = array('student_id' => $student_id);
+            $args          = array("student_id" => $student_id);
 
             //console.log($input_day);
             //console.log($input_hour);
@@ -76,15 +77,22 @@ function submit_availabilities(){
 
         //console.log("finished creating blocks");
 
-        update_availability_blocks($input_term_id, $input_blocks);
+
     }
 
-}
+    print_r($student_id);
+    print(" - ");
+    print_r($input_blocks);
 
-//if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
-if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
-    echo "<p>Connection Failed</p>\n";
-    exit();
+    $res = update_availability_blocks($input_term_id, $input_blocks, $args);
+
+    print(" - ");
+    print_r($res);
+    print(" end");
+
+    // when add_student_shift_preference is QA TEST
+    //$res = add_student_shift_preference($student_id, $pref);
+
 }
 
 //TODO: remove this line once auth is in place, it will be automatically populated
