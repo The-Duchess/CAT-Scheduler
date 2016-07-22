@@ -19,10 +19,10 @@ $report = "";
 </head>
 
 <body>
-    <a href="<?php echo htmlentities(dirname(__FILE__) . "/../login_home.php"); ?>">Return to Home</a>
+    <a href="<?php echo htmlentities(dirname(__FILE__) . "/../login_home.php"); ?>">Return to Home</a><br><br>
     <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
         <label for="termName">Term Name:</label><br>
-        <input type="text" id="termName" name="termName" />
+        <input type="text" id="termName" name="termName" /><br>
         <label for="startDate">Start Date:</label><br>
         <input type="text" id="startDate" name="startDate"><br>
         <label for="endDate">End Date:</label><br>
@@ -41,11 +41,11 @@ if (isset($_POST['submit'])) {
         $due = new DateTime($_POST['dueDate']);
 
         if (!($CONNECTION = fido_db_connect())) {
-            $report "ERROR: Failed to connect to database";
+            $report = "ERROR: Failed to connect to database";
         } else if (!add_term($name, $start, $end, $due)) {
             $report = "ERROR: Failed to add term to database";
         } else {
-            $report "Term Created";
+            $report = "Term Created";
         }
     } else {
         $report = "ERROR: Cannot create a term with empty fields";
