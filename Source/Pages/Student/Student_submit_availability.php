@@ -73,10 +73,16 @@ function submit_availabilities(){
     }
 
     print_r($student_id);
+    print_r(" || ");
     print_r($input_blocks);
 
-    $res = update_availability_blocks($input_term_id, $input_blocks);
+    $kwargs = array(
+        "student_id" => $student_id;
+    );
 
+    $res = update_availability_blocks($input_term_id, $input_blocks, $kwargs);
+
+    print_r(" || ");
     print_r($res);
 
 }
