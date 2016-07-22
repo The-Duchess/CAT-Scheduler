@@ -92,7 +92,7 @@ function submit_availabilities(){
     print(" end");
 
     // when add_student_shift_preference is QA TEST
-    //$res = add_student_shift_preference($student_id, $pref);
+    $res = add_student_shift_preference($student_id, $pref);
 
 }
 
