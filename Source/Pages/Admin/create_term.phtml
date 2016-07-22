@@ -1,0 +1,27 @@
+<?php
+include "../../Query/term.php";
+include "../../API/Utility.php";
+?>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Create New Term</title>
+    <link rel="stylesheet" href="../../JQuery-1.2/UI/jquery-ui-darkness.css">
+    <script src="../../JQuery-1.2/jquery-1.12.4.js"></script>
+    <script src="../../JQuery-1.2/jquery-ui.js"></script>
+    <script src="../../JavaScript/Admin/create_term.js"></script>
+</head>
+
+<body>
+    <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
+        <label>Starting Date<input type="text" id="startDate" name="startDate"></label>
+        <label>Ending Date<input type="text" id="endDate" name="endDate" disabled="true"></label>
+        <label>Due Date<input type="text" id="dueDate" name="dueDate" disabled="true"</label>
+        <p id="stats"></p>
+        <input type="submit" name="submit" value="Create Term" />
+    </form>
+<?php
+?>
+</body>
+</html>

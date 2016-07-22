@@ -53,4 +53,15 @@ function dropdown_select_term($subIdent, $kwargs=null) {
         }
     }
 }
+
+function fido_db_connect() {
+    $host = "capstonecatteam.hopto.org";
+    $port = "5432";
+    $database = "Cat";
+    $username = "guest";
+    $password="FIDO";
+    $conn_string = "host={$host} port={$port} dbname={$database} user={$username} password={$password}";
+
+    return pg_connect($conn_string);
+}
 ?>
