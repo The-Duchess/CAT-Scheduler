@@ -39,9 +39,11 @@ function submit_availabilities(){
 
         //console.log("creating blocks");
 
-        if ($key == "term_name" || $key == "term_id" || $key == "shift_preference" || $key == "Submit") {
+        if ($key == "term_name" || $key == "term_id" || $key == "shift_pref" || $key == "Submit") {
             // do nothing
-            if ($key == "shift_preference") {
+
+            if ($key == "shift_pref") {
+                /*
                 if ($val == "2h") {
                     $pref = "Two 2-Hour";
                 } elseif ($val == "4h" ) {
@@ -51,7 +53,8 @@ function submit_availabilities(){
                 } else {
                     
                 }
-
+                */
+                $pref = $val
                 // add shift_preference
                 // $ret = 
             }
