@@ -1,6 +1,8 @@
 <?php
 require_once dirname(__FILE__) . "/../../Query/Term.php";
 require_once dirname(__FILE__) . "/../../API/Utility.php";
+
+$report = "";
 ?>
 
 <html lang="en">
@@ -14,7 +16,10 @@ require_once dirname(__FILE__) . "/../../API/Utility.php";
 </head>
 
 <body>
+    <a href="<?php echo htmlentities(dirname(__FILE__) . "/../login_home.php"); ?>">Return to Home</a>
     <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
+        <label for="termName">Term Name:</label><br>
+        <input type="text" id="termName" name="termName" />
         <label for="startDate">Start Date:</label><br>
         <input type="text" id="startDate" name="startDate"><br>
         <label for="endDate">End Date:</label><br>
@@ -25,6 +30,23 @@ require_once dirname(__FILE__) . "/../../API/Utility.php";
         <input type="submit" name="submit" value="Create Term" />
     </form>
 <?php
+if (isset($_POST['submit'])) {
+    if (isset($_POST['termName']) and isset($_POST['startDate']) and isset($_POST['endDate']) and isset($_POST['dueDate'])) {
+        $name = $_POST['termName'];
+        $start = new DateTime($_POST['startDate']);
+        $end = new DateTime($_POST['endDate']);
+        $due = new DateTime($_POST['dueDate']);
+
+        if (!add_term($name, $start, $end, $due)) {
+            $report = "ERROR: Failed to add term to database";
+        } else {
+            $report "Term Created";
+        }
+    } else {
+        $report = "ERROR: Cannot create a term with empty fields";
+    }
+}
 ?>
+    <p><?php echo $report; ?></p>
 </body>
 </html>
