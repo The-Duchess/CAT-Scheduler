@@ -3,7 +3,7 @@
 
 require_once dirname(__FILE__) . "/../../Query/Student.php";
 require_once dirname(__FILE__) . "/../../Query/Availability.php";
-require_once dirname(__FILE__) . "/../../Dropdown_select_term.php";
+require_once dirname(__FILE__) . "/../../API/Utility.php";
 
 //require_once dirname(__FILE__) . "/process_availability_submission.php";
 //require_once dirname(__FILE__) . "/../../Query_retrieve_shift_preference.php";
