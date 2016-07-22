@@ -35,7 +35,17 @@ function submit_availabilities(){
 		if ($key == "term_name" || $key == "term_id" || $key == "shift_preference") {
 			// do nothing
 			if ($key == "shift_preference") {
-				$pref = $val;
+				//$pref = $val;
+
+				if ($val == "2h") {
+					$pref = "Two 2-Hour";
+				} elseif ($val == "4h" ) {
+					$pref = "One 4-Hour";
+				} elseif ($val == "0h") {
+					$pref = "No Prerence";
+				} else {
+					
+				}
 
 				// add shift_preference
 				// $ret = 

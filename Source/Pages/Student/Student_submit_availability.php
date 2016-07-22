@@ -42,7 +42,15 @@ function submit_availabilities(){
         if ($key == "term_name" || $key == "term_id" || $key == "shift_preference" || $key == "Submit") {
             // do nothing
             if ($key == "shift_preference") {
-                $pref = $val;
+                if ($val == "2h") {
+                    $pref = "Two 2-Hour";
+                } elseif ($val == "4h" ) {
+                    $pref = "One 4-Hour";
+                } elseif ($val == "0h") {
+                    $pref = "No Prerence";
+                } else {
+                    
+                }
 
                 // add shift_preference
                 // $ret = 
@@ -92,7 +100,7 @@ function submit_availabilities(){
     print(" end");
 
     // when add_student_shift_preference is QA TEST
-    $res = add_student_shift_preference($student_id, $term_id, $pref);
+    $res = add_student_shift_preference($student_id, $input_term_id, $pref);
 
 }
 
