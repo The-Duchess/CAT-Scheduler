@@ -72,6 +72,7 @@ function submit_availabilities(){
 
     }
 
+    print_r($student_id);
     print_r($input_blocks);
 
     $res = update_availability_blocks($input_term_id, $input_blocks);
