@@ -11,13 +11,6 @@ function submit_availabilities(){
 
     //console.log("in file process");
 
-/*
-    if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
-        echo "<p>Connection Failed</p>\n";
-        exit();
-    }
-*/
-
     //console.log("connection succeeded");
 
     // TO DO: set this to get the USER with PHP AUTH US;
@@ -81,7 +74,9 @@ function submit_availabilities(){
 
     print_r($input_blocks);
 
-    update_availability_blocks($input_term_id, $input_blocks);
+    $res = update_availability_blocks($input_term_id, $input_blocks);
+
+    print_r($res);
 
 }
 
