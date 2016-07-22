@@ -20,11 +20,12 @@ function submit_availabilities(){
 
     //console.log("connection succeeded");
 
+    // TO DO: set this to get the USER with PHP AUTH US;
     $student_uname = "dog01"; //$_SERVER['PHP_AUTH_US'];
     $student_id = get_student_id_by_username($student_uname);
     $input_term_id = $_POST['term_id'];
     $pref = "";
-    $input_bocks = array();
+    $input_blocks = array();
 
     //console.log("initialized");
 
