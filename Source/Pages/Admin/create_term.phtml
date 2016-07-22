@@ -19,8 +19,7 @@ $report = "";
 </head>
 
 <body>
-    <!-- <a href="<?php echo htmlentities(dirname(__FILE__) . "/../login_home.php"); ?>">Return to Home</a> -->
-    <a href="../login_home.php">Return to Home</a>
+    <a href="<?php echo htmlentities(dirname(__FILE__) . "/../login_home.php"); ?>">Return to Home</a>
     <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
         <label for="termName">Term Name:</label><br>
         <input type="text" id="termName" name="termName" />
