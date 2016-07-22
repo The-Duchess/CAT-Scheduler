@@ -79,6 +79,8 @@ function submit_availabilities(){
 
     }
 
+    print_r($input_blocks);
+
     update_availability_blocks($input_term_id, $input_blocks);
 
 }
