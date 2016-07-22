@@ -15,7 +15,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
-require_once dirname(__FILE__) . "/../../Query/term.php";
+require_once dirname(__FILE__) . "/../../Query/Term.php";
 
 //  Database connection
 if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
