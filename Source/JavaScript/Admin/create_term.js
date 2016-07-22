@@ -15,7 +15,14 @@ $(document).ready( function() {
         statsObj.text("Due  --- " + due_to_start_days + " days --->  Start  --- " + start_to_end_weeks + " weeks --->  End");
     }
 
-    startObj.datepicker();
+    var nextMonday = new Date();
+    nextMonday.setDay(nextMonday.getDay() - (nextMonday.getDay() - 1));
+    // nextMonday.setDay(1);
+    nextMonday.setDate(nextMonday.getDate() + 7);
+
+    startObj.datepicker({
+        defaultDate: nextMonday
+    });
     endObj.datepicker();
     dueObj.datepicker();
 
