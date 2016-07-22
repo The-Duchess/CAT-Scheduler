@@ -56,7 +56,7 @@ function submit_availabilities(){
             // TODO: if it is possible make this clean
             $pos = strpos($key, 'y');
             $input_day     = substr($key, 0, ($pos + 1));
-            $input_hour    = (int)substr($key, ($pos + 2), strlen($key));
+            $input_hour    = (int)substr($key, ($pos + 1), strlen($key));
             $input_pref    = $val;
             $args          = array('student_id' => $student_id);
 
