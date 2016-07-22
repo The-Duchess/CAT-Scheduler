@@ -1,9 +1,10 @@
 <?php
 // this first php block initializes the variables used by the page
 
-require_once('../../Dropdown_select_term.php');
-require_once('../../Query/Availability.php');
-require_once('../../Query/Student.php');
+require_once dirname(__FILE__) . '../../Query/Student.php';
+require_once dirname(__FILE__) . '../../Query/Availability.php';
+require_once dirname(__FILE__) . '../../Dropdown_select_term.php';
+
 //require_once('process_availability_submission.php');
 // require_once('../../Query_retrieve_shift_preference.php');
 
