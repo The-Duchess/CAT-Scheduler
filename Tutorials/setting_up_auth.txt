@@ -1,0 +1,24 @@
+Apache can be have settings set outside of the main configuration directory with distributed configuration files, named ".htaccess". These configs are only applied to the base directory the file is placed in and the directories below it. Currently, two htaccess files are in place, one ii
+
+Source/Pages/.htaccess
+
+the other in
+
+Source/Pages/Admin/htaccess
+
+These two are configured to require http basic auth against these directories. The one in "Pages"will allow anyone in the configured password file to login, the Admin currently only allows user "bowzr". Because the path to the password file has to be hardcoded and absolute, each of you will need to configure your own password file somewhere outside of the repository (for security reasons). Your home directory will be fine. There is a file
+
+Templates/htpasswd_sample
+
+Copy this file somewhere in your directory (simplest will be in home), rename it to ".htpasswd", and update the paths in the htaccess files to point to it.
+
+If you want to add more users to the file, you can do so with the following command:
+
+----------------------------------
+htpasswd ~/.htpasswd moarusers
+   ^          ^          ^
+   |          |          |
+command  path to file  new username
+-----------------------------------
+
+You will be prompted to set a password, once you do the new user will be appended to the file.
