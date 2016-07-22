@@ -15,7 +15,7 @@ function submit_availabilities(){
 
     // TO DO: set this to get the USER with PHP AUTH US;
     $student_uname = "dog01"; //$_SERVER['PHP_AUTH_US'];
-    $student_id = get_student_id_by_username($student_uname);
+    $student_id = 15;
     $input_term_id = $_POST['term_id'];
     $pref = "";
     $input_blocks = array();
