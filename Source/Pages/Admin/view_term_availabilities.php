@@ -68,12 +68,10 @@ if (!empty($selected_term)) {
 							$id = $student['block_day'] . $student['block_hour'];
 							$uname = $student['student_username'];
 							$pref = $student['block_preference'];
-							if(array_key_exists($id, $db_blocks)) {
-								$db_blocks[$id][$uname] = $pref;
-							}else {
-								$db_blocks[$id] = array();
-								$db_blocks[$id][$uname] = $pref;
+							if(!array_key_exists($id, $db_blocks)) {
+								$db_blocks[$id] = array();	
 							}
+							$db_blocks[$id][$uname] = $pref;
 						}
 					}
         }
@@ -114,17 +112,19 @@ if (!empty($selected_term)) {
                                             }
                                         }
 
-                                        //generate the id strings for the table elements
+                                        //generate the id string for the table element
                                         $cur_id = $day . $hour;
-																				//populate the table element with names if there are any
                                         echo "<td id=$cur_id>";
+																				//populate the table element with names of available students if there are any
                                         if(array_key_exists($cur_id, $db_blocks)){
 																					$block = $db_blocks[$cur_id];
+																					//display preffered availabilities first
 																					foreach($block as $name => $pref){
 																						if($pref == 'Preferred') {
 																							echo "<font color = 'blue'>$name</font><br>";
 																						}
 																					}
+																					//then display normal availabilities
 																					foreach($block as $name => $pref){
 																						if($pref == 'Available') {
 																							echo "<font color = 'green'>$name</font><br>";
@@ -144,6 +144,10 @@ if (!empty($selected_term)) {
 } //closing the page wrapper if statement
 
 ?>
+        </div>
+				<div> <h3>KEY:</h3>
+                        <p><font color = 'blue'>Blue - Preferred</font></p>
+                        <p><font color = 'green'>Green - Available</font></p>
         </div>
     </body>
 </html>
