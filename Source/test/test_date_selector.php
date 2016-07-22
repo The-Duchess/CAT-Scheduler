@@ -12,7 +12,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
-include "../Utility/utils.php";
+require_once dirname(__FILE__) . "/../Utility/utils.php";
 
 $result1 = date_selector("formSubmit");
 $result2 = date_selector("formSubmit", 2);

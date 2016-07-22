@@ -8,7 +8,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
-include "../Query/Student.php";
+require_once dirname(__FILE__) . "/../Query/Student.php";
 
 //  Database connection
 if (!($CONNECTION = pg_connect("host=db.cecs.pdx.edu port=5432 dbname=simca user=simca password=hk8#9Yyced"))) {

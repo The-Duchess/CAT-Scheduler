@@ -5,8 +5,8 @@ require_once dirname(__FILE__) . "/../../Query/Student.php";
 require_once dirname(__FILE__) . "/../../Query/Availability.php";
 require_once dirname(__FILE__) . "/../../Dropdown_select_term.php";
 
-//require_once('process_availability_submission.php');
-// require_once('../../Query_retrieve_shift_preference.php');
+//require_once dirname(__FILE__) . "/process_availability_submission.php";
+//require_once dirname(__FILE__) . "/../../Query_retrieve_shift_preference.php";
 
 //if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
 if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {

@@ -1,6 +1,6 @@
 <?php
 
-include "../Query/Student.php";
+require_once dirname(__FILE__) . "/../Query/Student.php";
 
 function temp_add_student($username) {
     $query = "INSERT INTO student (student_username) VALUES ($1)";

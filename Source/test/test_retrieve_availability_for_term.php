@@ -9,7 +9,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
-include "../Query_retrieve_availability_for_term.php";
+require_once dirname(__FILE__) . "/../Query_retrieve_availability_for_term.php";
 
 //  Database connection
 if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
