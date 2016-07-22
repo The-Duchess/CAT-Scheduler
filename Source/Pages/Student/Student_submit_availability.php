@@ -100,19 +100,19 @@ function submit_availabilities(){
 
     }
 
-    print_r($student_id);
-    print(" - ");
-    print_r($input_blocks);
+    //print_r($student_id);
+    //print(" - ");
+    //print_r($input_blocks);
 
     if(update_availability_blocks($input_term_id, $input_blocks, $kwargs2)){
-            print("succeeded");
+            //print("succeeded");
     } else {
             print("something went wrong");
     }
 
-    print(" - ");
-    print_r($res);
-    print(" end");
+    //print(" - ");
+    //print_r($res);
+    //print(" end");
 
     // when add_student_shift_preference is QA TEST
     $res = add_student_shift_preference($student_id, $input_term_id, $pref);
