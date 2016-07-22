@@ -82,6 +82,7 @@ function submit_availabilities(){
 
     print(" - ");
     print_r($res);
+    print(" end");
 
 }
 
