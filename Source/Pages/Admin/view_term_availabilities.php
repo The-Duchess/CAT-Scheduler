@@ -58,15 +58,9 @@ echo "</form>\n";
 if (!empty($selected_term)) {
 
     $term_id = (int)$selected_term['term_id'];
-    //$db_info['mon9a'] = 'A';
-
-
-     // TODO: This formatting step should be done in a API function, make a Story about it
     $info = retrieve_availability_for_term($term_id);
-    //$rows = pg_fetch_all($result);
-
     $db_blocks = array();
-		//$db_prefs = array();
+		//get all the availabilities ready to be echoed
     if ($info) {
         foreach ($info as $data) {
 					if(pg_fetch_all($data)){
@@ -80,13 +74,10 @@ if (!empty($selected_term)) {
 								$db_blocks[$id] = array();
 								$db_blocks[$id][$uname] = $pref;
 							}
-							//$db_blocks[$id] = $uname;
-							//$db_prefs[$id] = $pref;
 						}
 					}
         }
     }
-    // till here 
 
     $start_date = strtotime($selected_term['start_date']);
     $end_date = strtotime($selected_term['end_date']);
@@ -125,20 +116,18 @@ if (!empty($selected_term)) {
 
                                         //generate the id strings for the table elements
                                         $cur_id = $day . $hour;
-
+																				//populate the table element with names if there are any
                                         echo "<td id=$cur_id>";
-                                        foreach($db_blocks as $block => $student){
-																					//echo "Block *$block* Cur_id *$cur_id*";
-																					if($block == $cur_id){
-																						foreach($student as $name => $pref){
-																							if($pref == 'Preferred') {
-																								echo "<font color = 'blue'>$name</font><br>";
-																							}
+                                        if(array_key_exists($cur_id, $db_blocks)){
+																					$block = $db_blocks[$cur_id];
+																					foreach($block as $name => $pref){
+																						if($pref == 'Preferred') {
+																							echo "<font color = 'blue'>$name</font><br>";
 																						}
-																						foreach($student as $name => $pref){
-																							if($pref == 'Available') {
-																								echo "<font color = 'green'>$name</font><br>";
-																							}
+																					}
+																					foreach($block as $name => $pref){
+																						if($pref == 'Available') {
+																							echo "<font color = 'green'>$name</font><br>";
 																						}
 																					}
 																				}
