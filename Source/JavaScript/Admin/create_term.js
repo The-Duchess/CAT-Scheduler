@@ -16,9 +16,9 @@ $(document).ready( function() {
     }
 
     var nextMonday = new Date();
-    nextMonday.setDay(nextMonday.getDay() - (nextMonday.getDay() - 1));
-    // nextMonday.setDay(1);
-    nextMonday.setDate(nextMonday.getDate() + 7);
+    var day = nextMonday.getDay();
+    var offset = 7 + (nextMonday.getDate() - day + ((day == 0) ? (-6) : (1)));
+    nextMonday.setDate(offset);
 
     startObj.datepicker({
         defaultDate: nextMonday
