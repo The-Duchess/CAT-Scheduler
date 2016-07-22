@@ -54,7 +54,7 @@ function submit_availabilities(){
                     
                 }
                 */
-                $pref = $val
+                $pref = $val;
                 // add shift_preference
                 // $ret = 
             }
