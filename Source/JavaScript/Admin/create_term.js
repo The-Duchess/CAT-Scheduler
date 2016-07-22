@@ -22,10 +22,10 @@ $(document).ready( function() {
     startObj.change( function() {
         if ($(this).val() != "") {
             var currentStart = $(this).datepicker("getDate");
-            var defaultEnd = new Date();
-            var endMin = new Date();
-            var defaultDue = new Date();
-            var dueMax = new Date();
+            var defaultEnd = new Date(currentStart);
+            var endMin = new Date(currentStart);
+            var defaultDue = new Date(currentStart);
+            var dueMax = new Date(currentStart);
 
             defaultEnd.setDate(currentStart.getDate() + 76);
             endMin.setDate(currentStart.getDate() + 1);
