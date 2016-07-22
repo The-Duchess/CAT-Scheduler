@@ -10,7 +10,7 @@ $(document).ready( function() {
         var endMsec = (new Date(endObj.val())).getTime();
         var dueMsec = (new Date(dueObj.val())).getTime();
         var start_to_end_weeks = Math.ceil((endMsec - startMsec) / msecs_to_day / 7);
-        var due_to_start_days = Math.ceil((startMsec - endMsec) / msecs_to_day);
+        var due_to_start_days = Math.ceil((startMsec - dueMsec) / msecs_to_day);
 
         statsObj.text("Due  --- " + due_to_start_days + " days --->  Start  --- " + start_to_end_weeks + " weeks --->  End");
     }
@@ -28,19 +28,21 @@ $(document).ready( function() {
             var dueMax = new Date();
 
             defaultEnd.setDate(currentStart.getDate() + 76);
-            endMind.setDate(currentStart.getDate() + 1);
+            endMin.setDate(currentStart.getDate() + 1);
             defaultDue.setDate(currentStart.getDate() - 7);
             dueMax.setDate(currentStart.getDate() - 1);
-            endObj.datepicker("options", {
+            endObj.datepicker("option", {
                 defaultDate: defaultEnd,
                 minDate: endMin,
                 disabled: false
             });
-            dueObj.datepicker("options", {
+            endObj.val(defaultEnd.toLocaleDateString());
+            dueObj.datepicker("option", {
                 defaultDate: defaultDue,
                 maxDate: dueMax,
                 disabled: false
             });
+            dueObj.val(defaultDue.toLocaleDateString());
             
             updateStats();
         }
