@@ -17,7 +17,7 @@ $(document).ready( function() {
         var endMsec = endDate.getTime();
         var dueMsec = (new Date(dueInput.val())).getTime();
         var start_to_end_days = Math.ceil((endMsec - startMsec) / msecs_to_day);
-        var start_to_end_weeks = Math.ceil(start_to_end_weeks / 7);
+        var start_to_end_weeks = Math.ceil(start_to_end_days / 7);
         var due_to_start_days = Math.ceil((startMsec - dueMsec) / msecs_to_day);
 
         //  calculates term duration
