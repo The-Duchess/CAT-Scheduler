@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . "/login_handler.php");
+require_once dirname(__FILE__) . "/login_handler.php";
 
 ?>
 
