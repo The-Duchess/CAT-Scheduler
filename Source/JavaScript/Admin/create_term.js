@@ -22,7 +22,7 @@ $(document).ready( function() {
 
         //  calculates term duration
         if (startInput.val() != "" && endInput.val() != "") {
-            statsStartEndText.text("Term Duration: " + start_to_end_weeks + " weeks (" + start_to_end_days + " days), " + day_names[startDate.getDay()] + " to " + day_names[endDate.getDay()]);
+            statsStartEndText.text("Term Duration: ~" + start_to_end_weeks + " weeks (" + start_to_end_days + " days), " + day_names[startDate.getDay()] + " to " + day_names[endDate.getDay()]);
         } else {
             statsStartEndText.text("Term Duration: UNKNOWN");
         }
