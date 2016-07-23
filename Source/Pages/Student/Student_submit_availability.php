@@ -14,111 +14,6 @@ if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=
     exit();
 }
 
-function submit_availabilities(){
-
-    //console.log("in file process");
-
-    //console.log("connection succeeded");
-
-    //simulating user session
-    // TODO: remove this when we have a true user auth
-    $_SESSION['PHP_AUTH_USER'] = "dog01";
-
-    $kwargs2 = array(
-        "student_username" => 'dog01'
-    );
-
-    // TO DO: set this to get the USER with PHP AUTH US;
-    $student_uname = "dog01"; //$_SERVER['PHP_AUTH_US'];
-    $res = get_student_id_by_username($student_uname);
-    $arr = pg_fetch_array($res);
-    $student_id = $arr['student_id'];
-    $input_term_id = $_POST['term_id'];
-    $pref = "";
-    $input_blocks = array();
-
-    //console.log("initialized");
-
-    // things needed for time submission
-    // insert_availability_block($input_term_id, $input_day, $input_hour, $input_pref, $kwargs=null)
-
-    foreach ($_POST as $key => $val) {
-
-
-        //console.log("creating blocks");
-
-        if ($key == "term_name" || $key == "term_id" || $key == "shift_pref" || $key == "Submit") {
-            // do nothing
-
-            if ($key == "shift_pref") {
-                /*
-                if ($val == "2h") {
-                    $pref = "Two 2-Hour";
-                } elseif ($val == "4h" ) {
-                    $pref = "One 4-Hour";
-                } elseif ($val == "0h") {
-                    $pref = "No Prerence";
-                } else {
-                    
-                }
-                */
-                $pref = $val;
-                // add shift_preference
-                // $ret = 
-            }
-        } else {
-            // determine split point on $key to get day and number
-            // split $key into day + hour
-            // get term_id
-            // get input pref
-            // get student_id
-
-            // this is sort of a hack
-            // TODO: if it is possible make this clean
-            $pos = strpos($key, 'y');
-            $input_day     = substr($key, 0, ($pos + 1));
-            $input_hour    = (int)substr($key, ($pos + 1), strlen($key));
-            $input_pref    = $val;
-            $args          = array("student_id" => $student_id);
-
-            //console.log($input_day);
-            //console.log($input_hour);
-            //console.log($input_pref);
-
-            if ($val == "A") {
-                array_push($input_blocks, array("block_day" => $input_day, "block_hour" => $input_hour, "block_preference" => 'Available'));
-            } elseif ($val == "P") {
-                array_push($input_blocks, array("block_day" => $input_day, "block_hour" => $input_hour, "block_preference" => 'Prefered'));
-            } else {
-                // do nothing
-            }
-
-        }
-
-        //console.log("finished creating blocks");
-
-
-    }
-
-    //print_r($student_id);
-    //print(" - ");
-    //print_r($input_blocks);
-
-    if(update_availability_blocks($input_term_id, $input_blocks, $kwargs2)){
-            //print("succeeded");
-    } else {
-            print("something went wrong");
-    }
-
-    //print(" - ");
-    //print_r($res);
-    //print(" end");
-
-    // when add_student_shift_preference is QA TEST
-    $res = add_student_shift_preference($student_id, $input_term_id, $pref);
-
-}
-
 //TODO: remove this line once auth is in place, it will be automatically populated
 //$_SERVER['PHP_AUTH_USER'] = "simca";
 
@@ -146,8 +41,7 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
     </head>
     <body>
         <div class='container'>
-            <h1>USING simca's DB</h1>
-
+            <a href="../login_home.php">Back to Home</a>
 <?php
 
 //generate the dropdown form for selecting a term to submit availability for
@@ -194,7 +88,7 @@ if (!empty($selected_term)) {
 ?>
 
             <div class='main_form'>
-                <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
+                <form action="process_availability_submission.php" method="POST">
                     <input type='hidden' name='term_name' value='<?= $selected_term['term_name']?>' />
                     <input type='hidden' name='term_id' value='<?= $selected_term['term_id']?>' />
                     <table>
@@ -289,10 +183,6 @@ if (!empty($selected_term)) {
 <?php
 
 } //closing the page wrapper if statement
-
-if (isset($_POST['Submit'])) {
-    submit_availabilities();
-}
 
 ?>
         </div>

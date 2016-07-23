@@ -175,7 +175,7 @@ function update_availability_blocks($input_term_id, $input_blocks, $kwargs=null)
 		
 		//create an array with the student id specified to be used by insert_availability_block
 		$student_kwarg = array( "student_id" => $student_id);
-		foreach($blocks as $block){
+        foreach($blocks as $block){
 			if(insert_availability_block($term_id, $block['block_day'], $block['block_hour'], $block['block_preference'], $student_kwarg) == false) {
 				//ROLLBACK to before deletion if there is a problem inserting the hour_blocks
 				pg_query($GLOBALS['CONNECTION'], 'ROLLBACK');
