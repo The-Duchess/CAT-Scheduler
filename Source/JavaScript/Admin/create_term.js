@@ -1,41 +1,41 @@
 $(document).ready( function() {
-    var startObj = $("#startDate");
-    var endObj = $("#endDate");
-    var dueObj = $("#dueDate");
-    var statsStartToEndObj = $("#statsStartToEnd");
-    var statsDueToStartObj = $("$statsDueToStart");
+    var startInput = $("#startDate");
+    var endInput = $("#endDate");
+    var dueInput = $("#dueDate");
+    var statsStartEndText = $("#statsStartToEnd");
+    var statsDueStartText = $("#statsDueToStart");
 
     function updateStats() {
         var msecs_to_day = 1000*60*60*24;
         var day_names = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        var startDate = new Date(startObj.val());
-        var endDate = new Date(endObj.val());
+        var startDate = new Date(startInput.val());
+        var endDate = new Date(endInput.val());
         var startMsec = startDate.getTime();
         var endMsec = endDate.getTime();
-        var dueMsec = (new Date(dueObj.val())).getTime();
+        var dueMsec = (new Date(dueInput.val())).getTime();
         var start_to_end_days = Math.ceil((endMsec - startMsec) / msecs_to_day);
         var start_to_end_weeks = math.ceil(start_to_end_weeks / 7);
         var due_to_start_days = Math.ceil((startMsec - dueMsec) / msecs_to_day);
 
-        if (startObj.val() != "" && endObj.val() != "") {
-            statsStartToEndObj.text("Term Duration: " + start_to_end_weeks + " weeks (" + start_to_end_days + " days), " + day_names[startDate.getDay()] + " to " + day_names[endDate.getDay()]);
+        if (startInput.val() != "" && endInput.val() != "") {
+            statsStartEndText.text("Term Duration: " + start_to_end_weeks + " weeks (" + start_to_end_days + " days), " + day_names[startDate.getDay()] + " to " + day_names[endDate.getDay()]);
         } else {
-            statsStartToEndObj.text("Term Duration: UNKNOWN");
+            statsStartEndText.text("Term Duration: UNKNOWN");
         }
-        if (startObj.val() != "" && dueObj.val() != "") {
-            statsDueToStartObj.text("Time Between Due Date and Start of Term: " + due_to_start_days + " days");
+        if (startInput.val() != "" && dueInput.val() != "") {
+            statsDueStartText.text("Due Date: " + due_to_start_days + " days before start of term");
         } else {
-            statsDueToStartObj.text("Time Between Due Date and Start of Term: UNKNOWN");
+            statsDueStartText.text("Due Date: UNKNOWN");
         }
 
         // statsObj.text("Due  --- " + due_to_start_days + " days --->  Start  --- " + start_to_end_weeks + " weeks --->  End");
     }
 
-    startObj.datepicker();
-    endObj.datepicker();
-    dueObj.datepicker();
+    startInput.datepicker();
+    endInput.datepicker();
+    dueInput.datepicker();
 
-    startObj.change( function() {
+    startInput.change( function() {
         if ($(this).val() != "") {
             var currentStart = $(this).datepicker("getDate");
             var defaultEnd = new Date(currentStart);
@@ -47,28 +47,28 @@ $(document).ready( function() {
             endMin.setDate(currentStart.getDate() + 1);
             defaultDue.setDate(currentStart.getDate() - 7);
             dueMax.setDate(currentStart.getDate() - 1);
-            endObj.datepicker("option", {
+            endInput.datepicker("option", {
                 defaultDate: defaultEnd,
                 minDate: endMin,
                 disabled: false
             });
-            endObj.val(defaultEnd.toLocaleDateString());
-            dueObj.datepicker("option", {
+            endInput.val(defaultEnd.toLocaleDateString());
+            dueInput.datepicker("option", {
                 defaultDate: defaultDue,
                 maxDate: dueMax,
                 disabled: false
             });
-            dueObj.val(defaultDue.toLocaleDateString());
+            dueInput.val(defaultDue.toLocaleDateString());
             
             updateStats();
         }
     });
 
-    endObj.change( function() {
+    endInput.change( function() {
         if ($(this).val() != "") { updateStats(); }
     });
 
-    dueObj.change( function() {
+    dueInput.change( function() {
         if ($(this).val() != "") { updateStats(); }
     });
 });
