@@ -34,6 +34,7 @@ $report = "";
         <input type="submit" name="submit" value="Create Term" />
     </form>
 <?php
+//  check for submission
 if (isset($_POST['submit'])) {
     if (isset($_POST['termName']) and $_POST['termName'] != "" and isset($_POST['startDate']) and isset($_POST['endDate']) and isset($_POST['dueDate'])) {
         $name = $_POST['termName'];
@@ -41,6 +42,7 @@ if (isset($_POST['submit'])) {
         $end = new DateTime($_POST['endDate']);
         $due = new DateTime($_POST['dueDate']);
 
+        //  submit term or report errors
         if (!($CONNECTION = fido_db_connect())) {
             $report = "ERROR: Failed to connect to database";
         } else if (!add_term($name, $start, $end, $due)) {
