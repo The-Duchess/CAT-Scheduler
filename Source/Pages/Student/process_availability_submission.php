@@ -1,7 +1,7 @@
 <?php
 
-//include "../../Query/Student.php"
-//include "../../Query/Availability.php"
+//require_once dirname(__FILE__) . "/../../Query/Student.php";
+//require_once dirname(__FILE__) . "/../../Query/Availability.php";
 
 function submit_availabilities(){
 

@@ -2,14 +2,14 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
-include "../Query/term.php";
+require_once dirname(__FILE__) . "/../Query/Term.php";
 
 //  Creates a dropdown menu with a list of visible and editable terms
 //  and returns an associative array of that terms data fields from
 //  the database, otherwise FALSE.
 //  PARAMETERS:
 //      subIdent: identifier of submission button
-//      --All other parameters are passed to term.php::term_retrieve_by_start,
+//      --All other parameters are passed to Term.php::term_retrieve_by_start,
 //          see its documentation for a description
 //  OTHER:
 //      See test/test_Dropdown_student_term.php for an example of use

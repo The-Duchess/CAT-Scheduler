@@ -9,7 +9,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
-include "../term.php";
+require_once dirname(__FILE__) . "/../Term.php";
 
 //  Database connection
 if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {

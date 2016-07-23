@@ -9,7 +9,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
-include "../Query_retrieve_student_info.php";
+require_once dirname(__FILE__) . "/../Query_retrieve_availability_for_term.php";
 
 //  Database connection
 if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
@@ -25,17 +25,23 @@ $kwargs3 = array(
 //  Caller is responsible for form initialization
 echo "<form action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
 
-$info = retrieve_student_info(2);
-//$result = pg_fetch_row($info);
-echo "<p>". pg_num_rows($info) ."</p>";
+$info = retrieve_availability_for_term(2);
 
-//while($result = pg_fetch_row($info))
-for($i = 0; $i < pg_num_rows($info); $i++)
-{
-	$result = pg_fetch_row($info);
-	echo "<p>". $result[0] . $result[1] ."</p>";
+if (empty($info)){
+    echo "<p> EMPTY </p>";
 }
 
+foreach($info as $data) {
+    echo "<p> Next Student  </p>";
+
+    if(!pg_fetch_all($data)){
+	echo "<p> Student hasn't inputted any availabilities!! </p>";
+    }else {
+	foreach (pg_fetch_all($data) as $student) {
+	    echo "<p> " . $student['student_username'] ." ". $student['block_preference'] ." ". $student['block_day']." ".$student['block_hour']."</p>\n";
+	}
+    }
+}	
 
 ?>
 </body>

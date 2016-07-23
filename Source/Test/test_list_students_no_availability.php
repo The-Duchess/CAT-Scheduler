@@ -9,7 +9,7 @@
 error_reporting(E_ALL);
 ini_set("display_errors", "on");
 
-include "../API/Admin.php";
+require_once dirname(__FILE__) . "/..API/Admin.php";
 
 function temp_add_avail($term_id, $student_id) {
     $query = "INSERT INTO hour_block (term_id, student_id, block_day, block_hour, block_preference) VALUES ($1, $2, $3, $4, $5)";
