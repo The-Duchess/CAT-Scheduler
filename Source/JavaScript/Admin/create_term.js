@@ -2,17 +2,33 @@ $(document).ready( function() {
     var startObj = $("#startDate");
     var endObj = $("#endDate");
     var dueObj = $("#dueDate");
-    var statsObj = $("#stats");
+    var statsStartToEndObj = $("#statsStartToEnd");
+    var statsDueToStartObj = $("$statsDueToStart");
 
     function updateStats() {
         var msecs_to_day = 1000*60*60*24;
-        var startMsec = (new Date(startObj.val())).getTime();
-        var endMsec = (new Date(endObj.val())).getTime();
+        var day_names = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        var startDate = new Date(startObj.val());
+        var endDate = new Date(endObj.val());
+        var startMsec = startDate.getTime();
+        var endMsec = endDate.getTime();
         var dueMsec = (new Date(dueObj.val())).getTime();
-        var start_to_end_weeks = Math.ceil((endMsec - startMsec) / msecs_to_day / 7);
+        var start_to_end_days = Math.ceil((endMsec - startMsec) / msecs_to_day);
+        var start_to_end_weeks = math.ceil(start_to_end_weeks / 7);
         var due_to_start_days = Math.ceil((startMsec - dueMsec) / msecs_to_day);
 
-        statsObj.text("Due  --- " + due_to_start_days + " days --->  Start  --- " + start_to_end_weeks + " weeks --->  End");
+        if (startObj.val() != "" && endObj.val() != "") {
+            statsStartToEndObj.text("Term Duration: " + start_to_end_weeks + " weeks (" + start_to_end_days + " days), " + day_names[startDate.getDay()] + " to " + day_names[endDate.getDay()]);
+        } else {
+            statsStartToEndObj.text("Term Duration: UNKNOWN");
+        }
+        if (startObj.val() != "" && dueObj.val() != "") {
+            statsDueToStartObj.text("Time Between Due Date and Start of Term: " + due_to_start_days + " days");
+        } else {
+            statsDueToStartObj.text("Time Between Due Date and Start of Term: UNKNOWN");
+        }
+
+        // statsObj.text("Due  --- " + due_to_start_days + " days --->  Start  --- " + start_to_end_weeks + " weeks --->  End");
     }
 
     startObj.datepicker();

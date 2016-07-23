@@ -19,7 +19,6 @@ $report = "";
 </head>
 
 <body>
-    <!-- <a href="<?php echo htmlentities(dirname(__FILE__) . "/../login_home.php"); ?>">Return Home</a><br><br> -->
     <a href="../login_home.php">Return Home</a><br><br>
     <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
         <label for="termName">Term Name:</label><br>
@@ -30,7 +29,8 @@ $report = "";
         <input type="text" id="endDate" name="endDate" disabled="true"><br>
         <label for="dueDate">Due Date:</label><br>
         <input type="text" id="dueDate" name="dueDate" disabled="true"><br>
-        <p id="stats"></p>
+        <p id="statsStartToEnd">Term Duration: UNKNOWN</p>
+        <p id="statsDueToStart">Time Between Due Date and Start of Term: UNKNOWN</p>
         <input type="submit" name="submit" value="Create Term" />
     </form>
 <?php
