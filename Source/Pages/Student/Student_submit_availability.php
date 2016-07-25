@@ -49,7 +49,8 @@ if (!empty($selected_term)) {
 
     $student_id = (int)pg_fetch_row(get_student_id_by_username($_SERVER['PHP_AUTH_USER']))[0];
     $term_id = (int)$selected_term['term_id'];
-    $editable = is_term_editable($term_id);
+    $editable = ($selected_term['editable'] == "t" ? true:false);
+    var_dump($editable);
 
     // TODO: This formatting step should be done in a API function, make a Story about it
     $result = retrieve_availability_for_student($student_id, $term_id);
