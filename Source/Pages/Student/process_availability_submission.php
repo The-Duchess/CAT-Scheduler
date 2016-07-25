@@ -10,21 +10,20 @@ if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=
 
 //simulating user session
 // TODO: remove this when we have a true user auth
-if (empty($_SESSION['PHP_AUTH_USER'])) {
-    $_SESSION['PHP_AUTH_USER'] = "dog01";
+if (empty($_SERVER['PHP_AUTH_USER'])) {
+    echo "cant find user...";
+    $_SERVER['PHP_AUTH_USER'] = "dog01";
 }
 
-$kwargs2 = array(
-    "student_username" => 'dog01'
-);
-
-$student_uname = $_SESSION['PHP_AUTH_USER'];
+$student_uname = $_SERVER['PHP_AUTH_USER'];
 $res = get_student_id_by_username($student_uname);
 $arr = pg_fetch_array($res);
 $student_id = $arr['student_id'];
 $input_term_id = $_POST['term_id'];
 $pref = "";
 $input_blocks = array();
+
+echo "ID:". $student_id;
 
 //console.log("initialized");
 
@@ -77,9 +76,12 @@ foreach ($_POST as $key => $val) {
 //print(" - ");
 //print_r($input_blocks);
 
-if(update_availability_blocks($input_term_id, $input_blocks, $kwargs2)){
+if(update_availability_blocks($input_term_id, $input_blocks)){
     print("Shift availability successfully updated.");
 } else {
+    echo $student_uname."<br>";
+    echo $input_term_id."<br>";
+    print_r($input_blocks);
     print("Error in submitting the new availability.");
 }
 echo "<br>";
