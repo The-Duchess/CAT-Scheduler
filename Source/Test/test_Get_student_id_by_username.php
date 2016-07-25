@@ -8,16 +8,19 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
+require_once dirname(__FILE__) . "/../API/Utility.php";
 require_once dirname(__FILE__) . "/../Query/Student.php";
 
 //  Database connection
-if (!($CONNECTION = pg_connect("host=db.cecs.pdx.edu port=5432 dbname=simca user=simca password=hk8#9Yyced"))) {
-//if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
+if (!($CONNECTION = fido_db_connect())) {
     echo "<p>Connection Failed</p>\n";
     exit();
 }
-
-echo "<h1>Using simcas DB</h1>";
+if (pg_host($CONNECTION) == "capstonecatteam.hopto.org"){
+echo "<h1>Using Cody's Database</h1>";}
+else if (pg_host($CONNECTION) == "db.cecs.pdx.edu" 
+		AND pg_dbname($CONNECTION) == "simca"){
+	echo "<h1>Using " . pg_dbname($CONNECTION) . "'s Database</h1>";}
 echo "<h2>Testing get_student_id_by_username</h2>";
 
 $s1 = pg_fetch_row(get_student_id_by_username("simca"))[0];

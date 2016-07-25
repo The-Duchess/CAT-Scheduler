@@ -1,5 +1,6 @@
 <?php
 
+require_once dirname(__FILE__) . "/../API/Utility.php";
 require_once dirname(__FILE__) . "/../Query/Student.php";
 
 function temp_add_student($username) {
@@ -15,8 +16,9 @@ function temp_remove_avail($term_id, $student_id) {
     return pg_query_params($GLOBALS['CONNECTION'], $query, array($term_id, $student_id));
 }
 
-if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
-    echo "Connection to Database Failed\n";
+//  Database connection
+if (!($CONNECTION = fido_db_connect())) {
+    echo "<p>Connection Failed</p>\n";
     exit();
 } else {
     echo "Connection to Database Established\n";

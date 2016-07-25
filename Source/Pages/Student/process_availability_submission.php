@@ -4,6 +4,7 @@ require_once dirname(__FILE__) . "/../../Query/Availability.php";
 require_once dirname(__FILE__) . "/../../Query/Student.php";
 require_once dirname(__FILE__) . "/../../API/Utility.php";
 
+//  Database connection
 if (!($CONNECTION = fido_db_connect())) {
     echo "<p>Connection Failed</p>\n";
     exit();

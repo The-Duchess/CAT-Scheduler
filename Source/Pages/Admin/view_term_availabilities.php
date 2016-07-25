@@ -9,10 +9,8 @@ require_once dirname(__FILE__)."/../../Query/Student.php";
 //require_once('process_availability_submission.php');
 // require_once('../../Query_retrieve_shift_preference.php');
 
-
-//if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
+//  Database connection
 if (!($CONNECTION = fido_db_connect())) {
-:wa
     echo "<p>Connection Failed</p>\n";
     exit();
 }

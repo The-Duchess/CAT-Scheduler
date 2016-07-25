@@ -9,6 +9,7 @@
 error_reporting(E_ALL);
 ini_set("display_errors", "on");
 
+require_once dirname(__FILE__) . "/../API/Utility.php";
 require_once dirname(__FILE__) . "/..API/Admin.php";
 
 function temp_add_avail($term_id, $student_id) {
@@ -20,13 +21,11 @@ function temp_remove_avail($term_id, $student_id) {
     return pg_query_params($GLOBALS['CONNECTION'], $query, array($term_id, $student_id));
 }
 
-if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
-    echo "<p>Connection to Database Failed</p>\n";
+//  Database connection
+if (!($CONNECTION = fido_db_connect())) {
+    echo "<p>Connection Failed</p>\n";
     exit();
 }
-if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
-    echo "<p>Connection to Database Failed</p>\n";
-    exit();
 } else {
     echo "<p>Connection to Database Established</p>\n";
 }

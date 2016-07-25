@@ -43,6 +43,8 @@ if (isset($_POST['submit'])) {
         $due = new DateTime($_POST['dueDate']);
 
         //  submit term or report errors
+		
+		//  Database connection
         if (!($CONNECTION = fido_db_connect())) {
             $report = "ERROR: Failed to connect to database";
         } else if (!add_term($name, $start, $end, $due)) {
