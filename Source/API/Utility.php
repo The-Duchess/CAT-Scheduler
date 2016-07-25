@@ -74,11 +74,12 @@ function dropdown_select_term($subIdent, $kwargs=null) {
 
 function fido_db_connect() {
     //  Database connection variables, change to modify connection
-    $host = "capstonecatteam.hopto.org";
+    $host = "db.cecs.pdx.edu";
     $port = "5432";
-    $database = "Cat";
-    $username = "guest";
-    $password="Fido";
+    $database = "fido";
+    $username = "fido";
+    $password="";
+    
 	
 	//  Generate connection string
     
@@ -89,11 +90,11 @@ function fido_db_connect() {
 
 function cody_db_connect() {
 	//  Database connection information, modify to change connection
-    $host = "db.cecs.pdx.edu";
+    $host = "capstonecatteam.hopto.org";
     $port = "5432";
-    $database = "fido";
-    $username = "fido";
-    $password="";
+    $database = "Cat";
+    $username = "guest";
+    $password="Fido";
 	
 	//  Generate connection string
     $conn_string = "host={$host} port={$port} dbname={$database} user={$username} password={$password}";
