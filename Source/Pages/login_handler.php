@@ -23,7 +23,7 @@ if ($result = get_student_id_by_username($_SERVER['PHP_AUTH_USER']) && pg_num_ro
 //check if the user is an admin or not
 $admin = false;
 //TODO: when LDAP is intigrated, change logic to set $admin flag
-if ($_SERVER['PHP_AUTH_USER'] == bowzr) {
+if ($_SERVER['PHP_AUTH_USER'] == 'bowzr') {
     $admin = true;
 }
 
