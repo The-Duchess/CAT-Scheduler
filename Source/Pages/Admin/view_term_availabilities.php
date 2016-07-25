@@ -1,7 +1,8 @@
 <?php
 // this first php block initializes the variables used by the page
 
-require_once dirname(__FILE__)."/../../Dropdown_select_term.php";
+require_once dirname(__FILE__)."/../../API/Utility.php";
+require_once dirname(__FILE__)."/../../API/Admin.php";
 require_once dirname(__FILE__)."/../../Query/Availability.php";
 require_once dirname(__FILE__)."/../../Query/Student.php";
 //require_once dirname(__FILE__)."/../../Query_retrieve_availability_for_term.php";
@@ -43,8 +44,8 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
     </head>
     <body>
         <div class='container'>
-            <a href="../login_home.php">Return Home</a><br><br>
             <h1>USING Cody's DB</h1>
+            
 <?php
 
 //generate the dropdown form for selecting a term to submit availability for
@@ -69,11 +70,11 @@ if (!empty($selected_term)) {
             foreach(pg_fetch_all($data) as $student_id => $student){
               $id = $student['block_day'] . $student['block_hour'];
               $uname = $student['student_username'];
-              $pref = $student['block_preference'];
-              $res = get_student_id_by_username($uname);
-              $arr = pg_fetch_array($res);
-              $student_id = $arr['student_id'];
-              if(!array_key_exists($student_id, $students)){
+              $pref = $student['block_preference']; 
+              if(!in_array($uname, $students)){
+                $res = get_student_id_by_username($uname);
+                $arr = pg_fetch_array($res);
+                $student_id = $arr['student_id'];
                 $students[$student_id] = $uname;
               }
               $db_blocks[$id][$uname] = $pref;
@@ -150,10 +151,16 @@ if (!empty($selected_term)) {
                     </table>
             </div>
 <?php
-    echo "<div> <h3>Shift Preferences: </h3>";
+    //Display shift preferences for students who have submitted their availability for this term
+    echo "<div> <h3>Shift Preferences: </h3><ul>";
     foreach($pref_info as $username => $pref){
-	echo "<p> $username --> $pref  </p>";
+      echo "<li> $username --> $pref  </li>";
     }
+    echo "</ul></div>";
+    //Display student usernames who have yet to submit availability for this term
+    echo "<div> <h3>Students who have not submitted availability for this term: </h3>";
+    list_students_no_availability($term_id);
+    echo "</div>";
     
 } //closing the page wrapper if statement
 
@@ -165,3 +172,5 @@ if (!empty($selected_term)) {
         </div>
     </body>
 </html>
+            
+            
