@@ -78,7 +78,7 @@ function fido_db_connect() {
     $port = "5432";
     $database = "fido";
     $username = "fido";
-    $password="";
+    $password = "";
     
 	
 	//  Generate connection string
@@ -94,7 +94,7 @@ function cody_db_connect() {
     $port = "5432";
     $database = "Cat";
     $username = "guest";
-    $password="Fido";
+    $password = "Fido";
 	
 	//  Generate connection string
     $conn_string = "host={$host} port={$port} dbname={$database} user={$username} password={$password}";
