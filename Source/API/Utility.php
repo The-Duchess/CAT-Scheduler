@@ -8,9 +8,13 @@ require_once dirname(__FILE__) . "/../Query/Term.php";
 //  and returns an associative array of that terms data fields from
 //  the database, otherwise FALSE.
 //  PARAMETERS:
-//      subIdent: identifier of submission button
-//      --All other parameters are passed to Term.php::term_retrieve_by_start,
-//          see its documentation for a description
+//      subIdent:   identifier of submission button
+//      kwargs:     associative array of keyword arguments to change functionality,
+//                  this is also passed as a parameter to the internal query, see
+//                  Source/Query/Term.php::term_retrieve_visible_by_start for more
+//                  information
+//          view_only_alert:    if the dropdown should indicate terms that are
+//                              non-editable, default false
 //  OTHER:
 //      See test/test_Dropdown_student_term.php for an example of use
 function dropdown_select_term($subIdent, $kwargs=null) {
@@ -18,6 +22,16 @@ function dropdown_select_term($subIdent, $kwargs=null) {
     //  the same form or file won't interfere
     static $id = 0;
     $id++;
+
+    //  Default values
+    $view_only_alert = false;
+
+    //  Read from kwargs if necessary
+    if ($kwargs) {
+        if (isset($kwargs['view_only_alert'])) {
+            $view_only_alert = $kwargs['view_only_alert'];
+        }
+    }
 
     //  First we father the terms and convert them to an array
     if (!($result = term_retrieve_visible_by_start($kwargs))) {
@@ -32,7 +46,11 @@ function dropdown_select_term($subIdent, $kwargs=null) {
     echo "<select name=\"formTerm" . $id . "\">\n";
     echo "<option value=\"\">Please select a term...</option>\n";
     foreach ($terms as $term) {
-        echo "<option value=" . $term['term_id'] . ">" . $term['term_name'] . "</option>\n";
+        if ($view_only_alert and $term['editable']) {
+            echo "<option value=" . $term['term_id'] . ">" . $term['term_name'] . " -- VIEW ONLY</option>\n";
+        } else {
+            echo "<option value=" . $term['term_id'] . ">" . $term['term_name'] . "</option>\n";
+        }
     }
     echo "</select>\n";
 
