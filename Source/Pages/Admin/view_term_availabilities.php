@@ -43,8 +43,8 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
     </head>
     <body>
         <div class='container'>
+            <a href="../login_home.php">Return Home</a><br><br>
             <h1>USING Cody's DB</h1>
-            
 <?php
 
 //generate the dropdown form for selecting a term to submit availability for
@@ -165,5 +165,3 @@ if (!empty($selected_term)) {
         </div>
     </body>
 </html>
-            
-            
