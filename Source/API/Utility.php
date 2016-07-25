@@ -64,6 +64,7 @@ function fido_db_connect() {
 	
 	// Simca Database
 	/*
+
 	$host = "db.cecs.pdx.edu";
     $port = "5432";
     $database = "simca";
@@ -72,8 +73,7 @@ function fido_db_connect() {
 	*/
 	
 	//Connect String
-    $conn_string = "host={$host} port={$port} dbname={$database} user={$username} password={$password}";
-
+	$conn_string = "host={$host} port={$port} dbname={$database} user={$username} password={$password}";
     return pg_connect($conn_string);
 }
 ?>

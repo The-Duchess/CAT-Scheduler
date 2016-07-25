@@ -25,7 +25,7 @@ $kwargs2 = array("block_hour" => (8));
 $kwargs3 = array("block_day" => ('Monday'));
 $kwargs4 = array("block_day" => ('Monday'), "block_hour" => (8));
 
-$student_id = 4;
+$student_id = 3;
 $term_id = 2;
 
 if (!($result = retrieve_availability_for_student($student_id, $term_id, $kwargs))) {

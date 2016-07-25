@@ -16,8 +16,11 @@ if (!($CONNECTION = fido_db_connect())) {
     echo "<p>Connection Failed</p>\n";
     exit();
 }
-
-echo "<h1>Using simcas DB</h1>";
+if (pg_host($CONNECTION) == "capstonecatteam.hopto.org"){
+echo "<h1>Using Cody's Database</h1>";}
+else if (pg_host($CONNECTION) == "db.cecs.pdx.edu" 
+		AND pg_dbname($CONNECTION) == "simca"){
+	echo "<h1>Using " . pg_dbname($CONNECTION) . "'s Database</h1>";}
 echo "<h2>Testing get_student_id_by_username</h2>";
 
 $s1 = pg_fetch_row(get_student_id_by_username("simca"))[0];
