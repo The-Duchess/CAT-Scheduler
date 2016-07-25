@@ -25,8 +25,6 @@ $input_term_id = $_POST['term_id'];
 $pref = "";
 $input_blocks = array();
 
-echo "ID:". $student_id;
-
 //console.log("initialized");
 
 // things needed for time submission
@@ -81,9 +79,6 @@ foreach ($_POST as $key => $val) {
 if(update_availability_blocks($input_term_id, $input_blocks)){
     print("Shift availability successfully updated.");
 } else {
-    echo $student_uname."<br>";
-    echo $input_term_id."<br>";
-    print_r($input_blocks);
     print("Error in submitting the new availability.");
 }
 echo "<br>";

@@ -5,18 +5,11 @@ require_once dirname(__FILE__) . "/../../Query/Student.php";
 require_once dirname(__FILE__) . "/../../Query/Availability.php";
 require_once dirname(__FILE__) . "/../../API/Utility.php";
 
-//require_once dirname(__FILE__) . "/process_availability_submission.php";
-//require_once dirname(__FILE__) . "/../../Query_retrieve_shift_preference.php";
-
 //  Database connection
 if (!($CONNECTION = fido_db_connect())) {
     echo "<p>Connection Failed</p>\n";
     exit();
 }
-
-//TODO: remove this line once auth is in place, it will be automatically populated
-//$_SERVER['PHP_AUTH_USER'] = "simca";
-
 
 //these arrays will be used for generating the calendar grid
 $hours = array(
@@ -56,8 +49,7 @@ if (!empty($selected_term)) {
 
     $student_id = (int)pg_fetch_row(get_student_id_by_username($_SERVER['PHP_AUTH_USER']))[0];
     $term_id = (int)$selected_term['term_id'];
-    //$db_info['mon9a'] = 'A';
-
+    $editable = is_term_editable($term_id);
 
     // TODO: This formatting step should be done in a API function, make a Story about it
     $result = retrieve_availability_for_student($student_id, $term_id);
@@ -129,7 +121,7 @@ if (!empty($selected_term)) {
                                         }
 
                                         echo "<td class=$cur_id>";
-                                        echo "<fieldset>";
+                                        echo "<fieldset".($editable == false ? ' disabled="disabled" ':'').">";
 
                                         echo "<input type='radio' id=$id_A value='A' name=$cur_id" . ($default == 'A' ? ' checked ':' ') . "/>";
                                         echo "<label for=$id_A>A</label>";
@@ -166,7 +158,8 @@ if (!empty($selected_term)) {
                                     $pref = '2h';
                                 }
                             }
-                            ?>
+?>
+                        <fieldset<?= ($editable == false ? ' disabled="disabled" ':'')?>>
                             <input type='radio' id='4h' value='One 4-Hour' name='shift_pref' <?= ($pref == '4h' ? ' checked ' :' ')?>>
                             <label for='4h'>One 4 Hour Shift</label>
                             <br>
@@ -175,9 +168,10 @@ if (!empty($selected_term)) {
                             <br>
                             <input type='radio' id='0h' value='No Preference' name='shift_pref' <?= ($pref == '0h' ? ' checked ' :' ')?>>
                             <label for='0h'>No Preference</label>
+                        </fieldset>
                     </div>
 
-                    <input type='submit' value='Submit' name='Submit'/>
+                    <input type='submit' value='Submit' name='Submit'<?= ($editable == false ? ' disabled="disabled" ':'')?>/>
                 </form>
             </div>
 <?php

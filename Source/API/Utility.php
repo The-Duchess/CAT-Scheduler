@@ -99,4 +99,18 @@ function cody_db_connect() {
 	$conn_string = "host={$host} port={$port} dbname={$database} user={$username} password={$password}";
     return pg_connect($conn_string);
 }
+
+function is_term_editable($termid) {
+    $kwargs = array(
+        'term_id' => $termid
+    );
+
+    $result = term_retrieve_editable_terms($kwargs);
+    $ret = true;
+    if ($result && pg_num_rows($result) == 0) {
+        $ret = false;
+    }
+
+    return $ret;
+}
 ?>
