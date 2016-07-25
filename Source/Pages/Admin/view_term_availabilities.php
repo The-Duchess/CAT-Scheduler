@@ -44,7 +44,8 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
     </head>
     <body>
         <div class='container'>
-            <h1>USING Cody's DB</h1>
+            <a href="../login_home.php">Return Home</a><br>
+            <!--<h1>USING Cody's DB</h1>-->
             
 <?php
 
