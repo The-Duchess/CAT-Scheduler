@@ -46,7 +46,7 @@ function dropdown_select_term($subIdent, $kwargs=null) {
     echo "<select name=\"formTerm" . $id . "\">\n";
     echo "<option value=\"\">Please select a term...</option>\n";
     foreach ($terms as $term) {
-        if ($view_only_alert and $term['editable']) {
+        if ($view_only_alert and $term['editable'] == "f") {
             echo "<option value=" . $term['term_id'] . ">" . $term['term_name'] . " -- VIEW ONLY</option>\n";
         } else {
             echo "<option value=" . $term['term_id'] . ">" . $term['term_name'] . "</option>\n";
