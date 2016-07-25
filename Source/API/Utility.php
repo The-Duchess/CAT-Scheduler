@@ -89,11 +89,11 @@ function fido_db_connect() {
 
 function cody_db_connect() {
 	// Cody's Database
-    $host = "capstonecatteam.hopto.org";
+    $host = "db.cecs.pdx.edu";
     $port = "5432";
-    $database = "Cat";
-    $username = "guest";
-    $password="Fido";
+    $database = "fido";
+    $username = "fido";
+    $password="";
 	
 	//Connect String
 	$conn_string = "host={$host} port={$port} dbname={$database} user={$username} password={$password}";
