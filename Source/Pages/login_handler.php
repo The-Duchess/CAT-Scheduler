@@ -1,9 +1,10 @@
 <?php
 
 require_once dirname(__FILE__) . "/../Query/Student.php";
+require_once dirname(__FILE__) . "/../API/Utility.php";
 
-//connect to database
-if (!($CONNECTION = pg_connect("host=db.cecs.pdx.edu port=5432 dbname=simca user=simca password=hk8#9Yyced"))) {
+//  Database connection
+if (!($CONNECTION = fido_db_connect())) {
     echo "<p>Connection Failed</p>\n";
     exit();
 }

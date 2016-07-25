@@ -9,11 +9,11 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
+require_once dirname(__FILE__) . "/../API/Utility.php";
 require_once dirname(__FILE__) . "/../Query/Availability.php";
 
 //  Database connection
-//if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
-if (!($CONNECTION = pg_connect("host=db.cecs.pdx.edu port=5432 dbname=simca user=simca password=hk8#9Yyced"))) {
+if (!($CONNECTION = fido_db_connect())) {
     echo "<p>Connection Failed</p>\n";
     exit();
 }

@@ -8,11 +8,12 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
+require_once dirname(__FILE__) . "/../API/Utility.php";
 require_once dirname(__FILE__) . "/../Query/Availability.php";
-require_once dirname(__FILE__) . "/../Query_retrieve_shift_preference.php";
+//require_once dirname(__FILE__) . "/../Query_retrieve_shift_preference.php";
 
 //  Database connection
-if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=Fido"))) {
+if (!($CONNECTION = fido_db_connect())) {
     echo "<p>Connection Failed</p>\n";
     exit();
 }

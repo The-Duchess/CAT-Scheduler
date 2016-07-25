@@ -8,8 +8,8 @@ require_once dirname(__FILE__) . "/../../API/Utility.php";
 //require_once dirname(__FILE__) . "/process_availability_submission.php";
 //require_once dirname(__FILE__) . "/../../Query_retrieve_shift_preference.php";
 
-//if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
-if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
+//  Database connection
+if (!($CONNECTION = fido_db_connect())) {
     echo "<p>Connection Failed</p>\n";
     exit();
 }
