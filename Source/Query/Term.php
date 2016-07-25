@@ -135,14 +135,17 @@ function term_retrieve_by_start($kwargs=null) {
 //  or at a certain date and are visible, otherwise FALSE
 //  PARAMETERS:
 //      kwargs: associative array of keyword arguments
-//          start:  the start date to compare to, default 1 year before now
-//          ascend: if the results should be in ascending order, default false
-//          limit:  the max number of terms to retrieve, default none (null)
+//          start:      the start date to compare to, default 1 year before now
+//          ascend:     if the results should be in ascending order, default false
+//          editable:   if the returned terms should require being editable, default false
+//          limit:      the max number of terms to retrieve, default none (null)
 function term_retrieve_visible_by_start($kwargs=null) {
     //  Default values
     $start = null;
     $ascend = false;
+    $editable = false;
     $limit = null;
+    $where = array("visible IS true", "start_date >= $1");
 
     //  Read kwargs if necessary
     if ($kwargs) {
@@ -151,6 +154,9 @@ function term_retrieve_visible_by_start($kwargs=null) {
         }
         if (isset($kwargs['ascend'])) {
             $ascend = $kwargs['ascend'];
+        }
+        if (isset($kwargs['editable'])) {
+            $editable = $kwargs['editable'];
         }
         if (isset($kwargs['limit'])) {
             $limit = $kwargs['limit'];
@@ -162,8 +168,12 @@ function term_retrieve_visible_by_start($kwargs=null) {
         $start = (new DateTime("now"))->modify("-1 year");
     }
 
+    if ($editable) {
+        array_push($where, "editable IS true");
+    }
+
     //  Create the query and querys params without limit clause
-    $query = "SELECT * FROM Term WHERE visible IS true AND start_date >= $1 ORDER BY start_date " . ($ascend ? "ASC" : "DESC");
+    $query = "SELECT * FROM term WHERE " . implode(" and ", $where) . "ORDER BY start_date " . ($ascend ? "ASC" : "DESC");
     $params = array($start->format("Y-m-d"));
 
     //  Add limit clause and limit param if necessary
