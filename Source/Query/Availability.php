@@ -99,8 +99,8 @@ function insert_availability_block($input_term_id, $input_day, $input_hour, $inp
     // Use the given username if specified in kwargs, defaulting to session username (if set). null otherwise.
     if (isset($kwargs['student_username'])) {
         $student_user = $kwargs['student_username'];
-    } else if (isset($_SESSION['PHP_AUTH_USER'])) {
-        $student_user = $_SESSION['PHP_AUTH_USER'];
+    } else if (isset($_SERVER['PHP_AUTH_USER'])) {
+        $student_user = $_SERVER['PHP_AUTH_USER'];
     } else {
         return false;
     }
@@ -149,8 +149,8 @@ function update_availability_blocks($input_term_id, $input_blocks, $kwargs=null)
     // Use the given username if specified in kwargs, defaulting to session username (if set). null otherwise.
     if (isset($kwargs['student_username'])) {
         $student_user = $kwargs['student_username'];
-    } else if (isset($_SESSION['PHP_AUTH_USER'])) {
-        $student_user = $_SESSION['PHP_AUTH_USER'];
+    } else if (isset($_SERVER['PHP_AUTH_USER'])) {
+        $student_user = $_SERVER['PHP_AUTH_USER'];
     } else {
         return false;
     }
