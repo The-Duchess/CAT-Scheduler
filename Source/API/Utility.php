@@ -78,7 +78,7 @@ function fido_db_connect() {
     $port = "5432";
     $database = "fido";
     $username = "fido";
-    $password = "";
+    $password = "j@k7zg6Duw";
     
 	
 	//  Generate connection string
