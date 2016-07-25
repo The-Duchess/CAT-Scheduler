@@ -17,7 +17,7 @@ function temp_remove_avail($term_id, $student_id) {
 }
 
 //  Database connection
-if (!($CONNECTION = fido_db_connect())) {
+if (!($CONNECTION =cody_db_connect())) {
     echo "<p>Connection Failed</p>\n";
     exit();
 } else {

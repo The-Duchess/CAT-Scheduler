@@ -13,7 +13,7 @@ require_once dirname(__FILE__) . "/../Query/Availability.php";
 //require_once dirname(__FILE__) . "/../Query_retrieve_shift_preference.php";
 
 //  Database connection
-if (!($CONNECTION = fido_db_connect())) {
+if (!($CONNECTION =cody_db_connect())) {
     echo "<p>Connection Failed</p>\n";
     exit();
 }

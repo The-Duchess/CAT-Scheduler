@@ -13,7 +13,7 @@ require_once dirname(__FILE__) . "/../API/Utility.php";
 require_once dirname(__FILE__) . "/../Query_retrieve_student_info.php";
 
 //  Database connection
-if (!($CONNECTION = fido_db_connect())) {
+if (!($CONNECTION =cody_db_connect())) {
     echo "<p>Connection Failed</p>\n";
     exit();
 }

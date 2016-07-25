@@ -94,4 +94,18 @@ function fido_db_connect() {
 	$conn_string = "host={$host} port={$port} dbname={$database} user={$username} password={$password}";
     return pg_connect($conn_string);
 }
+
+
+function cody_db_connect() {
+	// Cody's Database
+    $host = "capstonecatteam.hopto.org";
+    $port = "5432";
+    $database = "Cat";
+    $username = "guest";
+    $password="Fido";
+	
+	//Connect String
+	$conn_string = "host={$host} port={$port} dbname={$database} user={$username} password={$password}";
+    return pg_connect($conn_string);
+}
 ?>
