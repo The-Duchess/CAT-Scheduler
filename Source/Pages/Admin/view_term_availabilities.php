@@ -2,9 +2,9 @@
 // this first php block initializes the variables used by the page
 
 require_once dirname(__FILE__)."/../../Dropdown_select_term.php";
-//require_once dirname(__FILE__)."/../../Query/Availability.php";
+require_once dirname(__FILE__)."/../../Query/Availability.php";
 require_once dirname(__FILE__)."/../../Query/Student.php";
-require_once dirname(__FILE__)."/../../Query_retrieve_availability_for_term.php";
+//require_once dirname(__FILE__)."/../../Query_retrieve_availability_for_term.php";
 //require_once('process_availability_submission.php');
 // require_once('../../Query_retrieve_shift_preference.php');
 
@@ -60,21 +60,31 @@ if (!empty($selected_term)) {
     $term_id = (int)$selected_term['term_id'];
     $info = retrieve_availability_for_term($term_id);
     $db_blocks = array();
-    //get all the availabilities ready to be echoed
+    $pref_info = array();
+    $students = array();
+    //get all the availabilities and shift prefs ready to be echoed
     if ($info) {
         foreach ($info as $data) {
           if(pg_fetch_all($data)){
-            foreach(pg_fetch_all($data) as $student){
+            foreach(pg_fetch_all($data) as $student_id => $student){
               $id = $student['block_day'] . $student['block_hour'];
               $uname = $student['student_username'];
               $pref = $student['block_preference'];
-              if(!array_key_exists($id, $db_blocks)) {
-                $db_blocks[$id] = array();  
+              $res = get_student_id_by_username($uname);
+              $arr = pg_fetch_array($res);
+              $student_id = $arr['student_id'];
+              if(!array_key_exists($student_id, $students)){
+                $students[$student_id] = $uname;
               }
               $db_blocks[$id][$uname] = $pref;
             }
           }
         }
+    }
+    foreach($students as $student_id => $student_uname){
+      $res = retrieve_shift_preference((int) $student_id, $term_id);
+      $arr = pg_fetch_array($res);
+      $pref_info[$student_uname] = $arr['shift_preference'];      
     }
 
     $start_date = strtotime($selected_term['start_date']);
@@ -140,7 +150,11 @@ if (!empty($selected_term)) {
                     </table>
             </div>
 <?php
-
+    echo "<div> <h3>Shift Preferences: </h3>";
+    foreach($pref_info as $username => $pref){
+	echo "<p> $username --> $pref  </p>";
+    }
+    
 } //closing the page wrapper if statement
 
 ?>

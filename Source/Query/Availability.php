@@ -175,7 +175,7 @@ function update_availability_blocks($input_term_id, $input_blocks, $kwargs=null)
 		
 		//create an array with the student id specified to be used by insert_availability_block
 		$student_kwarg = array( "student_id" => $student_id);
-		foreach($blocks as $block){
+        foreach($blocks as $block){
 			if(insert_availability_block($term_id, $block['block_day'], $block['block_hour'], $block['block_preference'], $student_kwarg) == false) {
 				//ROLLBACK to before deletion if there is a problem inserting the hour_blocks
 				pg_query($GLOBALS['CONNECTION'], 'ROLLBACK');
@@ -200,10 +200,44 @@ function retrieve_shift_preference($studentid, $termid) {
 // add the shift preference for a student
 function add_student_shift_preference($student_id, $term_id, $pref) {
 
-    // student_id, term_id and shift_preference for a student's shift pref
-    $query = 'INSERT into Shift_Preference (student_id, term_id, shift_preference) VALUES ($1, $2, $3)';
+    $delete_query = 'DELETE FROM shift_preference where student_id = $1 AND term_id = $2';
 
-    return pg_query_params($GLOBALS['CONNECTION'], $query, array($student_id, $term_id, $pref));
+    $res = pg_query_params($GLOBALS['CONNECTION'], $delete_query, array($student_id, $term_id));
+
+    $add_query = 'INSERT into Shift_Preference (student_id, term_id, shift_preference) VALUES ($1, $2, $3)';
+
+    $res_ =  pg_query_params($GLOBALS['CONNECTION'], $add_query, array($student_id, $term_id, $pref));
+
+    if (!$res_) {
+        pg_query($GLOBALS['CONNECTION'], 'ROLLBACK');
+        return false;
+    }
+
+    pg_query($GLOBALS['CONNECTION'], "COMMIT");
+
+    return true;
+}
+
+function retrieve_availability_for_term($term_id, $kwargs=null) {
+	// Default values
+	if (!is_int($term_id)) {
+		    return false;
+			}
+
+	    //get the list of all studnet ids
+	    $list = "SELECT student_id FROM student";
+		$students = pg_query_params($GLOBALS['CONNECTION'], $list, array());
+		    
+		    //fetch student ids one by one and then get their availability
+		    //save the avaialabity in an array
+		    for($i=0; $i < pg_num_rows($students); $i++)
+			    {
+				        $student = pg_fetch_row($students);
+					        $studentid = (int) $student[0];
+						        $query[$studentid] = retrieve_availability_for_student($studentid, $term_id);        
+							    }
+		        //return the array of the availabilities
+		        return $query;
 }
 
 ?>
