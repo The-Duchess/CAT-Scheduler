@@ -83,6 +83,22 @@ function term_retrieve_visible_all($kwargs=null) {
 
 }
 
+//  Retrieves a results object containing terms that are not currently editable
+//  PARAMETERS:
+//      kwargs: associative array of keyword arguments
+//          term_id: search for a specific term by id instead of a general list
+function term_retrieve_editable_terms($kwargs=null) {
+
+    $query = "SELECT * FROM Term WHERE editable IS true";
+    $params = array();
+
+    if (isset($kwargs['term_id'])) {
+        $query .= " AND term_id = $1";
+        array_push($params, $kwargs['term_id']);
+    }
+
+    return pg_query_params($GLOBALS['CONNECTION'], $query, $params);
+}
 
 //  Retrieves a results object containing all terms that start before
 //  or at a certain date, otherwise FALSE
