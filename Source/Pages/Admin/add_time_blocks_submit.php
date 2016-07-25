@@ -16,9 +16,10 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
 require_once dirname(__FILE__) . "/../../Query/Term.php";
+require_once dirname(__FILE__) . "/../../API/Utility.php";
 
 //  Database connection
-if (!($CONNECTION = pg_connect("host=capstonecatteam.hopto.org port=5432 dbname=Cat user=guest password=FIDO"))) {
+if (!($CONNECTION = fido_db_connect())) {
     echo "<p>Connection Failed</p>\n";
     exit();
 }

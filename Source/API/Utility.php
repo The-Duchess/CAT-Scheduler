@@ -59,7 +59,7 @@ function fido_db_connect() {
     $port = "5432";
     $database = "Cat";
     $username = "guest";
-    $password="FIDO";
+    $password = "FIDO";
     $conn_string = "host={$host} port={$port} dbname={$database} user={$username} password={$password}";
 
     return pg_connect($conn_string);
