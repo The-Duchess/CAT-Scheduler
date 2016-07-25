@@ -89,7 +89,7 @@ function fido_db_connect() {
 
 
 function cody_db_connect() {
-	//  Database connection information, modify to change connection
+	//  Cody's DB Connection Info
     $host = "capstonecatteam.hopto.org";
     $port = "5432";
     $database = "Cat";
