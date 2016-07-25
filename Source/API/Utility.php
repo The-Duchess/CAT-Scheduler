@@ -73,25 +73,16 @@ function dropdown_select_term($subIdent, $kwargs=null) {
 }
 
 function fido_db_connect() {
-	// Cody's Database
+    //  Database connection variables, change to modify connection
     $host = "capstonecatteam.hopto.org";
     $port = "5432";
     $database = "Cat";
     $username = "guest";
     $password="Fido";
 	
-	// Simca Database
-	/*
-
-	$host = "db.cecs.pdx.edu";
-    $port = "5432";
-    $database = "simca";
-    $username = "simca";
-    $password="hk8#9Yyced";
-	*/
-	
-	//Connect String
-	$conn_string = "host={$host} port={$port} dbname={$database} user={$username} password={$password}";
+	//  Generate connection string
+    
+    $conn_string = "host={$host} port={$port} dbname={$database} user={$username} password={$password}";
     return pg_connect($conn_string);
 }
 
