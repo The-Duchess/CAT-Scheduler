@@ -1,6 +1,6 @@
 --Inserts an example student into the database
-INSERT INTO student (Student_id, Student_FirstName, Student_LastName, Student_Email, Cat_Nickname, Join_Date, Leave_Date, Visible)
-    VALUES (920054997, 'Cody', 'Wyatt', 'cwyatt@pdx.edu', 'Code-E' , current_timestamp , NULL , default);
+INSERT INTO student (Student_username, join_date, leave_date, active)
+    VALUES ('dog01', DEFAULT, DEFAULT, TRUE);
 
 --Inserts an example new term into the database	
 INSERT INTO term (Term_Name, Start_Date, End_Date, Visible, Editable, term_id, Due_DATE)

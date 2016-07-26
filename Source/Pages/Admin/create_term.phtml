@@ -1,0 +1,62 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 'on');
+
+require_once dirname(__FILE__) . "/../../Query/Term.php";
+require_once dirname(__FILE__) . "/../../API/Utility.php";
+
+$report = "";
+?>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Create New Term</title>
+    <link rel="stylesheet" href="../../JQuery-1.2/UI/jquery-ui-darkness/jquery-ui.min.css">
+    <script src="../../JQuery-1.2/jquery-1.12.4.js"></script>
+    <script src="../../JQuery-1.2/UI/jquery-ui-darkness/jquery-ui.min.js"></script>
+    <script src="../../JavaScript/Admin/create_term.js"></script>
+</head>
+
+<body>
+    <a href="../login_home.php">Return Home</a><br><br>
+    <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
+        <label for="termName">Term Name:</label><br>
+        <input type="text" id="termName" name="termName" /><br>
+        <label for="startDate">Start Date:</label><br>
+        <input type="text" id="startDate" name="startDate"><br>
+        <label for="endDate">End Date:</label><br>
+        <input type="text" id="endDate" name="endDate" disabled="true"><br>
+        <label for="dueDate">Due Date:</label><br>
+        <input type="text" id="dueDate" name="dueDate" disabled="true"><br>
+        <p id="statsStartToEnd">Term Duration: UNKNOWN</p>
+        <p id="statsDueToStart">Due Date: UNKNOWN</p>
+        <input type="submit" name="submit" value="Create Term" />
+    </form>
+<?php
+//  check for submission
+if (isset($_POST['submit'])) {
+    if (isset($_POST['termName']) and $_POST['termName'] != "" and isset($_POST['startDate']) and isset($_POST['endDate']) and isset($_POST['dueDate'])) {
+        $name = $_POST['termName'];
+        $start = new DateTime($_POST['startDate']);
+        $end = new DateTime($_POST['endDate']);
+        $due = new DateTime($_POST['dueDate']);
+
+        //  submit term or report errors
+		
+		//  Database connection
+        if (!($CONNECTION = fido_db_connect())) {
+            $report = "ERROR: Failed to connect to database";
+        } else if (!add_term($name, $start, $end, $due)) {
+            $report = "ERROR: Failed to add term to database";
+        } else {
+            $report = "Term Created";
+        }
+    } else {
+        $report = "ERROR: Cannot create a term with empty fields";
+    }
+}
+?>
+    <p><?php echo $report; ?></p>
+</body>
+</html>

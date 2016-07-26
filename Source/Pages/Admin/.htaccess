@@ -1,0 +1,4 @@
+AuthUserFile /home/fido/ubuntu/.htpasswd
+AuthName "Please enter your username and password:"
+AuthType Basic
+Require user bowzr

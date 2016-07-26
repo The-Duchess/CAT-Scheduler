@@ -1,6 +1,6 @@
 <?php
 
-include "../Query/Student.php";
+require_once dirname(__FILE__) . "/../Query/Student.php";
 
 //  Generates HTML code for displaying a list of students
 //  who have not submitted availability for a given term,

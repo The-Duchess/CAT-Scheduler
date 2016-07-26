@@ -10,47 +10,61 @@ function get_student_id_by_username($input_username) {
     return pg_query_params($GLOBALS['CONNECTION'], $query, array($input_username));
 }
 
+
+// --
+
 // deactivate a student in the students table
-// set the Visible value to false
+// set the Active value to false
 // all other values can be default and are not required to change
 function deactivate_student($id) {
 
 
 	//Throw an error if student does not exist in the data base
 	
-	$query = "SELECT * FROM student WHERE student_id = '$id'";
-	$result = pg_query($GLOBALS['CONNECTION'], $query);
+    //  $query = "SELECT * FROM student WHERE student_id = '$id'";
+    $query = "SELECT * FROM student WHERE student_id=$1";
+    //  $result = pg_query($GLOBALS['CONNECTION'], $query);
+    $result = pg_query_params($GLOBALS['CONNECTION'], $query, array($id));
 	if(pg_num_rows($result) == 0) {
 	    echo "Student Does not exist<br>";
 	    return false;
-	}
+    }
+
 	//Throw an error if the student is already activated
-	$query = "SELECT * FROM student WHERE student_id = '$id' AND active is FALSE";
-	$result = pg_query($GLOBALS['CONNECTION'], $query);
+    //$query = "SELECT * FROM student WHERE student_id = '$id' AND active is FALSE";
+    $query = "SELECT * FROM student WHERE student_id=$1 AND active is FALSE";
+    //  $result = pg_query($GLOBALS['CONNECTION'], $query);
+    $result = pg_query_params($GLOBALS['CONNECTION'], $query, array($id));
 	if (pg_num_rows($result) != 0) {
 	    echo "Student is already deactivated<br>";
 	    return false;
 	}
 	//The only value is chanhing is the visibily since we are going to keep all
 	//of the student information
-	$query = "UPDATE student SET active = false WHERE student_id = '$id'";
+    //  $query = "UPDATE student SET active = false WHERE student_id = '$id'";
+    $query = "UPDATE student SET active=false WHERE student_id=$1";
 
-	return pg_query($GLOBALS['CONNECTION'], $query);
+    //  return pg_query($GLOBALS['CONNECTION'], $query);
+    return pg_query_params($GLOBALS['CONNECTION'], $query, array($id));
 }
 
-// --
-
 // add a student to the students table
+//
+// DEV NOTE: join date might be simply when user is being inserted into db, might want
+//           to integrate that directly into this function directly
 //
 // PARAMETERS:
 // 		| - student id
 // 		| - student uname
 // 		| - student's join time
-function add_student($id, $student_uname, $joind) {
+// TODO: the formatting of Datetime obj to a string should be done outside of this function, refacter ALL queries...
+function add_student($student_uname, $joind) {
 
-	$query = 'INSERT into Students (Student_id, Student_username, join_date) VALUES ($1, $2, $3)';
+	$query = 'INSERT into student (student_username, join_date) VALUES ($1, $2)';
 
-	return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $student_uname, $joind));
+	$new_joind = $joind->format("Y-m-d");
+
+	return pg_query_params($GLOBALS['CONNECTION'], $query, array($student_uname, $new_joind));
 }
 
 // --
