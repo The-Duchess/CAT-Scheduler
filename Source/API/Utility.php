@@ -73,7 +73,7 @@ function dropdown_select_term($subIdent, $kwargs=null) {
 }
 
 function fido_db_connect() {
-    $ini_arr = parse_ini_file("../../fidoconfig.ini", true);
+    $ini_arr = parse_ini_file(dirname(__FILE__) . "../../fidoconfig.ini", true);
     $dbconf = $ini_arr['database'];
     
     $conn = "
