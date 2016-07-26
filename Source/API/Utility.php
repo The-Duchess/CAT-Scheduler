@@ -73,9 +73,11 @@ function dropdown_select_term($subIdent, $kwargs=null) {
 }
 
 function fido_db_connect() {
+    //  read the configuration file
     $ini_arr = parse_ini_file(dirname(__FILE__) . "../../fidoconfig.ini", true);
     $dbconf = $ini_arr['database'];
-    
+
+    //  generate the connection string
     $conn = "
     host='{$dbconf['host']}'
     port='{$dbconf['port']}'
@@ -83,6 +85,7 @@ function fido_db_connect() {
     user='{$dbconf['user']}'
     password='{$dbconf['password']}'";
 
+    //  connect to the database
     return pg_connect($conn);
 }
 
