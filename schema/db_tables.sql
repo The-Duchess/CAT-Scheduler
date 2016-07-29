@@ -12,9 +12,9 @@ CREATE TABLE term
 (
   term_id serial,
   term_name character varying(20) NOT NULL,
-  start_date timestamp with time zone DEFAULT NULL,
-  end_date timestamp with time zone DEFAULT NULL,
-  due_date timestamp with time zone DEFAULT NULL,
+  start_date timestamp with time zone NOT NULL,
+  end_date timestamp with time zone NOT NULL,
+  due_date timestamp with time zone NOT NULL,
   visible boolean DEFAULT true,
   editable boolean DEFAULT true,
   CONSTRAINT term_pkey PRIMARY KEY (term_id)
