@@ -140,15 +140,24 @@ if (!empty($selected_term)) {
                     </table>
 <input type='button' value='Clear' onclick="clear_submission()"<?= ( $editable == false ? ' disabled=disabled ':'')?>/>
 <script>
+
+// Clears all the submissions on the page (setting them to 'NA'
+// and recoloring them (white))
 function clear_submission(){
     //get the table from the page
-    var table = document.getElementById("avail_table");
-    //ask the user if they are sure
-    /*TODO*/
-    //if they are, set all radio buttons to 'NA'
-    //document.getElementById("Monday8NA").checked = 'true';
     
-   
+    var table = document.getElementById("avail_table");
+    
+    //ask the user if they are sure
+    //if they are, set all radio buttons to 'NA'
+    
+    var r = confirm("Are you sure you want to clear all submissions? (This will not effect your saved availability until you submit)");
+    if(r!=true){
+        return;
+    }
+    
+    //iterate through the available blocks (mon-fri, 08:00 - 18:00, sat, 12:00 - 17:00)
+    //check the 'NA' radio and reset the repaint the colors
     var daystrings = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     var ds_len = daystrings.length; 
     for(var d = 0; d < ds_len; d++){
@@ -162,18 +171,6 @@ function clear_submission(){
         }
     }
     
-    //TODO other attempts DELETE
-    //$('input').change(function () {
-      //  $(this).checked = 'true';
-    // });
-    //table.find('td').each(function (i, el){
-    //    $('input').each(function () {
-    //        if($(this).value === "NA"){
-    //            $(this).checked = 'true';
-    //        }
-  
-    //    });
-    //});
     recolorCalendar();
 }
 </script>
