@@ -83,7 +83,7 @@ if (!empty($selected_term)) {
                 <form action="process_availability_submission.php" method="POST">
                     <input type='hidden' name='term_name' value='<?= $selected_term['term_name']?>' />
                     <input type='hidden' name='term_id' value='<?= $selected_term['term_id']?>' />
-                    <table>
+                    <table id="avail_table">
                         <thead>
                             <tr>
                                 <td></td>
@@ -138,6 +138,26 @@ if (!empty($selected_term)) {
                             ?>
                         </tbody>
                     </table>
+<input type='button' value='Clear' onclick="clear_submission()"<?= ( $editable == false ? ' disabled=disabled ':'')?>/>
+<script>
+function clear_submission(){
+    //get the table from the page
+    var table = document.getElementById("avail_table");
+    
+    //ask the user if they are sure
+    /*TODO*/
+    //if they are, set all radio buttons to 'NA'
+    table.find('tr').each(function (i, el){
+        var tds = this.find('td');
+        tds.eq(1).value = 'NA';
+    });
+    //for (var i = 0, row; row = table.rows[i]; i++){
+      //  for (var k = 0, col; col = row.cells[j]; j++){
+        //    col.value = 'NA';
+        //}
+    //}
+}
+</script>
 <div> <h3>KEY:</h3>
                         <p>A  - Available</p>
                         <p>P  - Prefered</p>
