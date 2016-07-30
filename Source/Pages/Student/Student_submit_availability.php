@@ -172,6 +172,9 @@ function clear_submission(){
     }
     
     recolorCalendar();
+
+    // set shift pref to no pref
+    document.getElementById("0h").checked = 'true';
 }
 </script>
 <div> <h3>KEY:</h3>
