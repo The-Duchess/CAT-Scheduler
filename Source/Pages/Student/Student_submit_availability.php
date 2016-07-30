@@ -143,19 +143,38 @@ if (!empty($selected_term)) {
 function clear_submission(){
     //get the table from the page
     var table = document.getElementById("avail_table");
-    
     //ask the user if they are sure
     /*TODO*/
     //if they are, set all radio buttons to 'NA'
-    table.find('tr').each(function (i, el){
-        var tds = this.find('td');
-        tds.eq(1).value = 'NA';
-    });
-    //for (var i = 0, row; row = table.rows[i]; i++){
-      //  for (var k = 0, col; col = row.cells[j]; j++){
-        //    col.value = 'NA';
-        //}
-    //}
+    //document.getElementById("Monday8NA").checked = 'true';
+    
+   
+    var daystrings = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    var ds_len = daystrings.length; 
+    for(var d = 0; d < ds_len; d++){
+        for(var i = 8; i < 18 ; i++){
+            if(daystrings[d] == "Saturday" && (i == 8 || i==9 || i==10 || i==11 || i==17)){
+                continue;
+            }else{
+                var t = daystrings[d].concat(i.toString(),"NA");
+                document.getElementById(t).checked = 'true'; 
+            }
+        }
+    }
+    
+    //TODO other attempts DELETE
+    //$('input').change(function () {
+      //  $(this).checked = 'true';
+    // });
+    //table.find('td').each(function (i, el){
+    //    $('input').each(function () {
+    //        if($(this).value === "NA"){
+    //            $(this).checked = 'true';
+    //        }
+  
+    //    });
+    //});
+    recolorCalendar();
 }
 </script>
 <div> <h3>KEY:</h3>
