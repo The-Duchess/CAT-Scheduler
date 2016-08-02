@@ -7,7 +7,7 @@ function isLeapYear(year) {
 }
 
 function dateIsValid(date_string) {
-    var regex_array = ( /^(\d{2})\/(\d{2})\/(\d{4})$/ ).match(date_string);
+    var regex_array = ( /^(\d{2})\/(\d{2})\/(\d{4})$/ ).exec(date_string);
     
     if (!regex_array) { return false; }
     
