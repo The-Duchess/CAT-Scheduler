@@ -1,10 +1,24 @@
 $(document).ready( function() {
+    //  Super wonky includes
+    $.getScript("../Utility/input_validation.js");
+
     //  global variables
     var startInput = $("#startDate");
     var endInput = $("#endDate");
     var dueInput = $("#dueDate");
     var statsStartEndText = $("#statsStartToEnd");
     var statsDueStartText = $("#statsDueToStart");
+    var submitButton = $("#submitButton");
+
+    //  function to validate input before enabling the submit button
+    function validateInput() {
+        if (submitButton.val().length > 0 &&
+                dateIsValid(startDate.val()) &&
+                dateIsValid(endDate.val()) &&
+                dateIsValid(dueDate.val())) {
+            submitButton.prop("disabled", false);
+        }
+    }
 
     //  function to update statistics of term
     function updateStats() {
@@ -75,16 +89,19 @@ $(document).ready( function() {
          
             //  update term stats
             updateStats();
+            validateInput();
         }
     });
 
     //  update stats when end date changed/selected
     endInput.change( function() {
         if ($(this).val() != "") { updateStats(); }
+        validateInput();
     });
 
     //  update stats when due date changed/selected
     dueInput.change( function() {
         if ($(this).val() != "") { updateStats(); }
+        validateInput();
     });
 });

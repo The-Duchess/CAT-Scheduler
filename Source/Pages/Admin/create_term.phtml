@@ -24,14 +24,16 @@ $report = "";
         <label for="termName">Term Name:</label><br>
         <input type="text" id="termName" name="termName" /><br>
         <label for="startDate">Start Date:</label><br>
-        <input type="text" id="startDate" name="startDate"><br>
+        <input type="text" id="startDate" name="startDate" readonly="true"><br>
         <label for="endDate">End Date:</label><br>
-        <input type="text" id="endDate" name="endDate" disabled="true"><br>
+        <input type="text" id="endDate" name="endDate" readonly="true" disabled="true"><br>
         <label for="dueDate">Due Date:</label><br>
-        <input type="text" id="dueDate" name="dueDate" disabled="true"><br>
+        <input type="text" id="dueDate" name="dueDate" readonly="true" disabled="true"><br>
         <p id="statsStartToEnd">Term Duration: UNKNOWN</p>
         <p id="statsDueToStart">Due Date: UNKNOWN</p>
-        <input type="submit" name="submit" value="Create Term" />
+        <!-- <input type="submit" name="submit" value="Create Term" /> -->
+        <button type="submit" id="submitButton" name="submit" disabled="true">Submit</button>
+        <button type="reset">Clear</button>
     </form>
 <?php
 //  check for submission
