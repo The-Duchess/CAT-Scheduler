@@ -107,6 +107,7 @@ $(document).ready( function() {
     });
 
     resetButton.click( function() {
-        endDate.prop("disabled", true);
-        dueDate.prop("disabled", true);
+        endInput.prop("disabled", true);
+        dueInput.prop("disabled", true);
+    });
 });
