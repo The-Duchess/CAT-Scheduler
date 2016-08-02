@@ -9,6 +9,7 @@ $(document).ready( function() {
     var statsStartEndText = $("#statsStartToEnd");
     var statsDueStartText = $("#statsDueToStart");
     var submitButton = $("#submitButton");
+    var resetButton = $("#resetButton");
 
     //  function to validate input before enabling the submit button
     function validateInput() {
@@ -104,4 +105,8 @@ $(document).ready( function() {
         if ($(this).val() != "") { updateStats(); }
         validateInput();
     });
+
+    resetButton.click( function() {
+        endDate.prop("disabled", true);
+        dueDate.prop("disabled", true);
 });
