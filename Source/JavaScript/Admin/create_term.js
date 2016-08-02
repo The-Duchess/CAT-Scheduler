@@ -3,7 +3,13 @@ $(document).ready( function() {
     $.getScript("../../JavaScript/Utility/input_validation.js");
 
     Date.prototype.toPaddedLocaleDateString = function() {
-        return this.toLocaleDateString().replace(/(\/{0,1})(\d)(\/)/gi, "$10$2$3");
+        var day = this.getDay().toString();
+        var month = (this.getMonth()+1).toString();
+        var year = this.getFullYear();
+
+        return (month.length == 1 ? "0" : "") + month + "/" +
+            (day.length == 1 ? "0" : "") + day + "/" +
+            year;
     };
 
     //  global variables
