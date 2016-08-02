@@ -2,7 +2,12 @@ $(document).ready( function() {
     //  Super wonky includes
     $.getScript("../Utility/input_validation.js");
 
+    Date.prototype.toPaddedLocaleDateString() = function() {
+        return this.toLocaleDateString().replace(/(\/{0,1})(\d)(\/)/gi, "$10$2$3");
+    };
+
     //  global variables
+    var termName = $("#termName");
     var startInput = $("#startDate");
     var endInput = $("#endDate");
     var dueInput = $("#dueDate");
@@ -13,10 +18,10 @@ $(document).ready( function() {
 
     //  function to validate input before enabling the submit button
     function validateInput() {
-        if (submitButton.val().length > 0 &&
-                dateIsValid(startDate.val()) &&
-                dateIsValid(endDate.val()) &&
-                dateIsValid(dueDate.val())) {
+        if (termName.val().length > 0 &&
+                dateIsValid(startInput.val()) &&
+                dateIsValid(endInput.val()) &&
+                dateIsValid(dueInput.val())) {
             submitButton.prop("disabled", false);
         }
     }
@@ -80,13 +85,13 @@ $(document).ready( function() {
                 disabled: false
             });
             //enable due date, set default date and max date
-            endInput.val(defaultEnd.toLocaleDateString());
+            endInput.val(defaultEnd.toPaddedLocaleDateString());
             dueInput.datepicker("option", {
                 defaultDate: defaultDue,
                 maxDate: dueMax,
                 disabled: false
             });
-            dueInput.val(defaultDue.toLocaleDateString());
+            dueInput.val(defaultDue.toPaddedLocaleDateString());
          
             //  update term stats
             updateStats();

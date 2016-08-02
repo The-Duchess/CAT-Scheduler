@@ -11,9 +11,9 @@ function dateIsValid(date_string) {
     
     if (!regex_array) { return false; }
     
-    var month = parseInt(regex_array[0], 10);
-    var day = parseInt(regex_array[1], 10);
-    var year = parseInt(regex_array[2], 10);
+    var month = parseInt(regex_array[1], 10);
+    var day = parseInt(regex_array[2], 10);
+    var year = parseInt(regex_array[3], 10);
 
     if (year < 1946) {
         return false;
