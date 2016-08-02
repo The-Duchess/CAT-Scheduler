@@ -1,8 +1,8 @@
 $(document).ready( function() {
     //  Super wonky includes
-    $.getScript("../Utility/input_validation.js");
+    $.getScript("../../JavaScript/Utility/input_validation.js");
 
-    Date.prototype.toPaddedLocaleDateString() = function() {
+    Date.prototype.toPaddedLocaleDateString = function() {
         return this.toLocaleDateString().replace(/(\/{0,1})(\d)(\/)/gi, "$10$2$3");
     };
 
