@@ -59,3 +59,9 @@ Additionally you MUST add your name to the contributors list in the NOTICE.
 
 an additional piece of notice will be present in the repo that instructs people viewing this source what the licensing
 restrictions are.
+
+# Database Setup
+
+Make a copy of the file Templates/fidoconfig.ini and place it in the root of the repository.
+Change the values under "[database]" to the connection details of your database.  Make sure
+you set the files permissions to 644.
