@@ -71,6 +71,14 @@ $(document).ready( function() {
     endInput.datepicker();
     dueInput.datepicker();
 
+    termName.change( function() {
+        if ($(this).val().length > 0) {
+            $(this).removeClass("invalidInput");
+        } else {
+            $(this).addClass("invalidInput");
+        }
+    });
+
     //  function for when start date is changed/selected
     startInput.change( function() {
         if (dateIsValid($(this).val())) {
