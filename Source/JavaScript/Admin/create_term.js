@@ -73,7 +73,7 @@ $(document).ready( function() {
 
     //  function for when start date is changed/selected
     startInput.change( function() {
-        if (isValidDate($(this).val())) {
+        if (dateIsValid($(this).val())) {
             //  variables
             var currentStart = $(this).datepicker("getDate");
             var defaultEnd = new Date(currentStart);
@@ -115,7 +115,7 @@ $(document).ready( function() {
 
     //  update stats when end date changed/selected
     endInput.change( function() {
-        if (isValidDate($(this).val())) {
+        if (dateIsValid($(this).val())) {
             updateStats();
             $(this).removeClass("invalidInput");
         } else {
@@ -126,7 +126,7 @@ $(document).ready( function() {
 
     //  update stats when due date changed/selected
     dueInput.change( function() {
-        if (isValidDate($(this).val())) {
+        if (dateIsValid($(this).val())) {
             updateStats();
             $(this).removeClass("invalidInput");
         } else {
