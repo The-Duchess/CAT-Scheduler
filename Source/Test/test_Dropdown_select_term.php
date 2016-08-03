@@ -10,7 +10,6 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
 require_once dirname(__FILE__) . "/../API/Utility.php";
-require_once dirname(__FILE__) . "/../API/Utility.php";
 
 //  Database connection
 if (!($CONNECTION =cody_db_connect())) {

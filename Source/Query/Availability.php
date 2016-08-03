@@ -188,6 +188,9 @@ function update_availability_blocks($input_term_id, $input_blocks, $kwargs=null)
 }
 
 // retrieves the shift preference for a specific student by a specific term
+	//  PARAMETERS:
+	//		studentid: The id of the student to retrieve shift preference for
+	//      input_term_id: the id of the term to retrieve shift preference for
 function retrieve_shift_preference($studentid, $termid) {
 
     //Selecet the shift preference from the shift preference table when
@@ -198,6 +201,13 @@ function retrieve_shift_preference($studentid, $termid) {
 }
 
 // add the shift preference for a student
+	//  PARAMETERS:
+	//		student_id:	The id of the student to retrieve shift preference for
+	//      term_id:	The id of the term to retrieve shift preference for
+	//		pref:		Selected preference to add to student on term
+	//			Choices:    'One 4-Hour'
+	//						'Two 2-Hour'
+	//						'No Preference'
 function add_student_shift_preference($student_id, $term_id, $pref) {
 
     //BEGIN TRANSACTION before making any changes to ensure atomicity
@@ -221,6 +231,11 @@ function add_student_shift_preference($student_id, $term_id, $pref) {
     return true;
 }
 
+//Retrieve all availability for selected term
+	//  PARAMETERS:
+	//      term_id:	The id of the term to retrieve availability for
+	//      kwargs: associative array of keyword arguments
+	//			None used (Could remove from this function?)
 function retrieve_availability_for_term($term_id, $kwargs=null) {
 	// Default values
 	if (!is_int($term_id)) {
