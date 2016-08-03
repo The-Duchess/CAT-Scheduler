@@ -1,16 +1,19 @@
+//  New method for date objects, adds padding zeroes
+Date.prototype.toPaddedLocaleDateString = function() {
+    var day = this.getDate().toString();
+    var month = (this.getMonth()+1).toString();
+    var year = this.getFullYear();
+
+    return (month.length == 1 ? "0" : "") + month + "/" +
+        (day.length == 1 ? "0" : "") + day + "/" +
+        year;
+};
+
+
 $(document).ready( function() {
     //  Super wonky includes
     $.getScript("../../JavaScript/Utility/input_validation.js");
 
-    Date.prototype.toPaddedLocaleDateString = function() {
-        var day = this.getDay().toString();
-        var month = (this.getMonth()+1).toString();
-        var year = this.getFullYear();
-
-        return (month.length == 1 ? "0" : "") + month + "/" +
-            (day.length == 1 ? "0" : "") + day + "/" +
-            year;
-    };
 
     //  global variables
     var termName = $("#termName");
@@ -70,7 +73,7 @@ $(document).ready( function() {
 
     //  function for when start date is changed/selected
     startInput.change( function() {
-        if ($(this).val() != "") {
+        if (isValidDate($(this).val())) {
             //  variables
             var currentStart = $(this).datepicker("getDate");
             var defaultEnd = new Date(currentStart);
@@ -102,23 +105,42 @@ $(document).ready( function() {
             //  update term stats
             updateStats();
             validateInput();
+            $(this).removeClass("invalidInput");
+            endInput.trigger("change");
+            dueInput.trigger("change");
+        } else {
+            $(this).addClass("invalidInput");
         }
     });
 
     //  update stats when end date changed/selected
     endInput.change( function() {
-        if ($(this).val() != "") { updateStats(); }
+        if (isValidDate($(this).val())) {
+            updateStats();
+            $(this).removeClass("invalidInput");
+        } else {
+            $(this).addClasS("invalidInput");
+        }
         validateInput();
     });
 
     //  update stats when due date changed/selected
     dueInput.change( function() {
-        if ($(this).val() != "") { updateStats(); }
+        if (isValidDate($(this).val())) {
+            updateStats();
+            $(this).removeClass("invalidInput");
+        } else {
+            $(this).addClass("invalidInput");
+        }
         validateInput();
     });
 
     resetButton.click( function() {
         endInput.prop("disabled", true);
         dueInput.prop("disabled", true);
+        termName.addClass("invalidInput");
+        startInput.addClass("invalidInput");
+        endInput.addClass("invalidInput");
+        dueInput.addClass("invalidInput");
     });
 });

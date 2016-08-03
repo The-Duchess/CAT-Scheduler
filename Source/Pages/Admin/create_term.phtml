@@ -16,19 +16,22 @@ $report = "";
     <script src="../../JQuery-1.2/jquery-1.12.4.js"></script>
     <script src="../../JQuery-1.2/UI/jquery-ui-darkness/jquery-ui.min.js"></script>
     <script src="../../JavaScript/Admin/create_term.js"></script>
+    <style type="text/css">
+        .invalidInput { border: 2px solid red; }
+    </style>
 </head>
 
 <body>
     <a href="../login_home.php">Return Home</a><br><br>
     <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
         <label for="termName">Term Name:</label><br>
-        <input type="text" id="termName" name="termName" /><br>
+        <input type="text" id="termName" class="invalidInput" name="termName" /><br>
         <label for="startDate">Start Date:</label><br>
-        <input type="text" id="startDate" name="startDate" readonly="true"><br>
+        <input type="text" id="startDate" class="invalidInput" name="startDate" readonly="true"><br>
         <label for="endDate">End Date:</label><br>
-        <input type="text" id="endDate" name="endDate" readonly="true" disabled="true"><br>
+        <input type="text" id="endDate" class="invalidInput" name="endDate" readonly="true" disabled="true"><br>
         <label for="dueDate">Due Date:</label><br>
-        <input type="text" id="dueDate" name="dueDate" readonly="true" disabled="true"><br>
+        <input type="text" id="dueDate" class="invalidInput" name="dueDate" readonly="true" disabled="true"><br>
         <p id="statsStartToEnd">Term Duration: UNKNOWN</p>
         <p id="statsDueToStart">Due Date: UNKNOWN</p>
         <!-- <input type="submit" name="submit" value="Create Term" /> -->
