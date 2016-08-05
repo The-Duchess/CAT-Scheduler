@@ -1,0 +1,126 @@
+<?php
+session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 'on');
+
+require_once dirname(__FILE__) . "/../../Query/Term.php";
+require_once dirname(__FILE__) . "/../../API/Utility.php";
+
+$report = "";
+
+// Database connection
+if (!($CONNECTION = fido_db_connect())) {
+    echo "<p>Connection Failed</p>\n";
+    exit();
+}
+?>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Edit a Term</title>
+    <link rel="stylesheet" href="../../JQuery-1.2/UI/jquery-ui-darkness/jquery-ui.min.css">
+    <script src="../../JQuery-1.2/jquery-1.12.4.js"></script>
+    <script src="../../JQuery-1.2/UI/jquery-ui-darkness/jquery-ui.min.js"></script>
+    <script src="../../JavaScript/Admin/edit_term.js"></script>
+</head>
+
+<body>
+    <a href="../login_home.php">Return Home</a><br><br>
+    
+<?php
+  //generate the dropdown form for selecting a term to edit 
+  echo "<form action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
+  echo "<label>Select which term you would like to edit</label><br>\n";
+  $args['all_terms'] = true;
+  $selected_term = dropdown_select_term("termSelect", $args);
+  echo "<input type=\"submit\" id=\"termSubmit\" name=\"termSelect\" value=\"Select\" />\n";
+  echo "</form>\n";
+?>
+    
+    
+<?php
+  if (!empty($selected_term)) {
+    $_SESSION['termID'] = (int)$selected_term['term_id'];
+    $term_name = $selected_term['term_name'];
+    $start_date = strtotime($selected_term['start_date']);
+    $end_date = strtotime($selected_term['end_date']);
+    $due_date = strtotime($selected_term['due_date']);
+    $editable = $selected_term['editable'];
+    $visible = $selected_term['visible'];
+?>
+    <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST" name="termForm">
+        <label for="termName">Term Name:</label><br>
+        <input type="text" id="termName" name="termName" /><br>
+        <label for="startDate">Start Date:</label><br>
+        <input type="text" id="startDate" name="startDate"/><br>
+        <label for="endDate">End Date:</label><br>
+        <input type="text" id="endDate" name="endDate"/><br>
+        <label for="dueDate">Due Date:</label><br>
+        <input type="text" id="dueDate" name="dueDate"/><br>
+        <label for="editable">Editable:</label>
+        <input type="radio" name="editable" value="t">True
+        <input type="radio" name="editable" value="f">False<br>
+        <label for="visible">Visible:</label>
+        <input type="radio" name="visible" value="t">True
+        <input type="radio" name="visible" value="f">False
+        <p id="statsStartToEnd">Term Duration: UNKNOWN</p>
+        <p id="statsDueToStart">Due Date: UNKNOWN</p>
+        <input type="submit" name="submit" value="Update Term" />
+    </form>
+    <script>
+    //update fields with selected term info
+    $("#termName").val("<?php echo $term_name;?>");
+    $("#startDate").val(formatDate(<?php echo $start_date;?>));
+    $("#endDate").val(formatDate(<?php echo $end_date;?>));
+    $("#dueDate").val(formatDate(<?php echo $due_date;?>));
+    //$("#startDate").trigger("change");
+    var editable = "<?php echo $editable;?>";
+    document.termForm.editable.value = editable;
+    var visible = "<?php echo $visible;?>";
+    document.termForm.visible.value = visible;
+    </script>
+<?php   
+  }
+    if (isset($_POST['submit'])) {
+      if (isset($_POST['termName']) and $_POST['termName'] != "" and isset($_POST['startDate']) and isset($_POST['endDate']) and isset($_POST['dueDate']) and isset($_POST['visible']) and isset($_POST['editable'])) {
+          $term_id = $_SESSION['termID'];
+          $name = $_POST['termName'];
+          $start = new DateTime($_POST['startDate']);
+          $end = new DateTime($_POST['endDate']);
+          $due = new DateTime($_POST['dueDate']);
+          if($_POST['editable'] === 't') {
+            $edit = true;
+          } else {
+            $edit = false;
+          }
+          if($_POST['visible'] === 't') {
+            $vis = true;
+          } else {
+            $vis = false;
+          }
+          $fields = array();
+          $fields['term_name'] = $name;
+          $fields['start_date'] = $start;
+          $fields['end_date'] = $end;
+          $fields['due_date'] = $due;
+          $fields['editable'] = $edit;
+          $fields['visible'] = $vis;
+          //  update term or report errors
+          if (!term_update($term_id, $fields)) {
+              $report = "ERROR: Failed to update term in database";
+          } else {
+              $report = "Term Updated";
+          }
+      } else {
+          $report = "ERROR: Cannot update a term with empty fields";
+      }
+      //echo '<p>'.$report.'</p>';
+    }
+  
+  
+?>
+  
+   <p><?php echo $report; ?></p> 
+</body>
+</html>
