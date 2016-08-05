@@ -24,4 +24,22 @@ function list_students_no_availability($term_id) {
     return true;
 }
 
+// generates a list of student usernames for those that
+// have not submitted availability for a term
+// PARAMETERS:
+//        - term_id
+function get_student_uname_no_availability($term_id) {
+     if (!($results = retrieve_students_no_availability($term_id))) {
+         return false;
+     }
+     $students = pg_fetch_all($results);
+     $students_uname = array();
+
+     foreach ($students as $student) {
+          array_push($students_uname, $student);
+     }
+
+     return $students_uname;
+}
+
 ?>
