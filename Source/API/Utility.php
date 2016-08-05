@@ -4,7 +4,7 @@ ini_set('display_errors', 'on');
 
 require_once dirname(__FILE__) . "/../Query/Term.php";
 
-//  Creates a dropdown menu with a list of visible and editable terms
+//  Creates a dropdown menu with a list of terms
 //  and returns an associative array of that terms data fields from
 //  the database, otherwise FALSE.
 //  PARAMETERS:
@@ -15,6 +15,7 @@ require_once dirname(__FILE__) . "/../Query/Term.php";
 //                  information
 //          view_only_alert:    if the dropdown should indicate terms that are
 //                              non-editable, default false
+//          all_terms:          if the dropdown should also display non visible terms
 //  OTHER:
 //      See test/test_Dropdown_student_term.php for an example of use
 function dropdown_select_term($subIdent, $kwargs=null) {
@@ -25,19 +26,31 @@ function dropdown_select_term($subIdent, $kwargs=null) {
 
     //  Default values
     $view_only_alert = false;
+    $all_terms = false;
 
     //  Read from kwargs if necessary
     if ($kwargs) {
         if (isset($kwargs['view_only_alert'])) {
             $view_only_alert = $kwargs['view_only_alert'];
         }
+        if (isset($kwargs['all_terms'])) {
+            $all_terms = $kwargs['all_terms'];
+        }
     }
 
     //  First we father the terms and convert them to an array
-    if (!($result = term_retrieve_visible_by_start($kwargs))) {
+    if ($all_terms) {
+      if (!($result = term_retrieve_by_start($kwargs))) {
         return false;
-    } else if (!($terms = pg_fetch_all($result))) {
+      } else if (!($terms = pg_fetch_all($result))) {
         return false;
+      }
+    } else {
+      if (!($result = term_retrieve_visible_by_start($kwargs))) {
+          return false;
+      } else if (!($terms = pg_fetch_all($result))) {
+          return false;
+      }
     }
 
     //  Output HTML for the dropdown menu using our gathered terms
