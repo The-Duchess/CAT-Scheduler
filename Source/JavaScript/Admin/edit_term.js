@@ -6,7 +6,7 @@ var formatDate = function(timeStamp) {
   if(month.length === 1){
     month = '0' + month;
   }
-  //format day so that it is to chars wide
+  //format day so that it is two chars wide
   var day = String(d.getDate());
   if(day.length === 1){
     day = '0' + day;
