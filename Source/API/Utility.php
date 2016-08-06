@@ -72,6 +72,67 @@ function dropdown_select_term($subIdent, $kwargs=null) {
     }
 }
 
+
+
+
+function dropdown_select_student($subIdent, $kwargs=null) {
+    //  This variable ensures that multiple calls in
+    //  the same form or file won't interfere
+    static $id = 0;
+    $id++;
+
+    //  Default values
+    $view_only_alert = false;
+
+    //  Read from kwargs if necessary
+    if ($kwargs) {
+        if (isset($kwargs['view_only_alert'])) {
+            $view_only_alert = $kwargs['view_only_alert'];
+        }
+    }
+
+    //  First we father the terms and convert them to an array
+    if (!($result = get_student_array())) {
+        return false;
+    } else if (!($students = pg_fetch_all($result))) {
+        return false;
+    }
+
+    //  Output HTML for the dropdown menu using our gathered terms
+    //  The caller must provide the form initialization and
+    //  submission button/object
+    echo "<select name=\"formStudent" . $id . "\">\n";
+    echo "<option value=\"\">Please select a student...</option>\n";
+    foreach ($students as $student) {
+        if ($view_only_alert and $student['active'] == "f") {
+            echo "<option value=" . $student['student_id'] . ">" . $student['student_username'] . " -- Not Active</option>\n";
+        } else {
+            echo "<option value=" . $student['student_id'] . ">" . $student['student_username'] . "</option>\n";
+        }
+    }
+    echo "</select>\n";
+
+    //  Check to see if the user has selected a term, and then
+    //  return the array holding the data
+    if (isset($_POST[$subIdent])) {
+        $selected = $_POST['formStudent' . $id];
+
+        if (!empty($selected)) {
+            $query = "SELECT * FROM student
+            WHERE student_id=$1
+            LIMIT 1";
+            if (!($result = pg_query_params($GLOBALS['CONNECTION'], $query, array($selected)))) {
+                return false;
+            }
+            $term = pg_fetch_array($result);
+            return $term;
+        }
+    }
+}
+
+
+
+
 function fido_db_connect() {
     //  Database connection variables, change to modify connection
     $host = "db.cecs.pdx.edu";

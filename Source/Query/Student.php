@@ -11,6 +11,16 @@ function get_student_id_by_username($input_username) {
 }
 
 
+// Retrieves a student's info based on the give id
+// PARAMETERS:
+//      student_id: id of the student you want to get the info for
+function get_student_info_by_id($student_id) {
+    $query = "SELECT student_id, student_username, join_date, leave_date, active FROM student WHERE student_id = $1";
+    return pg_query_params($GLOBALS['CONNECTION'], $query, array($input_username));
+}
+
+
+
 // --
 
 // deactivate a student in the students table
@@ -68,99 +78,6 @@ function add_student($student_uname, $joind) {
 
 	return pg_query_params($GLOBALS['CONNECTION'], $query, array($student_uname, $new_joind));
 }
-
-// --
-
-	// update a student's info
-	// this provides a number of functions to alter a specific student's value other than their primary key
-	// and the selection is done by the primary key
-
-	// these functions operate in a generic way where you feed the id of the student
-	// that is going to have a value changed and a new value for that column
-	// parameters:
-	//		id: the student id
-	// 		new: the new value
-/*
-	// DEPRECATED
-	function edit_student_email($id, $new) {
-		// this will edit the student's email
-
-		$query = 'UPDATE Student SET Student_Email=$2 WHERE Student_id=$1';
-
-		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $new));
-	}
-
-	// DEPRECATED
-	function edit_student_firstname($id, $new) {
-		// this will edit the student's first name
-
-		$query = 'UPDATE Student SET Student_FirstName=$2 WHERE Student_id=$1';
-
-		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $new));
-	}
-
-	// DEPRECATED
-	function edit_student_lastname($id, $new) {
-		// this will edit the student's last name
-
-		$query = 'UPDATE Student SET Student_LastName=$2 WHERE Student_id=$1';
-
-		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $new));
-	}
-
-	// DEPRECATED
-	function edit_student_nick($id, $new) {
-		// this will edit the student's cat nick
-
-		$query = 'UPDATE Student SET Cat_Nickname=$2 WHERE Student_id=$1';
-
-		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $new));
-	}
-
-	// DEPRECATED
-	function edit_student_visible($id, $new) {
-		// this will edit the student's state s visible
-
-		$query = 'UPDATE Student SET Active=$2 WHERE Student_id=$1';
-
-		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $new));
-	}
-
-	// DEPRECATED
-	function edit_student_uname($id, $new) {
-		// this will edit the student's state s visible
-
-		$query = 'UPDATE Student SET Student_username=$2 WHERE Student_id=$1';
-
-		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $new));
-	}
-
-	// DEPRECATED
-	// passed a date time
-	function edit_student_join_date($id, $new) {
-		// this will edit the student's state s visible
-
-		$query = 'UPDATE Student SET join_date=$2 WHERE Student_id=$1';
-
-		$newV = $new->format("Y-m-d");
-
-		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $newV));
-	}
-
-	// DEPRECATED
-	// also passed a date time
-	function edit_student_leave_date($id, $new) {
-		// this will edit the student's state s visible
-
-		$query = 'UPDATE Student SET leave_date=$2 WHERE Student_id=$1';
-
-		$newV = $new->format("Y-m-d");
-
-		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $newV));
-    }
-	*/
-	
-	
 	
 	
 	//  Updates a student in the database, returns FALSE on a failure
