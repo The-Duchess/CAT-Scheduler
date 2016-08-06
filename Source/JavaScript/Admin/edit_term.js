@@ -1,10 +1,12 @@
 // given a timeStamp, return a string that represents the date in the format 'MM/DD/YYYY'
 var formatDate = function(timeStamp) {
   var d = new Date(timeStamp*1000);
+  //format month so that it starts at 1 and is two chars wide
   var month = String(d.getMonth()+1);
   if(month.length === 1){
     month = '0' + month;
   }
+  //format day so that it is to chars wide
   var day = String(d.getDate());
   if(day.length === 1){
     day = '0' + day;

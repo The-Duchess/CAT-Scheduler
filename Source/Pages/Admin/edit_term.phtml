@@ -41,7 +41,7 @@ if (!($CONNECTION = fido_db_connect())) {
     
 <?php
   if (!empty($selected_term)) {
-    $select_flag = false;
+    //get all of the term's current fields once it is selected
     $_SESSION['termID'] = (int)$selected_term['term_id'];
     $term_name = $selected_term['term_name'];
     $start_date = strtotime($selected_term['start_date']);
@@ -49,6 +49,7 @@ if (!($CONNECTION = fido_db_connect())) {
     $due_date = strtotime($selected_term['due_date']);
     $editable = $selected_term['editable'];
     $visible = $selected_term['visible'];
+    //then create the form
 ?>
     <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST" name="termForm" id="termForm">
         <label for="termName">Term Name:</label><br>
@@ -70,22 +71,21 @@ if (!($CONNECTION = fido_db_connect())) {
         <input type="submit" name="submit" value="Update Term" />
     </form>
     <script>
-    //update fields with selected term info
-    $("#termName").val("<?php echo $term_name;?>");
-    $("#startDate").val(formatDate(<?php echo $start_date;?>));
-    $("#endDate").val(formatDate(<?php echo $end_date;?>));
-    $("#dueDate").val(formatDate(<?php echo $due_date;?>));
-    //$("#startDate").trigger("change");
-    //updateStats();
-    var editable = "<?php echo $editable;?>";
-    document.termForm.editable.value = editable;
-    var visible = "<?php echo $visible;?>";
-    document.termForm.visible.value = visible;
+      //update forms inputs with selected term info
+      $("#termName").val("<?php echo $term_name;?>");
+      $("#startDate").val(formatDate(<?php echo $start_date;?>));
+      $("#endDate").val(formatDate(<?php echo $end_date;?>));
+      $("#dueDate").val(formatDate(<?php echo $due_date;?>));
+      var editable = "<?php echo $editable;?>";
+      document.termForm.editable.value = editable;
+      var visible = "<?php echo $visible;?>";
+      document.termForm.visible.value = visible;
     </script>
 <?php   
-  }
+  }//closing form if bracket
     if (isset($_POST['submit'])) {
       if (isset($_POST['termName']) and $_POST['termName'] != "" and isset($_POST['startDate']) and $_POST['startDate'] != "" and isset($_POST['endDate']) and $_POST['endDate'] != ""and isset($_POST['dueDate']) and $_POST['dueDate'] != "" and isset($_POST['visible']) and isset($_POST['editable'])) {
+          //get all of the term's post variables
           $term_id = $_SESSION['termID'];
           $name = $_POST['termName'];
           $start = new DateTime($_POST['startDate']);
@@ -101,6 +101,7 @@ if (!($CONNECTION = fido_db_connect())) {
           } else {
             $vis = false;
           }
+          //get the fields ready in an array
           $fields = array();
           $fields['term_name'] = $name;
           $fields['start_date'] = $start;
@@ -113,15 +114,15 @@ if (!($CONNECTION = fido_db_connect())) {
               $report = "ERROR: Failed to update term in database";
           } else {
               $report = "Term Updated, reloading page...";
+              //refresh the page after updating the term
+              //this ensures that the dropdown reflects updated term names
               header("Refresh:0");
           }
       } else {
           $report = "ERROR: Cannot update a term with empty fields";
       }
       $select_flag = true;
-      //echo '<p>'.$report.'</p>';
     }
-  
   
 ?>
   
