@@ -13,16 +13,16 @@ if (!($CONNECTION = fido_db_connect())) {
 
 //these arrays will be used for generating the calendar grid
 $hours = array(
-    '8'  => '8:00AM - 9:00AM',
-    '9'  => '9:00AM - 10:00AM',
-    '10' => '10:00AM - 11:00AM',
-    '11' => '11:00AM - 12:00PM',
-    '12' => '12:00PM - 1:00PM',
-    '13'  => '1:00PM - 2:00PM',
-    '14'  => '2:00PM - 3:00PM',
-    '15'  => '3:00PM - 4:00PM',
-    '16'  => '4:00PM - 5:00PM',
-    '17'  => '5:00PM - 6:00PM'
+    '8'  => '8AM - 9AM',
+    '9'  => '9AM - 10AM',
+    '10' => '10AM - 11AM',
+    '11' => '11AM - 12PM',
+    '12' => '12PM - 1PM',
+    '13'  => '1PM - 2PM',
+    '14'  => '2PM - 3PM',
+    '15'  => '3PM - 4PM',
+    '16'  => '4PM - 5PM',
+    '17'  => '5PM - 6PM'
 );
 $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 
@@ -35,17 +35,28 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
         <title>Submit Availability</title>
     </head>
     <body>
-        <div class='container'>
-            <a href="../login_home.php">Back to Home</a>
+        <div class="container">
+            <br>
+            <div class="row">
+                <a class="btn btn-primary" href="../login_home.php">Back to Home</a>
+                <h1>Submit Availabilities</h1>
+            </div>
+            <div class="row">
 <?php
-
+//echo "<div class=\"col-md-2\">";
 //generate the dropdown form for selecting a term to submit availability for
-echo "<form action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
+echo "<form class=\"form-inline\" action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
 echo "<label>Select which term you would like to submit availabilities for</label><br>\n";
 $selected_term = dropdown_select_term("termSelect");
-echo "<input type=\"submit\" name=\"termSelect\" value=\"Select\" />\n";
-echo "</form>\n";
+//echo "</div>";
 
+echo "<input class=\"btn btn-default\" type=\"submit\" name=\"termSelect\" value=\"Select\" />\n";
+echo "</form>\n";
+?>
+
+            </div>
+            <hr>
+<?php
 // page wrapper statement, we dont want to load the availability blocks until a term is selected
 if (!empty($selected_term)) {
 
@@ -88,11 +99,10 @@ if (!empty($selected_term)) {
     $start_date = strtotime($selected_term['start_date']);
     $end_date = strtotime($selected_term['end_date']);
 
-    echo "<h1>User: " . $_SERVER['PHP_AUTH_USER'] . "</h1>";
-    echo "<h1>" . $selected_term['term_name'] . "</h1>";
-    echo "<h2>" . date('Y-m-d', $start_date) . " - " . date('Y-m-d', $end_date) . "</h2>";
-
 ?>
+            <h2>User: <?=$_SERVER['PHP_AUTH_USER']?></h2>
+            <h2>Term: <?=$selected_term['term_name']?></h2>
+            <h2>Dates: <?=date('Y-m-d', $start_date)?> <small><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></small> <?=date('Y-m-d', $end_date)?></h2>
             <div class='main_form'> <!-- beginning of main_form-->
                 <form action="process_availability_submission.php" method="POST">
                     <div class="row"> <!-- beginning of row 1-->
@@ -103,9 +113,11 @@ if (!empty($selected_term)) {
                                         <h3 class="panel-title">Key</h3>
                                     </div>
                                     <div class="panel-body">
-                                        <p>A  - Available</p>
-                                        <p>P  - Prefered</p>
-                                        <p>NA - Not Available</p>
+                                        <ul class="list-group">
+                                            <li class="list-group-item list-group-item-warning">A  - Available</li>
+                                            <li class="list-group-item list-group-item-success">P  - Preferred</li>
+                                            <li class="list-group-item list-group-item-defualt">NA - Not Available</li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div> <!-- end of row 1.1-->
@@ -115,7 +127,7 @@ if (!empty($selected_term)) {
                                         <h3 class="panel-title">Shift Preference</h3>
                                     </div>
                                     <div class="panel-body">
-                                        <fieldset<?= ($editable == false ? ' disabled="disabled" ':'')?>>
+                                        <fieldset id="shift-pref"<?= ($editable == false ? ' disabled="disabled" ':'')?>>
                                             <input type='radio' id='4h' value='One 4-Hour' name='shift_pref' <?= ($pref == '4h' ? ' checked ' :' ')?>>
                                             <label for='4h'>One 4 Hour Shift</label>
                                             <br>
@@ -137,7 +149,7 @@ if (!empty($selected_term)) {
                                 <div class="panel-body">
                                     <input type='hidden' name='term_name' value='<?= $selected_term['term_name']?>' />
                                     <input type='hidden' name='term_id' value='<?= $selected_term['term_id']?>' />
-                                    <table id="avail_table">
+                                    <table class="table" id="avail_table">
                                         <thead>
                                             <tr>
                                                 <td></td>
@@ -175,14 +187,17 @@ if (!empty($selected_term)) {
                                                         }
 
                                                         echo "<td class=$cur_id>";
-                                                        echo "<fieldset".($editable == false ? ' disabled="disabled" ':'').">";
+                                                        echo "<fieldset class='btn-group' data-toggle='buttons'".($editable == false ? ' disabled="disabled" ':'').">";
 
+                                                        echo "<label class='btn btn-xs'>";
                                                         echo "<input type='radio' id=$id_A value='A' name=$cur_id" . ($default == 'A' ? ' checked ':' ') . "/>";
-                                                        echo "<label for=$id_A>A</label>";
+                                                        echo "A</label>";
+                                                        echo "<label class='btn btn-xs'>";
                                                         echo "<input type='radio' id=$id_P value='P' name=$cur_id" . ($default == 'P' ? ' checked ':' ') . "/>";
-                                                        echo "<label for=$id_P>P</label>";
+                                                        echo "P</label>";
+                                                        echo "<label class='btn btn-xs'>";
                                                         echo "<input type='radio' id=$id_NA value='NA' name=$cur_id" . ($default == 'NA' ? ' checked ':' ') . "/>";
-                                                        echo "<label for=$id_NA>NA</label>";
+                                                        echo "NA</label>";
 
                                                         echo "</fieldset>";
                                                         echo "</td>";
@@ -197,8 +212,8 @@ if (!empty($selected_term)) {
                         </div> <!-- end of column 2-->
                     </div> <!-- end of row 1-->
                     <div class="row"> <!-- beginning of row 2-->
-                        <input type='submit' value='Submit' name='Submit'<?= ($editable == false ? ' disabled="disabled" ':'')?>/>
-                        <input type='button' value='Clear' onclick="clear_submission()"<?= ( $editable == false ? ' disabled=disabled ':'')?>/>
+                        <input class="btn btn-default" type='submit' value='Submit' name='Submit'<?= ($editable == false ? ' disabled="disabled" ':'')?>/>
+                        <input class="btn btn-primary" type='button' value='Clear' onclick="clear_submission()"<?= ( $editable == false ? ' disabled=disabled ':'')?>/>
                     </div> <!-- end of row 2-->
                 </form>
             </div> <!-- end of main_form-->
@@ -211,22 +226,22 @@ if (!empty($selected_term)) {
         <script type='text/javascript' src='../../jquery-3.0.0.min.js'></script>
         <script src="../../css/bootstrap_current/js/bootstrap.min.js"></script>
         <script type='text/javascript'>
-        
+
         // Clears all the submissions on the page (setting them to 'NA'
         // and recoloring them (white))
         function clear_submission(){
             //get the table from the page
-            
+
             var table = document.getElementById("avail_table");
-            
+
             //ask the user if they are sure
             //if they are, set all radio buttons to 'NA'
-            
+
             var r = confirm("Are you sure you want to clear all submissions? (This will not effect your saved availability until you submit)");
             if(r!=true){
                 return;
             }
-            
+
             //iterate through the available blocks (mon-fri, 08:00 - 18:00, sat, 12:00 - 17:00)
             //check the 'NA' radio and reset the repaint the colors
             var daystrings = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -241,9 +256,9 @@ if (!empty($selected_term)) {
                     }
                 }
             }
-            
+
             recolorCalendar();
-        
+
             // set shift pref to no pref
             document.getElementById("0h").checked = 'true';
         }
@@ -253,25 +268,36 @@ if (!empty($selected_term)) {
                 var selected = cell.find('input[type=radio]:checked');
                 console.log("Given cell: " + selected.val());
                 if (selected.val() == "A") {
-                    cell.css("background-color", "green");
+                    //cell.css("background-color", "green");
+                    cell.children("label").attr("class", "btn btn-xs btn-warning");
+                    selected.parent().addClass("active");
                 } else if (selected.val() == "P") {
-                    cell.css("background-color", "orange");
+                    //cell.css("background-color", "orange");
+                    cell.children("label").attr("class", "btn btn-xs btn-success");
+                    selected.parent().addClass("active");
                 } else {
-                    cell.css("background-color", "white");
+                    //cell.css("background-color", "white");
+                    cell.children("label").attr("class", "btn btn-xs btn-default");
+                    selected.parent().addClass("active");
                 }
             };
 
             var recolorCalendar = function() {
-                $('td').each(function() {
-                    colorCell($(this));
+                $('fieldset').each(function() {
+                    if ($(this).attr("id") != "shift-pref") {
+                        colorCell($(this));
+                    }
                 });
             };
 
                 $(document).ready(function() {
                 recolorCalendar();
 
-                $('td').change(function () {
-                    colorCell($(this));
+                $('fieldset').change(function () {
+                    console.log($(this).attr("id"));
+                    if ($(this).attr("id") != "shift-pref") {
+                        colorCell($(this));
+                    }
                 });
             });
         </script>
