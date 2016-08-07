@@ -102,7 +102,11 @@ if (!empty($selected_term)) {
 ?>
             <h2>User: <?=$_SERVER['PHP_AUTH_USER']?></h2>
             <h2>Term: <?=$selected_term['term_name']?></h2>
-            <h2>Dates: <?=date('Y-m-d', $start_date)?> <small><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></small> <?=date('Y-m-d', $end_date)?></h2>
+            <h2>Dates: <?=date('F jS, Y', $start_date)?> 
+                <small>
+                    <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+                </small> 
+                <?=date('F jS, Y', $end_date)?></h2>
             <div class='main_form'> <!-- beginning of main_form-->
                 <form action="process_availability_submission.php" method="POST">
                     <div class="row"> <!-- beginning of row 1-->
