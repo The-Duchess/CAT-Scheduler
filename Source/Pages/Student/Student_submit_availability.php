@@ -102,23 +102,24 @@ if (!empty($selected_term)) {
     $end_date = strtotime($selected_term['end_date']);
 
 ?>
+            <div class="row">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title"><?=$selected_term['term_name']?></h2>
+                    </div>
+                    <div class="panel-body">
+                        <h3><?=date('F jS, Y', $start_date)?>
+                            <small><span class="glyphicon glyphicon-arrow-right"></span></small>
+                            <?=date('F jS, Y', $end_date)?>
+                        </h3>
+                    </div>
+                </div>
+            </div>
             <div class='main_form'> <!-- beginning of main_form-->
                 <form action="process_availability_submission.php" method="POST">
-                    <div class="row row-eq-height"> <!-- beginning of row 1-->
+                    <div class="row"> <!-- beginning of row 1-->
                         <div class="col-md-3"> <!-- beginning of column 1-->
                             <div class="row"> <!-- beginning of column 1 row 1-->
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title">Term Information</h3>
-                                    </div>
-                                    <div class="panel-body">
-                                        <ul class="list-group">
-                                            <li class="list-group-item">Term: <?=$selected_term['term_name']?></li>
-                                            <li class="list-group-item">Start Date: <?=date('F jS, Y', $start_date)?></li>
-                                            <li class="list-group-item">End Date: <?=date('F jS, Y', $end_date)?></li>
-                                        </ul>
-                                    </div>
-                                </div>
                             </div> <!-- end of column 1 row 1-->
                             <div class="row"> <!-- beginning of column 1 row 2-->
                                 <div class="panel panel-default">
