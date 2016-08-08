@@ -48,7 +48,6 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
 //echo "<div class=\"col-md-2\">";
 //generate the dropdown form for selecting a term to submit availability for
 echo "<form class=\"form-inline\" action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
-echo "<label>Select which term you would like to submit availabilities for</label><br>\n";
 $selected_term = dropdown_select_term("termSelect");
 //echo "</div>";
 
