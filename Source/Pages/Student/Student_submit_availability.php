@@ -32,6 +32,8 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
     <head>
         <!-- Bootstrap -->
         <link href="../../css/bootstrap_current/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/custom/custom-buttons.css" rel="stylesheet">
+        <link href="../../css/custom/custom-list-group.css" rel="stylesheet">
         <title>Submit Availability</title>
     </head>
     <body>
@@ -118,8 +120,8 @@ if (!empty($selected_term)) {
                                     </div>
                                     <div class="panel-body">
                                         <ul class="list-group">
-                                            <li class="list-group-item list-group-item-warning">A  - Available</li>
-                                            <li class="list-group-item list-group-item-success">P  - Preferred</li>
+                                            <li class="list-group-item list-group-item-available">A  - Available</li>
+                                            <li class="list-group-item list-group-item-preferred">P  - Preferred</li>
                                             <li class="list-group-item list-group-item-defualt">NA - Not Available</li>
                                         </ul>
                                     </div>
@@ -273,7 +275,7 @@ if (!empty($selected_term)) {
                 console.log("Given cell: " + selected.val());
                 if (selected.val() == "A") {
                     //cell.css("background-color", "green");
-                    cell.children("label").attr("class", "btn btn-xs btn-warning");
+                    cell.children("label").attr("class", "btn btn-xs btn-available");
                     selected.parent().addClass("active");
                 } else if (selected.val() == "P") {
                     //cell.css("background-color", "orange");
