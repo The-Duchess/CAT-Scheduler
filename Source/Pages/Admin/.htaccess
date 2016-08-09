@@ -1,0 +1,4 @@
+AuthUserFile /home/fido/ubuntu/.htpasswd_admins
+AuthName "Please enter your username and password:"
+AuthType Basic
+Require valid-user

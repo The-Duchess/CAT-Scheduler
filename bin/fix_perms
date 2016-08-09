@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+cd $(dirname -- "$0")
+cd ..
+if [ -e 'bin' ]; then
+    chmod -R og+r .
+    find . -type d -exec chmod og+x {} \;
+else
+    echo "Not in the right directory, exiting" 1>&2
+    exit 1
+fi
