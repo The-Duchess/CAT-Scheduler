@@ -53,6 +53,11 @@ $selected_term = dropdown_select_term("termSelect");
 
 echo "<input class=\"btn btn-default\" type=\"submit\" name=\"termSelect\" value=\"Select\" />\n";
 echo "</form>\n";
+//serialize the selected trem to be able to post in html
+if(!empty($_POST['original_Term'])){
+    $selected_term = unserialize($_POST['original_Term']);
+}
+
 ?>
 
             </div>
@@ -63,10 +68,15 @@ if (!empty($selected_term)) {
 
     $student_id = (int)pg_fetch_row(get_student_id_by_username($_SERVER['PHP_AUTH_USER']))[0];
     $term_id = (int)$selected_term['term_id'];
+    if(!empty($_POST['copy_id'])){
+	$term_id_new = (int)$_POST['formTerm2'];
+    } else {
+	$term_id_new = (int)$selected_term['term_id'];
+    }
     $editable = ($selected_term['editable'] == "t" ? true:false);
 
     // TODO: This formatting step should be done in a API function, make a Story about it ****
-    $result = retrieve_availability_for_student($student_id, $term_id);
+    $result = retrieve_availability_for_student($student_id, $term_id_new);
     $rows = pg_fetch_all($result);
 
     $db_info = array();
@@ -115,10 +125,28 @@ if (!empty($selected_term)) {
                 </div>
             </div>
             <div class='main_form'> <!-- beginning of main_form-->
-                <form action="process_availability_submission.php" method="POST">
                     <div class="row"> <!-- beginning of row 1-->
                         <div class="col-md-3"> <!-- beginning of column 1-->
                             <div class="row"> <!-- beginning of column 1 row 1-->
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Copy previous submission</h3>
+                                    </div>
+                                    <div class="panel-body">
+				    <?php
+echo "<form class=\"form-inline\" action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
+$copy_term = dropdown_select_term("copy");
+//echo "</div>";
+
+$original_term = htmlentities(serialize($selected_term));
+
+echo "<input class=\"btn btn-default\" type=\"submit\" name=\"copy\" value=\"Copy\" />\n";
+echo "<input type=\"hidden\" name=\"original_Term\" value=\"$original_term\" />\n";
+echo "   Post ID  ". $_POST['copy_id'];
+echo "</form>\n";
+?>
+                                    </div>
+                                </div>
                             </div> <!-- end of column 1 row 1-->
                             <div class="row"> <!-- beginning of column 1 row 2-->
                                 <div class="panel panel-default">
@@ -134,6 +162,7 @@ if (!empty($selected_term)) {
                                     </div>
                                 </div>
                             </div> <!-- end of row 1.2-->
+                <form action="process_availability_submission.php" method="POST">
                             <div class="row"> <!-- beginning of column 1 row 3-->
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
