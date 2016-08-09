@@ -56,7 +56,7 @@ function dropdown_select_term($subIdent, $kwargs=null) {
     //  Output HTML for the dropdown menu using our gathered terms
     //  The caller must provide the form initialization and
     //  submission button/object
-    echo "<select name=\"formTerm" . $id . "\">\n";
+    echo "<select class=\"form-control\" name=\"formTerm" . $id . "\">\n";
     echo "<option value=\"\">Please select a term...</option>\n";
     foreach ($terms as $term) {
         if ($view_only_alert and $term['editable'] == "f") {
