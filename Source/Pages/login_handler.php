@@ -23,8 +23,17 @@ if (!($result = get_student_id_by_username($_SERVER['PHP_AUTH_USER']))) {
 
 //check if the user is an admin or not
 $admin = false;
+$admins = array(
+    'bowzr',
+    'shrugz4life',
+    'dog01',
+    'unix4life',
+    'princessz',
+    'koopaking'
+);
+
 //TODO: when LDAP is intigrated, change logic to set $admin flag
-if ($_SERVER['PHP_AUTH_USER'] == 'bowzr') {
+if (in_array($_SERVER['PHP_AUTH_USER'], $admins)) {
     $admin = true;
 }
 
