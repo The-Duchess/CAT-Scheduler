@@ -59,14 +59,14 @@ $(document).ready( function() {
         var due_to_start_days = Math.ceil((startMsec - dueMsec) / msecs_to_day);
 
         //  calculates term duration
-        if (dateIsValid(startInput.val()) && !dateIsValid(endInput.val())) {
+        if (dateIsValid(startInput.val()) && dateIsValid(endInput.val())) {
             statsStartEndText.text("Term Duration: ~" + start_to_end_weeks + " weeks (" + start_to_end_days + " days), " + day_names[startDate.getDay()] + " to " + day_names[endDate.getDay()]);
         } else {
             statsStartEndText.text("Term Duration: UNKNOWN");
         }
 
         //  calculates time between due date and start of term
-        if (dateIsValid(startInput.val()) && !dateIsValid(dueInput.val())) {
+        if (dateIsValid(startInput.val()) && dateIsValid(dueInput.val())) {
             statsDueStartText.text("Due Date: " + due_to_start_days + " days before start");
         } else {
             statsDueStartText.text("Due Date: UNKNOWN");
