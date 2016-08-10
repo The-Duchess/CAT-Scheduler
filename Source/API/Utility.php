@@ -86,18 +86,20 @@ function dropdown_select_term($subIdent, $kwargs=null) {
 }
 
 function fido_db_connect() {
-    //  Database connection variables, change to modify connection
-    $host = "db.cecs.pdx.edu";
-    $port = "5432";
-    $database = "fido";
-    $username = "fido";
-    $password = "j@k7zg6Duw";
-    
-	
-	//  Generate connection string
-    
-    $conn_string = "host={$host} port={$port} dbname={$database} user={$username} password={$password}";
-    return pg_connect($conn_string);
+    //  read the configuration file
+    $ini_arr = parse_ini_file(dirname(__FILE__) . "/../../fidoconfig.ini", true);
+    $dbconf = $ini_arr['database'];
+
+    //  generate the connection string
+    $conn = "
+    host='{$dbconf['host']}'
+    port='{$dbconf['port']}'
+    dbname='{$dbconf['dbname']}'
+    user='{$dbconf['user']}'
+    password='{$dbconf['password']}'";
+
+    //  connect to the database
+    return pg_connect($conn);
 }
 
 
