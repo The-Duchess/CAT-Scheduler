@@ -4,21 +4,28 @@ Source/Pages/.htaccess
 
 the other in
 
-Source/Pages/Admin/htaccess
+Source/Pages/Admin/.htaccess
 
 These two are configured to require http basic auth against these directories. The one in "Pages"will allow anyone in the configured password file to login, the Admin currently only allows user "bowzr". Because the path to the password file has to be hardcoded and absolute, each of you will need to configure your own password file somewhere outside of the repository (for security reasons). Your home directory will be fine. There is a file
 
 Templates/htpasswd_sample
 
-Copy this file somewhere in your directory (simplest will be in home), rename it to ".htpasswd", and update the paths in the htaccess files to point to it.
+Copy this file somewhere in your directory (simplest will be in home), rename it to ".htpasswd", and update the paths in the htaccess file in Pages to point to it.
 
-If you want to add more users to the file, you can do so with the following command:
+There is a second sample file
+
+Templates/htpasswd_admins_sample
+
+which should be copied to the same place the other htpasswd file was copied to, and renamed to ".htpasswd_admins". Update the .htaccess file in the Pages/Admin directory to point to this second file.
+
+If you want to add more users to either of the files, you can do so with the following command:
 
 ----------------------------------
 htpasswd ~/.htpasswd moarusers
-   ^          ^          ^
-   |          |          |
+  ^          ^          ^
+  |          |          |
 command  path to file  new username
 -----------------------------------
 
 You will be prompted to set a password, once you do the new user will be appended to the file.
+
