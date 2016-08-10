@@ -1,4 +1,4 @@
-AuthUserFile /home/simca/ubuntu/.htpasswd
+AuthUserFile /home/fido/ubuntu/.htpasswd_admins
 AuthName "Please enter your username and password:"
 AuthType Basic
-Require user bowzr
+Require valid-user

@@ -16,8 +16,9 @@ if (!($CONNECTION = fido_db_connect())) {
 }
 
 //simulating user session
-$_SESSION['PHP_AUTH_USER'] = "ealkadi"; 
-
+if(empty($_SERVER['PHP_AUTH_USER'])) {
+    $_SERVER['PHP_AUTH_USER'] = "ealkadi";
+}
 
 //these arrays will be used for generating the calendar grid
 $hours = array(
@@ -43,7 +44,8 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
     </head>
     <body>
         <div class='container'>
-            <h1>USING Cody's DB</h1>
+            <a href="../login_home.php">Return Home</a><br>
+            <!--<h1>USING Cody's DB</h1>-->
             
 <?php
 
@@ -171,5 +173,3 @@ if (!empty($selected_term)) {
         </div>
     </body>
 </html>
-            
-            

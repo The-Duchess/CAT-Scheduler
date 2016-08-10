@@ -74,6 +74,7 @@ foreach ($_POST as $key => $val) {
 
 //print_r($student_id);
 //print(" - ");
+//print($input_term_id);
 //print_r($input_blocks);
 
 if(update_availability_blocks($input_term_id, $input_blocks)){

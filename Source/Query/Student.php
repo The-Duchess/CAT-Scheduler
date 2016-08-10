@@ -16,6 +16,8 @@ function get_student_id_by_username($input_username) {
 // deactivate a student in the students table
 // set the Active value to false
 // all other values can be default and are not required to change
+		//  PARAMETERS:
+		//      id: The id of the student you want to set active flag to false
 function deactivate_student($id) {
 
 
@@ -114,8 +116,8 @@ function add_student($student_uname, $joind) {
 
 		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $new));
 	}
-*/
 
+	// DEPRECATED
 	function edit_student_visible($id, $new) {
 		// this will edit the student's state s visible
 
@@ -124,6 +126,7 @@ function add_student($student_uname, $joind) {
 		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $new));
 	}
 
+	// DEPRECATED
 	function edit_student_uname($id, $new) {
 		// this will edit the student's state s visible
 
@@ -132,6 +135,7 @@ function add_student($student_uname, $joind) {
 		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $new));
 	}
 
+	// DEPRECATED
 	// passed a date time
 	function edit_student_join_date($id, $new) {
 		// this will edit the student's state s visible
@@ -143,6 +147,7 @@ function add_student($student_uname, $joind) {
 		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $newV));
 	}
 
+	// DEPRECATED
 	// also passed a date time
 	function edit_student_leave_date($id, $new) {
 		// this will edit the student's state s visible
@@ -153,6 +158,69 @@ function add_student($student_uname, $joind) {
 
 		return pg_query_params($GLOBALS['CONNECTION'], $query, array($id, $newV));
     }
+	*/
+	
+	
+	
+	
+	//  Updates a student in the database, returns FALSE on a failure
+	//  PARAMETERS:
+	//      id:     the id of the student to update
+	//      fields: an associative array of db data fields and their
+	//              updated values. only fields passed as keys in
+	//              this array will be updated
+	//			"student_username" => string,
+	//				String to change username to
+	//			"join_date" => DateTime,
+	//				Date to set the Join date to
+	//			"leave_date" => DateTime,
+	//				Date to set the Leave date to
+	//			"active" => boolean);
+	//				Either True or False to set the active flag
+	//      check:  whether to verify there are no invalid fields in
+	//              the fields parameter, small hit to performance.
+	//              default TRUE
+	function student_update($id, $fields) {
+    //  Check for validity
+    if (!is_int($id)) {
+        return false;
+    }
+    $check_string = function ($var) { return ((is_string($var)) ? true : false); };
+    $check_DateTime = function ($var) { return (($var instanceof DateTime) ? true : false); };
+    $check_boolean = function ($var) { return ((is_bool($var)) ? true : false); };
+    $valid_fields = array(
+        "student_username" => $check_string,
+        "join_date" => $check_DateTime,
+        "leave_date" => $check_DateTime,
+        "active" => $check_boolean);
+    foreach ($fields as $field => $val) {
+        if (!is_string($field) or
+            !array_key_exists(strtolower($field), $valid_fields) or
+            is_null($val) or
+            !($valid_fields[$field]($val))) {
+            return false;
+        }
+    }
+
+    //  Generate the query and its parameters
+    $field_arr = array();
+    $params = array($id);
+    $counter = 2;
+    foreach ($fields as $field => $val) {
+        array_push($field_arr, $field . "=$" . $counter);
+        if ($val instanceof DateTime) {
+            array_push($params, $val->format("Y-m-d"));
+        } else if (is_bool($val)) {
+            array_push($params, var_export($val, true));
+        } else {
+            array_push($params, $val);
+        }
+        $counter++;
+    }
+    $query = "UPDATE Student SET " . implode(", ", $field_arr) . " WHERE student_id=$1";
+
+    return pg_query_params($GLOBALS['CONNECTION'], $query, $params);
+	}
 
 
     //  Retrieves a results object containing all terms regardless of editability

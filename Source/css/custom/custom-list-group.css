@@ -1,0 +1,59 @@
+.list-group-item-available {
+    color: #8a6d3b;
+    background-color: #ffff3f;
+}
+a.list-group-item-available,
+button.list-group-item-available {
+    color: #8a6d3b;
+}
+a.list-group-item-available .list-group-item-heading,
+button.list-group-item-available .list-group-item-heading {
+    color: inherit;
+}
+a.list-group-item-available:hover,
+button.list-group-item-available:hover,
+a.list-group-item-available:focus,
+button.list-group-item-available:focus {
+    color: #8a6d3b;
+    background-color: #e3e305;
+}
+a.list-group-item-available.active,
+button.list-group-item-available.active,
+a.list-group-item-available.active:hover,
+button.list-group-item-available.active:hover,
+a.list-group-item-available.active:focus,
+button.list-group-item-available.active:focus {
+    color: #333;
+    background-color: #e3e305;
+    border-color: #cdcd06;
+}
+.list-group-item-preferred {
+    color: #fff;
+    background-color: #5cb85c;
+}
+a.list-group-item-preferred,
+button.list-group-item-preferred {
+    color: #fff;
+}
+a.list-group-item-preferred .list-group-item-heading,
+button.list-group-item-preferred .list-group-item-heading {
+    color: inherit;
+}
+a.list-group-item-preferred:hover,
+button.list-group-item-preferred:hover,
+a.list-group-item-preferred:focus,
+button.list-group-item-preferred:focus {
+    color: #fff;
+    background-color: #449d44;
+}
+a.list-group-item-preferred.active,
+button.list-group-item-preferred.active,
+a.list-group-item-preferred.active:hover,
+button.list-group-item-preferred.active:hover,
+a.list-group-item-preferred.active:focus,
+button.list-group-item-preferred.active:focus {
+    color: #fff;
+    background-color: #398439;
+    border-color: #255625;
+}
+
