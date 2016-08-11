@@ -1,10 +1,48 @@
+/**********  New Methods for Built in Objects  **********/
+Date.prototype.toPaddedLocaleDateString = function() {
+    var day = this.getDate().toString();
+    var month = (this.getMonth()+1).toString();
+    var year = this.getFullYear();
+
+    return (month.length == 1 ? "0" : "") + month + "/" +
+        (day.length == 1 ? "0" : "") + day + "/" +
+        year;
+};
+
+
 $(document).ready( function() {
-    //  global variables
+    /**********  JQuery Includes are Scary  **********/
+    $.getScript("../../JavaScript/Utility/input_validation.js");
+
+
+    /**********  Global Variables  **********/
+    var termName = $("#termName");
     var startInput = $("#startDate");
     var endInput = $("#endDate");
     var dueInput = $("#dueDate");
     var statsStartEndText = $("#statsStartToEnd");
     var statsDueStartText = $("#statsDueToStart");
+    var submitButton = $("#submitButton");
+    var resetButton = $("#resetButton");
+    
+	/**********  Object Initialization  **********/
+    startInput.datepicker();
+    endInput.datepicker();
+    dueInput.datepicker();
+
+
+	/**********  Functions  **********/
+    //  function to validate input before enabling the submit button
+    function validateInput() {
+        if (termName.val().length > 0 &&
+                dateIsValid(startInput.val()) &&
+                dateIsValid(endInput.val()) &&
+                dateIsValid(dueInput.val())) {
+            submitButton.prop("disabled", false);
+        } else {
+			submitButton.prop("disabled", true);
+		}
+    }
 
     //  function to update statistics of term
     function updateStats() {
@@ -21,30 +59,35 @@ $(document).ready( function() {
         var due_to_start_days = Math.ceil((startMsec - dueMsec) / msecs_to_day);
 
         //  calculates term duration
-        if (startInput.val() != "" && endInput.val() != "") {
+        if (dateIsValid(startInput.val()) && dateIsValid(endInput.val())) {
             statsStartEndText.text("Term Duration: ~" + start_to_end_weeks + " weeks (" + start_to_end_days + " days), " + day_names[startDate.getDay()] + " to " + day_names[endDate.getDay()]);
         } else {
             statsStartEndText.text("Term Duration: UNKNOWN");
         }
 
         //  calculates time between due date and start of term
-        if (startInput.val() != "" && dueInput.val() != "") {
+        if (dateIsValid(startInput.val()) && dateIsValid(dueInput.val())) {
             statsDueStartText.text("Due Date: " + due_to_start_days + " days before start");
         } else {
             statsDueStartText.text("Due Date: UNKNOWN");
         }
-
-        // statsObj.text("Due  --- " + due_to_start_days + " days --->  Start  --- " + start_to_end_weeks + " weeks --->  End");
     }
 
-    //  initialized JQuery datepickers
-    startInput.datepicker();
-    endInput.datepicker();
-    dueInput.datepicker();
 
-    //  function for when start date is changed/selected
+	/**********  Define Handlers  **********/
+	//  change handler for termName
+    termName.change( function() {
+        if ($(this).val().length > 0) {
+            $(this).removeClass("invalidInput");
+        } else {
+            $(this).addClass("invalidInput");
+        }
+		validateInput();
+    });
+
+    //  change handler for startDate
     startInput.change( function() {
-        if ($(this).val() != "") {
+        if (dateIsValid($(this).val())) {
             //  variables
             var currentStart = $(this).datepicker("getDate");
             var defaultEnd = new Date(currentStart);
@@ -65,26 +108,55 @@ $(document).ready( function() {
                 disabled: false
             });
             //enable due date, set default date and max date
-            endInput.val(defaultEnd.toLocaleDateString());
+            endInput.val(defaultEnd.toPaddedLocaleDateString());
             dueInput.datepicker("option", {
                 defaultDate: defaultDue,
                 maxDate: dueMax,
                 disabled: false
             });
-            dueInput.val(defaultDue.toLocaleDateString());
+            dueInput.val(defaultDue.toPaddedLocaleDateString());
          
-            //  update term stats
-            updateStats();
+            //  update objects
+            $(this).removeClass("invalidInput");
+            endInput.trigger("change");
+            dueInput.trigger("change");
+        } else {
+            $(this).addClass("invalidInput");
         }
+		updateStats();
+		validateInput();
     });
 
-    //  update stats when end date changed/selected
+    //  change handler for endDate
     endInput.change( function() {
-        if ($(this).val() != "") { updateStats(); }
+        if (dateIsValid($(this).val())) {
+            $(this).removeClass("invalidInput");
+        } else {
+            $(this).addClasS("invalidInput");
+        }
+		updateStats();
+        validateInput();
     });
 
-    //  update stats when due date changed/selected
+    // change handler for dueDate
     dueInput.change( function() {
-        if ($(this).val() != "") { updateStats(); }
+        if (dateIsValid($(this).val())) {
+            $(this).removeClass("invalidInput");
+        } else {
+            $(this).addClass("invalidInput");
+        }
+		updateStats();
+        validateInput();
+    });
+
+	//  click handler for reset button
+    resetButton.click( function() {
+        endInput.prop("disabled", true);
+        dueInput.prop("disabled", true);
+        termName.addClass("invalidInput");
+        startInput.addClass("invalidInput");
+        endInput.addClass("invalidInput");
+        dueInput.addClass("invalidInput");
+		submitButton.prop("disabled", true);
     });
 });
