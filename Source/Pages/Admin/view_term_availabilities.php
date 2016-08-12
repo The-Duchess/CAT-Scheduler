@@ -40,22 +40,31 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
 
 <html>
     <head>
+        <link href="../../css/bootstrap_current/css/bootstrap.min.css" rel="stylesheet">
         <title>View Availability</title>
     </head>
     <body>
         <div class='container'>
-            <a href="../login_home.php">Return Home</a><br>
+            <br>
+            <div class="row">
+                <a class="btn btn-primary" href="../login_home.php">Return Home</a><br>
+                <h1>View Availability Submissions</h1>
+            </div>
             <!--<h1>USING Cody's DB</h1>-->
-            
+            <div class="row">
 <?php
 
 //generate the dropdown form for selecting a term to submit availability for
-echo "<form action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
-echo "<label>Select which term you would like to view availabilities for</label><br>\n";
+echo "<form class=\"form-inline\" action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
 $selected_term = dropdown_select_term("termSelect");
-echo "<input type=\"submit\" name=\"termSelect\" value=\"Select\" />\n";
+echo "<input class=\"btn btn-default\" type=\"submit\" name=\"termSelect\" value=\"Select\" />\n";
 echo "</form>\n";
+?>
 
+            </div>
+            <hr>
+
+<?php
 // page wrapper statement, we dont want to load the availability blocks until a term is selected
 if (!empty($selected_term)) {
 
