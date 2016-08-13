@@ -24,38 +24,7 @@ require_once dirname(__FILE__) . "/../../API/Admin.php"
 // this php block defines the function that takes the email and student list of usernames
 // this function then sends the emails
 
-// send_mail
-// PARAMETERS:
-//   - $admin
-//   - $student_list (an array of student usernames)
-//   - $email_block  (a string)
-//   - $subject
-// OUTPUT:
-//   - true if the emails sent correctly and inputs were valid
-//   - false if
-//        - $student_list is empty
-//        - $email_block is empty
-//        - emails didn't send correctly (cannot be evaluated)
-function send_mail ($admin, $student_list, $email_block, $subject) {
-
-     if (empty($student_list) || $email_block == "") {
-          return false;
-     }
-
-     $admin_u_name = $admin . "@cat.pdx.edu";
-
-     foreach ($student_list as $u_name) {
-          $to = $u_name . "@cat.pdx.edu";
-          $message = $email_block;
-          $headers = 'From: ' . $admin_u_name . "\r\n" .
-                     'Reply-To: ' . $admin_u_name . "\r\n" .
-                     'X-Mailer: PHP/' . phpversion();
-
-          mail($to, $subject, $message, $headers);
-     }
-
-     return true;
-}
+// this function has been moved to API Admin
 
 ?>
 
@@ -106,7 +75,7 @@ function send_mail ($admin, $student_list, $email_block, $subject) {
 <?php foreach ($student_res as $student_uname) { ?>
           <input type="radio" checked="checked" name="$student_uname" value="TRUE"
           <?= (1 == 1 ? ' checked ' : ' checked ') ?>>
-          <label for="email">$student_uname</label>
+          <label for="$student_uname">$student_uname</label>
           <br>
 <?php } ?>
 
