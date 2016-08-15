@@ -45,9 +45,9 @@ if (!($CONNECTION = fido_db_connect())) {
 
 
 <!-- generate a dropdown to select a term for selecting what students to email -->
-<form action=" . htmlentities($_SERVER['PHP_SELF']) ." method="post">
+<form  class="form-inline" action="htmlentities($_SERVER['PHP_SELF'])" method="post">
      <label>Select Term</label> <br>
-     <?php $selected_term = dropdown_select_term("termselect"); ?>
+     <?php $selected_term = dropdown_select_term("termSelect"); ?>
      <input type="submit" name="termSelect" value="Select">
 </form>
 
