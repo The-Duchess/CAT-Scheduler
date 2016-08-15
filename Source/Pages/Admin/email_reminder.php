@@ -57,7 +57,7 @@ if (!($CONNECTION = fido_db_connect())) {
      $subject_text = "";
      ?>
 
-     show_students($student_res);
+     <?php show_students($student_res); ?>
 
      <input type="submit" name="termSelect" value="Select">
 </form>
