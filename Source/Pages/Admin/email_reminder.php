@@ -21,18 +21,14 @@ require_once dirname(__FILE__) . "/../../API/Utility.php";
 require_once dirname(__FILE__) . "/../../Query/Term.php";
 require_once dirname(__FILE__) . "/../../API/Admin.php";
 
-// this php block defines the function that takes the email and student list of usernames
-// this function then sends the emails
-
-// this function has been moved to API Admin
-
-//  Database connection
+// Database connection
 if (!($CONNECTION = fido_db_connect())) {
     echo "<p>Connection Failed</p>\n";
     exit();
 }
 
 ?>
+
 
 <html>
      <head>
@@ -48,12 +44,7 @@ if (!($CONNECTION = fido_db_connect())) {
 <?php echo "<form class=\"form-inline\" action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n"; ?>
      <label>Select Term</label> <br>
      <?php $selected_term = dropdown_select_term("termSelect"); ?>
-     <input type="submit" name="termSelect" value="Select">
-</form>
-          </div>
-          <hr>
-
-<?php
+     <?php
      // var setup
      // get list of students who have not submitted availability
      // based upon term_id
@@ -63,7 +54,20 @@ if (!($CONNECTION = fido_db_connect())) {
      $admin_uname = $_SERVER['PHP_AUTH_USER']; // collected from the $_SERVER
      $email_text = "";
      $subject_text = "";
-?>
+     ?>
+
+     <?php foreach ($student_res as $student_uname) { ?>
+               <input type="radio" checked="checked" name="$student_uname" value="TRUE"
+               <?= (1 == 1 ? ' checked ' : ' checked ') ?>>
+               <label for="$student_uname">$student_uname</label>
+               <br>
+     <?php } ?>
+     <input type="submit" name="termSelect" value="Select">
+</form>
+          </div>
+          <hr>
+
+<!-- UP TO THIS POINT WORKS -->
 
 <!-- display a form to collect $subject_text -->
 <!-- display a form to collect the email_text -->
@@ -79,13 +83,6 @@ if (!($CONNECTION = fido_db_connect())) {
      <input type="text" name="subject" size="80"><br>
      <label>Text:</label>
      <textarea name="text" cols="80" rows="10"></textarea><br>
-
-<?php foreach ($student_res as $student_uname) { ?>
-          <input type="radio" checked="checked" name="$student_uname" value="TRUE"
-          <?= (1 == 1 ? ' checked ' : ' checked ') ?>>
-          <label for="$student_uname">$student_uname</label>
-          <br>
-<?php } ?>
 
      <input type="submit" name="email_information" value="Submit">
 </div>
