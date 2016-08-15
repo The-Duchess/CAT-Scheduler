@@ -50,6 +50,8 @@ if (!($CONNECTION = fido_db_connect())) {
      <?php $selected_term = dropdown_select_term("termSelect"); ?>
      <input type="submit" name="termSelect" value="Select">
 </form>
+          </div>
+          <hr>
 
 <?php
      // var setup
