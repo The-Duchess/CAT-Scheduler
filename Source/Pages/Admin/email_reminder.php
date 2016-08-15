@@ -16,10 +16,10 @@
 // includes
 
 require_once dirname(__FILE__) . "/../../Query/Student.php";
-require_once dirname(__FILE__) . "/../../Query/Availability.php"
-require_once dirname(__FILE__) . "/../../API/Utility.php"
-require_once dirname(__FILE__) . "/../../Query/Term.php"
-require_once dirname(__FILE__) . "/../../API/Admin.php"
+require_once dirname(__FILE__) . "/../../Query/Availability.php";
+require_once dirname(__FILE__) . "/../../API/Utility.php";
+require_once dirname(__FILE__) . "/../../Query/Term.php";
+require_once dirname(__FILE__) . "/../../API/Admin.php";
 
 // this php block defines the function that takes the email and student list of usernames
 // this function then sends the emails
