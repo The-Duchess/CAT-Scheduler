@@ -13,6 +13,7 @@ $report = "";
     <meta charset="utf-8">
     <title>Create New Term</title>
     <link rel="stylesheet" href="../../JQuery-1.2/UI/jquery-ui-darkness/jquery-ui.min.css">
+    <link rel="stylesheet" href="../../css/bootstrap_current/css/bootstrap.min.css">
     <script src="../../JQuery-1.2/jquery-1.12.4.js"></script>
     <script src="../../JQuery-1.2/UI/jquery-ui-darkness/jquery-ui.min.js"></script>
     <script src="../../JavaScript/Admin/create_term.js"></script>
@@ -22,40 +23,48 @@ $report = "";
 </head>
 
 <body>
-    <a href="../login_home.php">Return Home</a><br><br>
-    <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
-        <label for="termName">Term Name:</label><br>
-        <input type="text" id="termName" class="invalidInput" name="termName" /><br>
-        <label for="startDate">Start Date:</label><br>
-        <input type="text" id="startDate" class="invalidInput" name="startDate" readonly="true"><br>
-        <label for="endDate">End Date:</label><br>
-        <input type="text" id="endDate" class="invalidInput" name="endDate" readonly="true" disabled="true"><br>
-        <label for="dueDate">Due Date:</label><br>
-        <input type="text" id="dueDate" class="invalidInput" name="dueDate" readonly="true" disabled="true"><br>
-        <p id="statsStartToEnd">Term Duration: UNKNOWN</p>
-        <p id="statsDueToStart">Due Date: UNKNOWN</p>
-        <!-- <input type="submit" name="submit" value="Create Term" /> -->
-        <button type="submit" id="submitButton" name="submit" disabled="true">Submit</button>
-        <button type="reset" id="resetButton">Clear</button>
-    </form>
-<?php
-//  check for submission
-if (isset($_POST['submit'])) {
-    $name = $_POST['termName'];
-    $start = new DateTime($_POST['startDate']);
-    $end = new DateTime($_POST['endDate']);
-    $due = new DateTime($_POST['dueDate']);
+    <div class="container">
+        <a class="btn btn-primary" href="../login_home.php">Return Home</a><br><br>
+        <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
+            <div class="panel panel-default">
+                <div class="panel panel-heading">
+                    <h2 class="panel-title">New Term</h2>
+                </div>
+                <div class="panel-body">
+                    <label for="termName">Term Name:</label><br>
+                    <input type="text" id="termName" class="invalidInput" name="termName" /><br><br>
+                    <label for="startDate">Start Date:</label><br>
+                    <input type="text" id="startDate" class="invalidInput" name="startDate" readonly="true"><br><br>
+                    <label for="endDate">End Date:</label><br>
+                    <input type="text" id="endDate" class="invalidInput" name="endDate" readonly="true" disabled="true"><br><br>
+                    <label for="dueDate">Due Date:</label><br>
+                    <input type="text" id="dueDate" class="invalidInput" name="dueDate" readonly="true" disabled="true"><br><br><br>
+                    <p id="statsStartToEnd">Term Duration: UNKNOWN</p>
+                    <p id="statsDueToStart">Due Date: UNKNOWN</p>
+                </div>
+            </div>
+            <button class="btn btn-primary" type="submit" id="submitButton" name="submit" disabled="true">Submit</button>
+            <button class="btn btn-primary" type="reset" id="resetButton">Clear</button>
+        </form>
+    <?php
+    //  check for submission
+    if (isset($_POST['submit'])) {
+        $name = $_POST['termName'];
+        $start = new DateTime($_POST['startDate']);
+        $end = new DateTime($_POST['endDate']);
+        $due = new DateTime($_POST['dueDate']);
 
-    //  Database connection
-    if (!($CONNECTION = fido_db_connect())) {
-        $report = "ERROR: Failed to connect to database";
-    } else if (!add_term($name, $start, $end, $due)) {
-        $report = "ERROR: Failed to add term to database";
-    } else {
-        $report = "Term Created";
+        //  Database connection
+        if (!($CONNECTION = fido_db_connect())) {
+            $report = "ERROR: Failed to connect to database";
+        } else if (!add_term($name, $start, $end, $due)) {
+            $report = "ERROR: Failed to add term to database";
+        } else {
+            $report = "Term Created";
+        }
     }
-}
-?>
+    ?>
     <p><?php echo $report; ?></p>
+    </div>
 </body>
 </html>
