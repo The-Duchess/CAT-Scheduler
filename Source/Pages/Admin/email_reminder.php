@@ -20,6 +20,7 @@ require_once dirname(__FILE__) . "/../../Query/Availability.php";
 require_once dirname(__FILE__) . "/../../API/Utility.php";
 require_once dirname(__FILE__) . "/../../Query/Term.php";
 require_once dirname(__FILE__) . "/../../API/Admin.php";
+require_once dirname(__FILE__) . "/./show-students.php";
 
 // Database connection
 if (!($CONNECTION = fido_db_connect())) {
@@ -56,12 +57,8 @@ if (!($CONNECTION = fido_db_connect())) {
      $subject_text = "";
      ?>
 
-     <?php foreach ($student_res as $student_uname) { ?>
-               <input type="radio" checked="checked" name="$student_uname" value="TRUE"
-               <?= (1 == 1 ? ' checked ' : ' checked ') ?>>
-               <label for="$student_uname">$student_uname</label>
-               <br>
-     <?php } ?>
+     show_students($student_res);
+
      <input type="submit" name="termSelect" value="Select">
 </form>
           </div>
@@ -78,6 +75,7 @@ if (!($CONNECTION = fido_db_connect())) {
      to the email
 -->
 <div class="main_form">
+     <
      <form action=" . htmlentities($_SERVER['PHP_SELF']) ." method="post">
      <label>Subject:</label>
      <input type="text" name="subject" size="80"><br>
