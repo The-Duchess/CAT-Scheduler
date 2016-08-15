@@ -26,6 +26,12 @@ require_once dirname(__FILE__) . "/../../API/Admin.php";
 
 // this function has been moved to API Admin
 
+//  Database connection
+if (!($CONNECTION = fido_db_connect())) {
+    echo "<p>Connection Failed</p>\n";
+    exit();
+}
+
 ?>
 
 <html>
