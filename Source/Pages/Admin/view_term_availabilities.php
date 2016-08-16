@@ -22,16 +22,16 @@ if(empty($_SERVER['PHP_AUTH_USER'])) {
 
 //these arrays will be used for generating the calendar grid
 $hours = array(
-    '8'  => '8:00AM - 9:00AM',
-    '9'  => '9:00AM - 10:00AM',
-    '10' => '10:00AM - 11:00AM',
-    '11' => '11:00AM - 12:00PM',
-    '12' => '12:00PM - 1:00PM',
-    '13'  => '1:00PM - 2:00PM',
-    '14'  => '2:00PM - 3:00PM',
-    '15'  => '3:00PM - 4:00PM',
-    '16'  => '4:00PM - 5:00PM',
-    '17'  => '5:00PM - 6:00PM'
+    '8'  => '8AM - 9AM',
+    '9'  => '9AM - 10AM',
+    '10' => '10AM - 11AM',
+    '11' => '11AM - 12PM',
+    '12' => '12PM - 1PM',
+    '13'  => '1PM - 2PM',
+    '14'  => '2PM - 3PM',
+    '15'  => '3PM - 4PM',
+    '16'  => '4PM - 5PM',
+    '17'  => '5PM - 6PM'
 );
 $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 
@@ -41,6 +41,7 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
 <html>
     <head>
         <link href="../../css/bootstrap_current/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/custom/custom-list-group.css" rel="stylesheet">
         <title>View Availability</title>
     </head>
     <body>
@@ -107,78 +108,109 @@ if (!empty($selected_term)) {
 
 ?>
 
-            <div class='main_form'>
-               <table border="1">
-                        <thead>
-                            <tr>
-                                <td></td>
-                                <td>Monday</td>
-                                <td>Tuesday</td>
-                                <td>Wednesday</td>
-                                <td>Thursday</td>
-                                <td>Friday</td>
-                                <td>Saturday</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                                foreach($hours as $hour => $label) {
-                                    echo "<tr>";
-                                    echo "<td>$label</td>";
-                                    foreach($days as $day) {
-                                        //saturday has less hours so we want to skip creating blocks for those hours
-                                        if ($day == 'Saturday') {
-                                            if ($hour == '8' || $hour == '9' || $hour == '10' || $hour == '11' || $hour == '17') {
-                                                continue;
-                                            }
-                                        }
 
-                                        //generate the id string for the table element
-                                        $cur_id = $day . $hour;
-                                        echo "<td id=$cur_id>";
-                                        //populate the table element with names of available students if there are any
-                                        if(array_key_exists($cur_id, $db_blocks)){
-                                          $block = $db_blocks[$cur_id];
-                                          //display preffered availabilities first
-                                          foreach($block as $name => $pref){
-                                            if($pref == 'Preferred') {
-                                              echo "<font color = 'blue'>$name</font><br>";
-                                            }
-                                          }
-                                          //then display normal availabilities
-                                          foreach($block as $name => $pref){
-                                            if($pref == 'Available') {
-                                              echo "<font color = 'green'>$name</font><br>";
-                                            }
-                                          }
-                                        }
-                                        echo "</td>";
-                                    }
-                                    echo "</tr>";
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="row">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Key</h3>
+                            </div>
+                            <ul class="list-group">
+                                <li class="list-group-item list-group-item-available">A  - Available</li>
+                                <li class="list-group-item list-group-item-preferred">P  - Preferred</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Shift Preferences</h3>
+                            </div>
+                            <ul class="list-group">
+                                <?php
+                                //Display shift preferences for students who have submitted their availability for this term
+                                foreach($pref_info as $username => $pref){
+                                    echo "<li class=\"list-group-item list-group-item-default\">";
+                                    echo "$username ";
+                                    echo "<small><span class=\"glyphicon glyphicon-arrow-right\"</span></small>";
+                                    echo " $pref";
+                                    echo "</li>";
                                 }
-                            ?>
-                        </tbody>
-                    </table>
+                                ?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Shift Preferences</h3>
+                        </div>
+                    <div class="panel-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <td></td>
+                                    <td>Monday</td>
+                                    <td>Tuesday</td>
+                                    <td>Wednesday</td>
+                                    <td>Thursday</td>
+                                    <td>Friday</td>
+                                    <td>Saturday</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                    foreach($hours as $hour => $label) {
+                                        echo "<tr>";
+                                        echo "<td>$label</td>";
+                                        foreach($days as $day) {
+                                            //saturday has less hours so we want to skip creating blocks for those hours
+                                            if ($day == 'Saturday') {
+                                                if ($hour == '8' || $hour == '9' || $hour == '10' || $hour == '11' || $hour == '17') {
+                                                    continue;
+                                                }
+                                            }
+
+                                            //generate the id string for the table element
+                                            $cur_id = $day . $hour;
+                                            echo "<td id=$cur_id>";
+                                            //populate the table element with names of available students if there are any
+                                            if(array_key_exists($cur_id, $db_blocks)){
+                                              $block = $db_blocks[$cur_id];
+                                              //display preffered availabilities first
+                                              foreach($block as $name => $pref){
+                                                if($pref == 'Preferred') {
+                                                  echo "<font color = 'blue'>$name</font><br>";
+                                                }
+                                              }
+                                              //then display normal availabilities
+                                              foreach($block as $name => $pref){
+                                                if($pref == 'Available') {
+                                                  echo "<font color = 'green'>$name</font><br>";
+                                                }
+                                              }
+                                            }
+                                            echo "</td>";
+                                        }
+                                        echo "</tr>";
+                                    }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+                </div>
             </div>
 <?php
-    //Display shift preferences for students who have submitted their availability for this term
-    echo "<div> <h3>Shift Preferences: </h3><ul>";
-    foreach($pref_info as $username => $pref){
-      echo "<li> $username --> $pref  </li>";
-    }
-    echo "</ul></div>";
     //Display student usernames who have yet to submit availability for this term
     echo "<div> <h3>Students who have not submitted availability for this term: </h3>";
     list_students_no_availability($term_id);
     echo "</div>";
-    
 } //closing the page wrapper if statement
 
 ?>
-        </div>
-        <div> <h3>KEY:</h3>
-                        <p><font color = 'blue'>Blue - Preferred</font></p>
-                        <p><font color = 'green'>Green - Available</font></p>
         </div>
     </body>
 </html>
