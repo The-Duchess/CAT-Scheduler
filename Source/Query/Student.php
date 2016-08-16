@@ -223,8 +223,8 @@ function add_student($student_uname, $joind) {
 	}
 
 
-    //  Retrieves a results object containing all terms regardless of editability
-    //  sorted by student username, otherwise FALSE
+    //  Retrieves a results object containing all students with no availabilitiy
+    //  for the specified term sorted by student username, otherwise FALSE
     //  PARAMETERS:
     //      id:     the id of the term
     //      kwargs: associative array of keyword arguments
@@ -249,6 +249,45 @@ function add_student($student_uname, $joind) {
         $query = "
         SELECT student_id, student_username FROM student 
         WHERE active=true AND student_id NOT IN (SELECT student_id FROM hour_block WHERE term_id=$1)
+        ORDER BY student_username " . ($ascend ? "ASC" : "DESC");
+        $params = array($id);
+
+        //  Add limit clause and parameter if desired
+        if ($limit) {
+            $query .= " LIMIT $2";
+            array_push($params, $limit);
+        }
+
+        //  Return results object
+        return pg_query_params($GLOBALS['CONNECTION'], $query, $params);
+    }
+    
+    //  Retrieves a results object containing all students with availability
+    //  for the specified term sorted by student username, otherwise FALSE
+    //  PARAMETERS:
+    //      id:     the id of the term
+    //      kwargs: associative array of keyword arguments
+    //          ascend:     if the results should be in ascending order, default TRUE
+    //          limit:      the max number of students to retrieve, default none (null)
+    function retrieve_students_with_availability($id, $kwargs=null) {
+        //  Default values
+        $ascend = true;
+        $limit = null;
+
+        //  Read kwargs if necessary
+        if ($kwargs) {
+            if (isset($kwargs['ascend'])) {
+                $ascend = $kwargs['ascend'];
+            }
+            if (isset($kwargs['limit'])) {
+                $limit = $kwargs['limit'];
+            }
+        }
+
+        //  Create basic query
+        $query = "
+        SELECT student_id, student_username FROM student 
+        WHERE active=true AND student_id IN (SELECT student_id FROM hour_block WHERE term_id=$1)
         ORDER BY student_username " . ($ascend ? "ASC" : "DESC");
         $params = array($id);
 
