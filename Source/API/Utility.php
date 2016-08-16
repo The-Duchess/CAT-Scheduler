@@ -38,7 +38,7 @@ function dropdown_select_term($subIdent, $kwargs=null) {
         }
     }
 
-    //  First we father the terms and convert them to an array
+    //  First we gather the terms and convert them to an array
     if ($all_terms) {
       if (!($result = term_retrieve_by_start($kwargs))) {
         return false;
@@ -81,6 +81,57 @@ function dropdown_select_term($subIdent, $kwargs=null) {
             }
             $term = pg_fetch_array($result);
             return $term;
+        }
+    }
+}
+
+//  Creates a dropdown menu with a list of students with availability submissions
+//  for a specified termand returns an associative array of that students data 
+//  fields from the database, otherwise FALSE.
+//  PARAMETERS:
+//      subIdent:   identifier of submission button
+//      termId:     id of term to search by
+//      kwargs:     associative array of keyword arguments to change functionality,
+//                  this is also passed as a parameter to the internal query, see
+//                  Source/Query/Student.php::retrieve_students_with_availability for more
+//                  information
+function dropdown_select_student($subIdent, $termID, $kwargs = null) {
+    //  This variable ensures that multiple calls in
+    //  the same form or file won't interfere
+    static $id = 0;
+    $id++;
+
+    //  First we gather the students and convert them to an array
+    if (!($result = retrieve_students_with_availability($termID, $kwargs))) {
+        return false;
+    } else if (!($students = pg_fetch_all($result))) {
+        return false;
+    }
+
+    //  Output HTML for the dropdown menu using our gathered students
+    //  The caller must provide the form initialization and
+    //  submission button/object
+    echo "<select class=\"form-control\" name=\"formStudent" . $id . "\">\n";
+    echo "<option value=\"\">Select a student to focus on...</option>\n";
+    foreach ($students as $student) {
+       echo "<option value=" . $student['student_id'] . ">" . $student['student_username'] . "</option>\n";
+    }
+    echo "</select>\n";
+
+    //  Check to see if the user has selected a student, and then
+    //  return the array holding the data
+    if (isset($_POST[$subIdent])) {
+        $selected = $_POST['formStudent' . $id];
+
+        if (!empty($selected)) {
+            $query = "SELECT * FROM student
+            WHERE student_id=$1
+            LIMIT 1";
+            if (!($result = pg_query_params($GLOBALS['CONNECTION'], $query, array($selected)))) {
+                return false;
+            }
+            $student = pg_fetch_array($result);
+            return $student;
         }
     }
 }
