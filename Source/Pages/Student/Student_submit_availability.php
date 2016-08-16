@@ -147,7 +147,8 @@ if (!empty($selected_term)) {
                                         $original_term = htmlentities(serialize($selected_term));
                                         echo "<input type=\"hidden\" name=\"original_Term\" value=\"$original_term\" />\n";
 
-                                        echo "<input class=\"btn btn-default\" type=\"submit\" name=\"copy\" value=\"Copy\" />\n";
+                                        echo "<input class=\"btn btn-default\" type=\"submit\" name=\"copy\" value=\"Copy\"
+                                              onclick=\"return confirm('Are you sure you want to overwrite the entries of the current term with the selected one? (This will not effect your saved availability until you submit');\" />\n";
                                         echo "</fieldset>";
                                         echo "</form>\n";
                                         ?>
@@ -310,6 +311,11 @@ if (!empty($selected_term)) {
             // set shift pref to no pref
             document.getElementById("0h").checked = 'true';
         }
+        </script>
+        <script type='text/javascript'>
+            function confirmCopy(){
+                return confirm('Are you sure you want to overwrite the entries of the current term with the selected one? (This will not effect your saved availability until you submit)');
+            }
         </script>
         <script type='text/javascript'>
             var colorCell = function (cell) {
