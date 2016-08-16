@@ -140,6 +140,7 @@ if (!empty($selected_term)) {
                                     <div class="panel-body">
                                         <?php
                                         echo "<form class=\"form-inline\" action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
+                                        echo "<fieldset".($editable == false ? ' disabled="disabled" ':'').">";
                                         $copy_term = dropdown_select_term("copy");
 
                                         // pass along the term to display if the copy button will be pressed
@@ -147,6 +148,7 @@ if (!empty($selected_term)) {
                                         echo "<input type=\"hidden\" name=\"original_Term\" value=\"$original_term\" />\n";
 
                                         echo "<input class=\"btn btn-default\" type=\"submit\" name=\"copy\" value=\"Copy\" />\n";
+                                        echo "</fieldset>";
                                         echo "</form>\n";
                                         ?>
                                     </div>
