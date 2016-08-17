@@ -60,6 +60,9 @@ if (!($CONNECTION = fido_db_connect())) {
           <?php
           foreach ($student_res as $student_uname) {
                          echo "<input type=\"radio\" checked=\"checked\" name=$student_uname value=\"TRUE\"";
+                         ?>
+                         <br>
+                         <?php
                          echo "<label for=$student_uname> $student_uname </label>";
           }
           ?>
@@ -80,7 +83,7 @@ if (!($CONNECTION = fido_db_connect())) {
      <form action=" . htmlentities($_SERVER['PHP_SELF']) ." method="post">
      <label>Subject:</label>
      <input type="text" name="subject" size="80"><br>
-     <label>Text:</label>
+     <label>Text:   </label>
      <textarea name="text" cols="80" rows="10"></textarea><br>
 
      <input type="submit" name="email_information" value="Submit">
