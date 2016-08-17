@@ -1,13 +1,7 @@
 <?php
-//error_reporting(E_ALL);
-//ini_set('display_errors', 'on');
-
 require_once dirname(__FILE__) . "/../../Query/Term.php";
 require_once dirname(__FILE__) . "/../../API/Utility.php";
-
-$report = "";
 ?>
-
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -32,11 +26,23 @@ $report = "";
 
             //  Database connection
             if (!($CONNECTION = @fido_db_connect())) {?>
-                <div class="alert alert-danger text-center" role="alert"><strong>FAILURE!</strong><br>ERROR: unable to connect to database</div><?php
+                <div class="alert alert-danger text-center" role="alert">
+                    <strong>FAILURE!</strong>
+                    <br>
+                    ERROR: unable to connect to database
+                </div><?php
             } else if (!@add_term($name, $start, $end, $due)) {?>
-                <div class="alert alert-danger text-center" role="alert"><strong>FAILURE!</strong><br><?php echo pg_last_error();?></div><?php
+                <div class="alert alert-danger text-center" role="alert">
+                    <strong>FAILURE!</strong>
+                    <br>
+                    <?php echo pg_last_error();?>
+                </div><?php
             } else {?>
-                <div class="alert alert-success text-center" role="alert"><strong>SUCCESS!</strong><br><?php echo $name; ?> added to FIDO system</div><?php
+                <div class="alert alert-success text-center" role="alert">
+                    <strong>SUCCESS!</strong>
+                    <br>
+                    <?php echo $name; ?> added to FIDO system
+                </div><?php
             }
         }
         ?>
@@ -51,7 +57,7 @@ $report = "";
                             <div class="form-group has-error" id="nameGroup"> <!--  begin term name form group  -->
                                 <div class="input-group">  <!--  begin term name input group  -->
                                     <span class="input-group-addon" id="termNameAddon">Term Name</span>
-                                    <input class="form-control" type="text" id="termName" name="termName" maxlength="100" placeholder="Name of term" aria-describedby="termNameAddon" />
+                                    <input class="form-control" type="text" id="termName" name="termName" maxlength="20" placeholder="Name of term" aria-describedby="termNameAddon" />
                                     <span class="input-group-btn">
                                         <button class="btn btn-danger" type="button" id="termNameClear">Clear</button>
                                     </span>
