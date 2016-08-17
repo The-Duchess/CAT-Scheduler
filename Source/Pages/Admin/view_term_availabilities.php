@@ -48,7 +48,7 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
         <div class='container'>
             <a href="../login_home.php">Return Home</a><br>
             <!--<h1>USING Cody's DB</h1>-->
-            
+
 <?php
 
 //generate the dropdown form for selecting a term to submit availability for
@@ -73,7 +73,7 @@ if (!empty($selected_term)) {
             foreach(pg_fetch_all($data) as $student_id => $student){
               $id = $student['block_day'] . $student['block_hour'];
               $uname = $student['student_username'];
-              $pref = $student['block_preference']; 
+              $pref = $student['block_preference'];
               if(!in_array($uname, $students)){
                 $res = get_student_id_by_username($uname);
                 $arr = pg_fetch_array($res);
@@ -88,7 +88,7 @@ if (!empty($selected_term)) {
     foreach($students as $student_id => $student_uname){
       $res = retrieve_shift_preference((int) $student_id, $term_id);
       $arr = pg_fetch_array($res);
-      $pref_info[$student_uname] = $arr['shift_preference'];      
+      $pref_info[$student_uname] = $arr['shift_preference'];
     }
 
     $start_date = strtotime($selected_term['start_date']);
@@ -104,7 +104,7 @@ if (!empty($selected_term)) {
     echo "<input type=\"submit\" name=\"studentSelect\" value=\"Select student\" />\n";
     echo "<input type=\"button\" id=\"studentReset\" name=\"studentReset\" value=\"Reset focus\"/>\n";
     echo "</form>\n";
-    
+
 ?>
 
             <div id='termAvailabilities' class='main_form'>
@@ -167,11 +167,12 @@ if (!empty($selected_term)) {
       echo "<li> $username --> $pref  </li>";
     }
     echo "</ul></div>";
+    ?>
     //Display student usernames who have yet to submit availability for this term
     echo "<div> <h3>Students who have not submitted availability for this term: </h3>";
     list_students_no_availability($term_id);
     echo "</div>";
-    
+
 } //closing the page wrapper if statement
 
 ?>

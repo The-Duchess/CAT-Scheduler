@@ -42,14 +42,11 @@ if (!($CONNECTION = fido_db_connect())) {
 
 
 <!-- generate a dropdown to select a term for selecting what students to email -->
-<?php echo "<form class=\"form-inline\" action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n"; ?>
-     <label>Select Term</label> <br>
-     <?php $selected_term = dropdown_select_term("termSelect"); ?>
      <?php
      // var setup
      // get list of students who have not submitted availability
      // based upon term_id
-     $term_id = (int)$selected_term['term_id'];
+     $term_id = (int)$_GET['term_id'];
      $student_res = get_student_uname_no_availability($term_id);
      //$student_res_unames = pg_fetch_all($student_res);
      $student_list = array(); // to be completed from the subset of $student_res the admin wishes to email
@@ -58,10 +55,6 @@ if (!($CONNECTION = fido_db_connect())) {
      $subject_text = "";
      ?>
 
-     <br>
-
-     <input type="submit" name="termSelect" value="Select">
-</form>
           </div>
           <hr>
 
