@@ -212,14 +212,20 @@ if (!empty($selected_term)) {
                     </div>
                 </div>
             </div>
-<?php
-    //Display student usernames who have yet to submit availability for this term
-    echo "<div> <h3>Students who have not submitted availability for this term: </h3>";
-    list_students_no_availability($term_id);
-    echo "</div>";
-} //closing the page wrapper if statement
-
-?>
+    <!--Display student usernames who have yet to submit availability for this term-->
+            <div class="col-md-6 col-md-offset-3">
+                <div class="panel panel-default text-center">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Students who have not submitted availability for this term</h3>
+                    </div>
+                    <?php
+                    bootstrapped_list_students_no_availability($term_id);
+                    ?>
+                </div>
+            </div>
         </div>
+<?php
+} //closing the page wrapper if statement
+?>
     </body>
 </html>
