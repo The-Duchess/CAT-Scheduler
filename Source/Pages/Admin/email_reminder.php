@@ -62,6 +62,7 @@ if (!($CONNECTION = fido_db_connect())) {
                          echo "<input type=\"radio\" checked=\"checked\" name=$student_uname value=\"TRUE\"";
                          ?>
                          <br>
+                         
                          <?php
                          echo "<label for=$student_uname> $student_uname </label>";
           }
