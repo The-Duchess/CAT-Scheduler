@@ -57,9 +57,11 @@ if (!($CONNECTION = fido_db_connect())) {
           </div>
           <hr>
 
-          <?php foreach ($student_res as $student_uname) {
+          <?php
+          foreach ($student_res as $student_uname) {
                          echo "<input type=\"radio\" checked=\"checked\" name=$student_uname value=\"TRUE\"";
                          echo "<label for=$student_uname> $student_uname </label>";
+          }
           ?>
                     <br>
 
