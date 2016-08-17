@@ -168,6 +168,16 @@ if (!empty($selected_term)) {
     }
     echo "</ul></div>";
     ?>
+    <!--
+    this will link to the email reminder page
+     -->
+     <?php
+     $term_data = array(
+         "term_id" => $term_id
+     );
+     ?>
+     <a href="email_reminder.php?<?php echo http_build_query($term_data); ?>">Email Reminder</a>
+    <?php
     //Display student usernames who have yet to submit availability for this term
     echo "<div> <h3>Students who have not submitted availability for this term: </h3>";
     list_students_no_availability($term_id);
