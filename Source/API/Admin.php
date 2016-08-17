@@ -36,7 +36,7 @@ function get_student_uname_no_availability($term_id) {
      $students_uname = array();
 
      foreach ($students as $student) {
-          array_push($students_uname, $student);
+          array_push($students_uname, $student['student_username']);
      }
 
      return $students_uname;
