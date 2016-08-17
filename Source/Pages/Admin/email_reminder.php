@@ -60,12 +60,12 @@ if (!($CONNECTION = fido_db_connect())) {
 
      <br>
 
-     <?php show_students($student_res); ?>
-
      <input type="submit" name="termSelect" value="Select">
 </form>
           </div>
           <hr>
+
+     <?php show_students($student_res); ?>
 
 <!-- UP TO THIS POINT WORKS -->
 
