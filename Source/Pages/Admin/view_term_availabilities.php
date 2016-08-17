@@ -10,7 +10,7 @@ require_once dirname(__FILE__)."/../../Query/Student.php";
 // require_once('../../Query_retrieve_shift_preference.php');
 
 //  Database connection
-if (!($CONNECTION = fido_db_connect())) {
+if (!($CONNECTION = cody_db_connect())) {
     echo "<p>Connection Failed</p>\n";
     exit();
 }
@@ -41,6 +41,8 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
 <html>
     <head>
         <title>View Availability</title>
+        <script src="../../JQuery-1.2/jquery-1.12.4.js"></script>
+        <script src="../../JavaScript/Admin/view_term_availabilities.js"></script>
     </head>
     <body>
         <div class='container'>
@@ -96,9 +98,16 @@ if (!empty($selected_term)) {
     echo "<h1>" . $selected_term['term_name'] . "</h1>";
     echo "<h2>" . date('Y-m-d', $start_date) . " - " . date('Y-m-d', $end_date) . "</h2>";
 
+    //generate the dropdown form for selecting a student to focus on
+    echo "<form id=\"studentsForm\"action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
+    $selected_student = dropdown_select_student("studentSelect", $term_id);
+    echo "<input type=\"submit\" name=\"studentSelect\" value=\"Select student\" />\n";
+    echo "<input type=\"button\" id=\"studentReset\" name=\"studentReset\" value=\"Reset focus\"/>\n";
+    echo "</form>\n";
+    
 ?>
 
-            <div class='main_form'>
+            <div id='termAvailabilities' class='main_form'>
                <table border="1">
                         <thead>
                             <tr>
