@@ -51,7 +51,7 @@ if (!($CONNECTION = fido_db_connect())) {
      // based upon term_id
      $term_id = (int)$selected_term['term_id'];
      $student_res = get_student_uname_no_availability($term_id);
-     $student_res_unames = pg_fetch_all($student_res);
+     //$student_res_unames = pg_fetch_all($student_res);
      $student_list = array(); // to be completed from the subset of $student_res the admin wishes to email
      $admin_uname = $_SERVER['PHP_AUTH_USER']; // collected from the $_SERVER
      $email_text = "";
