@@ -77,7 +77,6 @@ if (!($CONNECTION = fido_db_connect())) {
      to the email
 -->
 <div class="main_form">
-     <
      <form action=" . htmlentities($_SERVER['PHP_SELF']) ." method="post">
      <label>Subject:</label>
      <input type="text" name="subject" size="80"><br>
