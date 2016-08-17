@@ -20,7 +20,6 @@ require_once dirname(__FILE__) . "/../../Query/Availability.php";
 require_once dirname(__FILE__) . "/../../API/Utility.php";
 require_once dirname(__FILE__) . "/../../Query/Term.php";
 require_once dirname(__FILE__) . "/../../API/Admin.php";
-require_once dirname(__FILE__) . "/./show-students.php";
 
 // Database connection
 if (!($CONNECTION = fido_db_connect())) {
@@ -58,7 +57,11 @@ if (!($CONNECTION = fido_db_connect())) {
           </div>
           <hr>
 
-     <?php show_students($student_res); ?>
+          <?php foreach ($student_res as $student_uname) {
+                         echo "<input type=\"radio\" checked=\"checked\" name=$student_uname value=\"TRUE\"";
+                         echo "<label for=$student_uname> $student_uname </label>";
+          ?>
+                    <br>
 
 <!-- UP TO THIS POINT WORKS -->
 
