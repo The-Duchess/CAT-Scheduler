@@ -42,6 +42,7 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
     <head>
         <link href="../../css/bootstrap_current/css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/custom/custom-list-group.css" rel="stylesheet">
+        <link href="../../css/custom/custom-table.css" rel="stylesheet">
         <title>View Availability</title>
         <script src="../../JQuery-1.2/jquery-1.12.4.js"></script>
         <script src="../../JavaScript/Admin/view_term_availabilities.js"></script>
@@ -114,7 +115,7 @@ if (!empty($selected_term)) {
     echo "<input type=\"submit\" name=\"studentSelect\" value=\"Select student\" />\n";
     echo "<input type=\"button\" id=\"studentReset\" name=\"studentReset\" value=\"Reset focus\"/>\n";
     echo "</form>\n";
-    
+
 ?>
 
             <div class="row">
@@ -156,7 +157,7 @@ if (!empty($selected_term)) {
                             <h3 class="panel-title">Shift Preferences</h3>
                         </div>
                     <div class="panel-body">
-                        <table id='termAvailabilities' class="table">
+                        <table id='termAvailabilities' class="table table-scrollable table-condensed table-bordered table-responsive">
                             <thead>
                                 <tr>
                                     <td></td>
