@@ -205,7 +205,7 @@ require_once dirname(__FILE__) . "/../../API/Admin.php";
                <div class="alert alert-danger text-center" role="alert">
                    <strong>You Must Have Students Selected</strong>
                    <br>
-                   ERROR: unable to connect to database
+                   ERROR: You Need To Select At Least 1 Student
                </div>
           <?php
           } else {

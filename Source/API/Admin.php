@@ -60,7 +60,7 @@ function send_mail ($admin, $student_list, $email_block, $subject) {
           return false;
      }
 
-     $admin_u_name = $admin . "@pdx.edu";
+     $admin_u_name = $admin . "@cat.pdx.edu";
 
      foreach ($student_list as $u_name) {
           $to = $u_name . "@cat.pdx.edu";
