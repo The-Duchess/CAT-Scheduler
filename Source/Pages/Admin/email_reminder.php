@@ -36,12 +36,10 @@ if (!($CONNECTION = fido_db_connect())) {
          <link rel="stylesheet" href="../../css/bootstrap_current/css/bootstrap.min.css">
     </head>
     <body>
-          <div class='container'>
-               Email Notify
-               <br>
+          <div class='container'> <!--  begin container  -->
                <a href="../login_home.php">Back to Home</a>
-
-
+               <br>
+               Email Notify
 
 <!-- generate a dropdown to select a term for selecting what students to email -->
      <?php
@@ -56,8 +54,6 @@ if (!($CONNECTION = fido_db_connect())) {
      $email_text = "";
      $subject_text = "";
      ?>
-
-<!-- UP TO THIS POINT WORKS -->
 
 <!-- display a form to collect $subject_text -->
 <!-- display a form to collect the email_text -->
@@ -82,7 +78,7 @@ if (!($CONNECTION = fido_db_connect())) {
      <textarea name="text" cols="80" rows="10"></textarea><br>
 
      <input type="submit" name="email_information" value="Submit">
-</div>
+</div> <!--  end container  -->
 <hr>
      </body>
 </html>
