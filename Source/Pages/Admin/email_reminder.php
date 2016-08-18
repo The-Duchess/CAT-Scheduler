@@ -211,7 +211,7 @@ require_once dirname(__FILE__) . "/../../API/Admin.php";
                <div class="alert alert-success text-center" role="alert">
                    <strong>SUCCESS!</strong>
                    <br>
-                   <?php echo "Emails "; ?> Sent
+                   "Emails Sent
                </div>
           <?php
           }
