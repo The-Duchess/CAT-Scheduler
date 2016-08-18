@@ -70,7 +70,7 @@ if (!($CONNECTION = fido_db_connect())) {
      <form action="" method="post">
           <div style="height:300px;
           width:300px;border1px solid
-          #00FF00; overflow:auto"> <!--  begin scrollbox  -->
+          #0F0; overflow:auto"> <!--  begin scrollbox  -->
           <?php
           foreach ($student_res as $student_uname) {
                          echo "<input type=\"checkbox\" checked=\"checked\" name=\"students[]\" value=$student_uname />";
