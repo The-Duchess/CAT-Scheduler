@@ -37,7 +37,8 @@ if (!($CONNECTION = fido_db_connect())) {
     </head>
     <body>
           <div class='container'>
-               <a>Email Notify</a>
+               Email Notify
+               <br>
                <a href="../login_home.php">Back to Home</a>
 
 
@@ -66,7 +67,6 @@ if (!($CONNECTION = fido_db_connect())) {
      will fill in the $student_list and will get posted
      to the email
 -->
-<div class="main_form">
      <form action="" method="post">
           <?php
           foreach ($student_res as $student_uname) {
@@ -82,7 +82,6 @@ if (!($CONNECTION = fido_db_connect())) {
      <textarea name="text" cols="80" rows="10"></textarea><br>
 
      <input type="submit" name="email_information" value="Submit">
-</div>
 </div>
 <hr>
      </body>
