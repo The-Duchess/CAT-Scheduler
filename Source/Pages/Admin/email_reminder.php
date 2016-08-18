@@ -85,6 +85,7 @@ if (!($CONNECTION = fido_db_connect())) {
      <label>Subject:</label>
      <br>
      <input type="text" name="subject" size="80" style'float: left'><br>
+     <br>
      <label>Text:</label>
      <br>
      <textarea name="text" cols="80" rows="10" style'float: left'></textarea><br>
