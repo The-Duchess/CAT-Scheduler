@@ -90,7 +90,7 @@ if (!($CONNECTION = fido_db_connect())) {
 
 <?php
 
-     if(isset($_POST['Submit'])) {
+     if(isset($_POST['email_information'])) {
           foreach ($_POST as $name => $value) {
                // if name is any of the other settings then do not do student_uname push
                // otherwise push $name onto $student_list if the checkbox was checked
