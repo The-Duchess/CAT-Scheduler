@@ -59,7 +59,7 @@ if (!($CONNECTION = fido_db_connect())) {
 
           <?php
           foreach ($student_res as $student_uname) {
-                         echo "<input type=\"radio\" checked=\"checked\" name=$student_uname value=\"TRUE\">";
+                         echo "<input type=\"checkbox\" checked=\"checked\" name=$student_uname value=\"TRUE\">";
                          echo "<label for=$student_uname> $student_uname </label>";
                          echo "<br>";
           }
@@ -89,7 +89,6 @@ if (!($CONNECTION = fido_db_connect())) {
 </html>
 
 <?php
-
      foreach ($_POST as $name => $value) {
           // if name is any of the other settings then do not do student_uname push
           // otherwise push $name onto $student_list if the checkbox was checked
