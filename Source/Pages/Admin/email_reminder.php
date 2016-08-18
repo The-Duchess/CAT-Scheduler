@@ -91,18 +91,31 @@ if (!($CONNECTION = fido_db_connect())) {
                </div>
           </div> <!--  end checkbox form group  -->
      <!--  </div end scrollbox  -->
-                    <br>
      <div class='col-md-9'> <!--  text area  -->
-     <div class="form-group"> <!--  begin form  -->
+     <div class="form-group has-error"> <!--  begin subject form group  -->
+          <div class='input-group'>
+               <span class="input-group-addon" id='subject-addon'>Subject</span>
+               <input class="form-control" type="text" name="subject" id="subject" aria-describedby='subject-addon' />
+          </div>
+     </div> <!--  end subject form group  -->
+
+<!--
      <label>Subject:</label>
      <br>
      <input type="text" name="subject" class="form-control" size="80" style'float: left'><br>
+-->
 
+     <div class="form-group has-error"> <!--  begin subject form group  -->
+          <textarea name="text" class="form-control" cols="80" rows="10" style'float: left' placeholder='Message body'></textarea>
+     </div> <!--  end subject form group  -->
+
+<!--
      <label>Text:</label>
      <br>
      <textarea name="text" class="form-control" cols="80" rows="10" style'float: left'></textarea><br>
-     </div> <!--  end text area  --> 
-     </div> <!--  form end  -->
+-->
+
+     </div> <!--  end text area  -->
      </div> <!--  end row  -->
           </div> <!--  end panel body  -->
      </div> <!--  end panel  -->
