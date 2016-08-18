@@ -29,12 +29,15 @@ if (!($CONNECTION = fido_db_connect())) {
 
 ?>
 
-
 <html>
-     <head>
-               <title> Email Reminder </title>
-     </head>
-     <body>
+    <head>
+        <!-- Bootstrap -->
+        <link href="../../css/bootstrap_current/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/custom/custom-buttons.css" rel="stylesheet">
+        <link href="../../css/custom/custom-list-group.css" rel="stylesheet">
+        <title>Email Notify</title>
+    </head>
+    <body>
           <div class='container'>
                <a href="../login_home.php">Back to Home</a>
 
@@ -53,9 +56,6 @@ if (!($CONNECTION = fido_db_connect())) {
      $email_text = "";
      $subject_text = "";
      ?>
-
-          </div>
-          <hr>
 
 <!-- UP TO THIS POINT WORKS -->
 
@@ -84,6 +84,8 @@ if (!($CONNECTION = fido_db_connect())) {
 
      <input type="submit" name="email_information" value="Submit">
 </div>
+</div>
+<hr>
      </body>
 </html>
 
