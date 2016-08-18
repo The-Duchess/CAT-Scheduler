@@ -79,7 +79,7 @@ if (!($CONNECTION = fido_db_connect())) {
                     <div style='max-height:275px; overflow: auto'>
                          <?php
                          foreach ($student_res as $student_uname) { ?>
-                              <div class='input-group'>
+                              <div class='input-group has-success'>
                                    <span class='input-group-addon'>
                                         <input type="checkbox" name="students[]" value="<?php echo $student_uname; ?>" checked />
                                    </span>
