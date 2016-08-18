@@ -70,7 +70,7 @@ if (!($CONNECTION = fido_db_connect())) {
      <form action="" method="post">
 
           <div style="height:300px;
-          width:300px;border:1px solid
+          width:300px;border:0px solid
           #0F0; overflow:auto"> <!--  begin scrollbox  -->
           <?php
           foreach ($student_res as $student_uname) {
@@ -83,8 +83,10 @@ if (!($CONNECTION = fido_db_connect())) {
 
                     <br>
      <label>Subject:</label>
+     <br>
      <input type="text" name="subject" size="80" style'float: left'><br>
      <label>Text:</label>
+     <br>
      <textarea name="text" cols="80" rows="10" style'float: left'></textarea><br>
           </div> <!--  end panel body  -->
      </div> <!--  end panel  -->
