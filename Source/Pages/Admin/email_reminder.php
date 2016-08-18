@@ -111,7 +111,7 @@ if (!($CONNECTION = fido_db_connect())) {
                array_push($student_list, $uname);
           }
 
-          send_mail ($admin_uname, $student_list, $email_text, $subject_text);
+          send_mail($admin_uname, $student_list, $email_text, $subject_text);
      }
 
 ?>
