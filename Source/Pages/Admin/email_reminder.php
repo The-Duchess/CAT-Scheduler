@@ -82,13 +82,15 @@ if (!($CONNECTION = fido_db_connect())) {
      </div> <!--  end scrollbox  -->
 
                     <br>
+     <div class="form-group"> <!--  begin form  -->
      <label>Subject:</label>
      <br>
-     <input type="text" name="subject" size="80" style'float: left'><br>
+     <input type="text" name="subject" class="form-control" size="80" style'float: left'><br>
      <br>
      <label>Text:</label>
      <br>
-     <textarea name="text" cols="80" rows="10" style'float: left'></textarea><br>
+     <textarea name="text" class="form-control" cols="80" rows="10" style'float: left'></textarea><br>
+     </div> <!--  form end  -->
           </div> <!--  end panel body  -->
      </div> <!--  end panel  -->
      <input type="submit" class='btn btn-primary' name="email_information" value="send email(s)">
