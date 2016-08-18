@@ -76,7 +76,7 @@ if (!($CONNECTION = fido_db_connect())) {
 -->
           <div class='form-group'> <!--  begin checkbox form group  -->
                <div class='col-md-3'>
-                    <div style='max-height:300px; overflow: auto'>
+                    <div style='max-height:275px; overflow: auto'>
                          <?php
                          foreach ($student_res as $student_uname) { ?>
                               <div class='input-group'>
