@@ -22,10 +22,10 @@ require_once dirname(__FILE__) . "/../../Query/Term.php";
 require_once dirname(__FILE__) . "/../../API/Admin.php";
 
 // Database connection
-if (!($CONNECTION = fido_db_connect())) {
-    echo "<p>Connection Failed</p>\n";
-    exit();
-}
+//if (!($CONNECTION = fido_db_connect())) {
+//    echo "<p>Connection Failed</p>\n";
+//    exit();
+//}
 
 ?>
 
@@ -39,6 +39,17 @@ if (!($CONNECTION = fido_db_connect())) {
     <body>
          <br>
           <div class='container'> <!--  begin container  -->
+               <?php
+                    if (!($CONNECTION = @fido_db_connect())) {?>
+                         <div class="alert alert-danger text-center" role="alert">
+                             <strong>FAILURE!</strong>
+                             <br>
+                             ERROR: unable to connect to database
+                         </div><?php
+                    } else {?>
+
+                    }
+               ?>
                <div class='panel panel-primary'> <!-- begin panel -->
                     <div class='panel panel-heading'>
                          <h2 class='panel-title'>Email Notify<h2>
@@ -53,6 +64,11 @@ if (!($CONNECTION = fido_db_connect())) {
      // based upon term_id
      $term_id = (int)$_GET['term_id'];
      $student_res = get_student_uname_no_availability($term_id);
+
+     if (!($student_res = get_student_uname_no_availability($term_id))) { ?>
+
+     <?php }
+
      //$student_res_unames = pg_fetch_all($student_res);
      $student_list = array(); // to be completed from the subset of $student_res the admin wishes to email
      $admin_uname = $_SERVER['PHP_AUTH_USER']; // collected from the $_SERVER
@@ -178,9 +194,9 @@ if (!($CONNECTION = fido_db_connect())) {
           }
 
           if (empty($student_list)) {
-
+               
           } else {
-               send_mail($admin_uname, $student_list, $email_text, $subject_text);
+               @send_mail($admin_uname, $student_list, $email_text, $subject_text);
           }
      }
 
