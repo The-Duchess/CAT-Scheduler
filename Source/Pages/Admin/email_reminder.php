@@ -194,8 +194,10 @@ require_once dirname(__FILE__) . "/../../API/Admin.php";
                }
           }
 
-          foreach ($_POST['students'] as $uname) {
-               array_push($student_list, $uname);
+          if(isset($_POST['students']) {
+               foreach ($_POST['students'] as $uname) {
+                    array_push($student_list, $uname);
+               }
           }
 
           if (empty($student_list)) {
