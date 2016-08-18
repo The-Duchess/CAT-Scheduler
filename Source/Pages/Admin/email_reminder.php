@@ -43,7 +43,7 @@ if (!($CONNECTION = fido_db_connect())) {
                          <h2 class='panel-title'>Email Notify<h2>
                     </div>
                     <div class='panel-body'> <!--  begin panel body  -->
-
+                    <div class='row'> <!--  begin row  -->
 
 <!-- generate a dropdown to select a term for selecting what students to email -->
      <?php
@@ -69,9 +69,23 @@ if (!($CONNECTION = fido_db_connect())) {
 -->
      <form action="" method="post">
 
+<!--
           <div style="height:300px;
           width:300px;border:0px solid
-          #0F0; overflow:auto"> <!--  begin scrollbox  -->
+          #0F0; overflow:auto">
+-->
+          <div class='col-md-3'>
+               <div style='max-height:200px; overflow: auto'>
+          <?php
+          foreach ($student_res as $student_uname) { ?>
+               <div class='input-group'>
+                    <span class='input-group-addon'>
+                         <input type="checkbox" name="students[]" value="<?php echo $student_uname; ?>" checked />
+                    </span>
+                    <span class='input-group-addon'><?php=$student_uname?></span>
+               </div> <?php
+          }
+          ?>
           <?php
           foreach ($student_res as $student_uname) {
                          echo "<input type=\"checkbox\" checked=\"checked\" name=\"students[]\" value=$student_uname />";
@@ -79,18 +93,20 @@ if (!($CONNECTION = fido_db_connect())) {
                          echo "<br>";
           }
           ?>
-     </div> <!--  end scrollbox  -->
-
+               </div>
+          </div>
+     <!--  </div end scrollbox  -->
                     <br>
      <div class="form-group"> <!--  begin form  -->
      <label>Subject:</label>
      <br>
      <input type="text" name="subject" class="form-control" size="80" style'float: left'><br>
-     <br>
+
      <label>Text:</label>
      <br>
      <textarea name="text" class="form-control" cols="80" rows="10" style'float: left'></textarea><br>
      </div> <!--  form end  -->
+     </div> <!--  end row  -->
           </div> <!--  end panel body  -->
      </div> <!--  end panel  -->
      <input type="submit" class='btn btn-primary' name="email_information" value="send email(s)">
