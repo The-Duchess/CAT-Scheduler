@@ -34,6 +34,7 @@ if (!($CONNECTION = fido_db_connect())) {
          <meta charset="utf-8">
          <title>Email Notify</title>
          <link rel="stylesheet" href="../../css/bootstrap_current/css/bootstrap.min.css">
+         <link rel="stylesheet" href="../../JQuery-1.2/UI/jquery-ui-darkness/jquery-ui.min.css">
     </head>
     <body>
          <br>
@@ -92,7 +93,7 @@ if (!($CONNECTION = fido_db_connect())) {
           </div> <!--  end checkbox form group  -->
      <!--  </div end scrollbox  -->
      <div class='col-md-9'> <!--  text area  -->
-     <div class="form-group has-success"> <!--  begin subject form group  -->
+     <div class="form-group has-error" id="subject-form"> <!--  begin subject form group  -->
           <div class='input-group'>
                <span class="input-group-addon" id='subject-addon'>Subject</span>
                <input class="form-control" type="text" name="subject" id="subject" aria-describedby='subject-addon' />
@@ -105,7 +106,7 @@ if (!($CONNECTION = fido_db_connect())) {
      <input type="text" name="subject" class="form-control" size="80" style'float: left'><br>
 -->
 
-     <div class="form-group has-success"> <!--  begin subject form group  -->
+     <div class="form-group has-error" id="text-form"> <!--  begin subject form group  -->
           <textarea name="text" class="form-control" id="text" rows="10" style'float: left' placeholder='Message body'></textarea>
      </div> <!--  end subject form group  -->
 
@@ -122,7 +123,31 @@ if (!($CONNECTION = fido_db_connect())) {
      <input type="submit" class='btn btn-primary' name="email_information" value="send email(s)">
      <a href="../login_home.php" class='btn btn-primary' style='float: right'>Back to Home</a>
 </div> <!--  end container  -->
-<hr>
+          <script src="../../JQuery-1.2/jquery-1.12.4.js"></script>
+          <script src="../../JQuery-1.2/UI/jquery-ui-darkness/jquery-ui.min.js"></script>
+          <script type="text/javascript">
+
+               $("#subject").change( function() {
+                    if ($(this).val() != "") {
+                         $("#subject-form").removeClass("has-error");
+                         $("#subject-form").addClass("has-success");
+                    } else {
+                         $("#subject-form").removeClass("has-success");
+                         $("#subject-form").addClass("has-error");
+                    }
+               });
+
+               $("#text").change( function() {
+                    if ($(this).val() != "") {
+                         $("#text-form").removeClass("has-error");
+                         $("#text-form").addClass("has-success");
+                    } else {
+                         $("#text-form").removeClass("has-success");
+                         $("#text-form").addClass("has-error");
+                    }
+               });
+
+          </script>
      </body>
 </html>
 
