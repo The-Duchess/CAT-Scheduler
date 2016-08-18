@@ -194,9 +194,22 @@ require_once dirname(__FILE__) . "/../../API/Admin.php";
           }
 
           if (empty($student_list)) {
-               
+               ?>
+               <div class="alert alert-danger text-center" role="alert">
+                   <strong>You Must Have Students Selected</strong>
+                   <br>
+                   ERROR: unable to connect to database
+               </div>
+               <?php
           } else {
                @send_mail($admin_uname, $student_list, $email_text, $subject_text);
+               ?>
+               <div class="alert alert-success text-center" role="alert">
+                   <strong>SUCCESS!</strong>
+                   <br>
+                   <?php echo "Emails "; ?> Sent
+               </div>
+               <?php
           }
      }
 
