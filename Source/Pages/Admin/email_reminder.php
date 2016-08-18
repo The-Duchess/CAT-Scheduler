@@ -30,12 +30,10 @@ if (!($CONNECTION = fido_db_connect())) {
 ?>
 
 <html>
-    <head>
-        <!-- Bootstrap -->
-        <link href="../../css/bootstrap_current/css/bootstrap.min.css" rel="stylesheet">
-        <link href="../../css/custom/custom-buttons.css" rel="stylesheet">
-        <link href="../../css/custom/custom-list-group.css" rel="stylesheet">
-        <title>Email Notify</title>
+     <head>
+         <meta charset="utf-8">
+         <title>Email Notify</title>
+         <link rel="stylesheet" href="../../css/bootstrap_current/css/bootstrap.min.css">
     </head>
     <body>
           <div class='container'>
@@ -72,14 +70,14 @@ if (!($CONNECTION = fido_db_connect())) {
           <?php
           foreach ($student_res as $student_uname) {
                          echo "<input type=\"checkbox\" checked=\"checked\" name=\"students[]\" value=$student_uname />";
-                         echo "<label for=$student_uname> $student_uname </label>";
+                         echo "<label for=$student_uname>&nbsp; $student_uname </label>";
                          echo "<br>";
           }
           ?>
                     <br>
      <label>Subject:</label>
      <input type="text" name="subject" size="80"><br>
-     <label>Text:   </label>
+     <label>Text:&nbsp;&nbsp;&nbsp;</label>
      <textarea name="text" cols="80" rows="10"></textarea><br>
 
      <input type="submit" name="email_information" value="Submit">
