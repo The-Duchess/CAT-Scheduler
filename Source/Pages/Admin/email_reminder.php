@@ -69,7 +69,7 @@ if (!($CONNECTION = fido_db_connect())) {
 -->
      <form action="" method="post">
           <div style="height:300px;
-          width:150px;border1px solid
+          width:300px;border1px solid
           #00FF00; overflow:auto">
           <?php
           foreach ($student_res as $student_uname) {
