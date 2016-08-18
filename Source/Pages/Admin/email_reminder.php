@@ -74,27 +74,22 @@ if (!($CONNECTION = fido_db_connect())) {
           width:300px;border:0px solid
           #0F0; overflow:auto">
 -->
-          <div class='col-md-3'>
-               <div style='max-height:200px; overflow: auto'>
-          <?php
-          foreach ($student_res as $student_uname) { ?>
-               <div class='input-group'>
-                    <span class='input-group-addon'>
-                         <input type="checkbox" name="students[]" value="<?php echo $student_uname; ?>" checked />
-                    </span>
-                    <span class='input-group-addon' style='min-width: 100px'><?php echo $student_uname; ?></span>
-               </div> <?php
-          }
-          ?>
-          <?php
-          foreach ($student_res as $student_uname) {
-                         echo "<input type=\"checkbox\" checked=\"checked\" name=\"students[]\" value=$student_uname />";
-                         echo "<label for=$student_uname>&nbsp; $student_uname </label>";
-                         echo "<br>";
-          }
-          ?>
+          <div class='form-group'> <!--  begin checkbox form group  -->
+               <div class='col-md-3'>
+                    <div style='max-height:200px; overflow: auto'>
+                         <?php
+                         foreach ($student_res as $student_uname) { ?>
+                              <div class='input-group'>
+                                   <span class='input-group-addon'>
+                                        <input type="checkbox" name="students[]" value="<?php echo $student_uname; ?>" checked />
+                                   </span>
+                                   <span class='input-group-addon' style='min-width: 100px'><?php echo $student_uname; ?></span>
+                              </div> <?php
+                         }
+                         ?>
+                    </div>
                </div>
-          </div>
+          </div> <!--  end checkbox form group  -->
      <!--  </div end scrollbox  -->
                     <br>
      <div class="form-group"> <!--  begin form  -->
