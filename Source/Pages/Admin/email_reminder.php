@@ -68,6 +68,9 @@ if (!($CONNECTION = fido_db_connect())) {
      to the email
 -->
      <form action="" method="post">
+          <div style="height:300px;
+          width:150px;border1px solid
+          #00FF00; overflow:auto">
           <?php
           foreach ($student_res as $student_uname) {
                          echo "<input type=\"checkbox\" checked=\"checked\" name=\"students[]\" value=$student_uname />";
@@ -75,10 +78,11 @@ if (!($CONNECTION = fido_db_connect())) {
                          echo "<br>";
           }
           ?>
+          </div>
                     <br>
      <label>Subject:</label>
      <input type="text" name="subject" size="80"><br>
-     <label>Text:&nbsp;&nbsp;&nbsp;</label>
+     <label>Text:</label>
      <textarea name="text" cols="80" rows="10"></textarea><br>
           </div> <!--  end panel body  -->
      </div> <!--  end panel  -->
