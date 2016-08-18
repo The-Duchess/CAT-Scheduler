@@ -37,6 +37,7 @@ if (!($CONNECTION = fido_db_connect())) {
     </head>
     <body>
           <div class='container'>
+               <a>Email Notify</a>
                <a href="../login_home.php">Back to Home</a>
 
 
