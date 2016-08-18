@@ -68,9 +68,9 @@ if (!($CONNECTION = fido_db_connect())) {
      to the email
 -->
      <form action="" method="post">
-          <div class="panel-body">
+
           <div style="height:300px;
-          width:300px;border1px solid
+          width:300px;border:1px solid
           #0F0; overflow:auto"> <!--  begin scrollbox  -->
           <?php
           foreach ($student_res as $student_uname) {
@@ -80,12 +80,12 @@ if (!($CONNECTION = fido_db_connect())) {
           }
           ?>
      </div> <!--  end scrollbox  -->
-     </div>
+
                     <br>
      <label>Subject:</label>
-     <input type="text" name="subject" size="80"><br>
+     <input type="text" name="subject" size="80" style'float: left'><br>
      <label>Text:</label>
-     <textarea name="text" cols="80" rows="10"></textarea><br>
+     <textarea name="text" cols="80" rows="10" style'float: left'></textarea><br>
           </div> <!--  end panel body  -->
      </div> <!--  end panel  -->
      <input type="submit" class='btn btn-primary' name="email_information" value="send email(s)">
@@ -98,6 +98,9 @@ if (!($CONNECTION = fido_db_connect())) {
 <?php
 
      if(isset($_POST['email_information'])) {
+
+          // provide notification that email was sent
+
           foreach ($_POST as $name => $value) {
                // if name is any of the other settings then do not do student_uname push
                // otherwise push $name onto $student_list if the checkbox was checked
