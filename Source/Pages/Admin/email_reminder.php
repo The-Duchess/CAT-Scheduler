@@ -68,17 +68,15 @@ if (!($CONNECTION = fido_db_connect())) {
      to the email
 -->
      <form action="" method="post">
-          <div style="height:300px;
-          width:300px;border1px solid
-          #00FF00; overflow:auto">
-          <?php
+
+          <div class="pre-scrollable">
           foreach ($student_res as $student_uname) {
                          echo "<input type=\"checkbox\" checked=\"checked\" name=\"students[]\" value=$student_uname />";
                          echo "<label for=$student_uname>&nbsp; $student_uname </label>";
                          echo "<br>";
           }
           ?>
-          </div>
+          </div> <!--  end scrollbox  -->
                     <br>
      <label>Subject:</label>
      <input type="text" name="subject" size="80"><br>
