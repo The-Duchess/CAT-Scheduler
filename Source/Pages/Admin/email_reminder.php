@@ -37,9 +37,8 @@ if (!($CONNECTION = fido_db_connect())) {
     </head>
     <body>
           <div class='container'> <!--  begin container  -->
-               <a href="../login_home.php">Back to Home</a>
-               <br>
                Email Notify
+               <br>
 
 <!-- generate a dropdown to select a term for selecting what students to email -->
      <?php
@@ -77,7 +76,8 @@ if (!($CONNECTION = fido_db_connect())) {
      <label>Text:&nbsp;&nbsp;&nbsp;&nbsp;</label>
      <textarea name="text" cols="80" rows="10"></textarea><br>
 
-     <input type="submit" name="email_information" value="Submit">
+     <input type="submit" class='btn btn-primary' name="email_information" value="Submit">
+     <a href="../login_home.php" class='btn btn-primary' style='float: right'>Back to Home</a>
 </div> <!--  end container  -->
 <hr>
      </body>
