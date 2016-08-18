@@ -61,7 +61,7 @@ if (!($CONNECTION = fido_db_connect())) {
 
 <!-- display a form to collect $subject_text -->
 <!-- display a form to collect the email_text -->
-<!-- display a list of students with a radio button -->
+<!-- display a list of students with a check box -->
 <!--
      the list of students that end up selected
      will fill in the $student_list and will get posted
@@ -78,11 +78,11 @@ if (!($CONNECTION = fido_db_connect())) {
                     <br>
      <label>Subject:</label>
      <input type="text" name="subject" size="80"><br>
-     <label>Text:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+     <label>Text:&nbsp;&nbsp;&nbsp;</label>
      <textarea name="text" cols="80" rows="10"></textarea><br>
           </div> <!--  end panel body  -->
      </div> <!--  end panel  -->
-     <input type="submit" class='btn btn-primary' name="email_information" value="Submit">
+     <input type="submit" class='btn btn-primary' name="email_information" value="send email(s)">
      <a href="../login_home.php" class='btn btn-primary' style='float: right'>Back to Home</a>
 </div> <!--  end container  -->
 <hr>
