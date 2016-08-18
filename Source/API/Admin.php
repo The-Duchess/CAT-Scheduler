@@ -63,11 +63,39 @@ function send_mail ($admin, $student_list, $email_block, $subject) {
      $admin_u_name = $admin . "@cat.pdx.edu";
 
      foreach ($student_list as $u_name) {
-          $to = $u_name . "@cat.pdx.edu";
+          $to = $u_name . "@pdx.edu";
           $message = $email_block;
           $headers = 'From: ' . $admin_u_name . "\r\n" .
                      'Reply-To: ' . $admin_u_name . "\r\n" .
                      'X-Mailer: PHP/' . phpversion();
+          $params = array();
+
+          // extra params are hardset for now
+          // this prevents security issues with shelling
+          // these params are
+          //   the mailhost: mailhost.cecs.pdx.edu
+          //   the port: 25
+          //
+          // the arguments should look like
+          //
+
+          //  read the configuration file
+          //$ini_arr = parse_ini_file(dirname(__FILE__) . "/../../fidoconfig.ini", true);
+          //$dbconf = $ini_arr['database'];
+
+          /*
+          // --
+               $mail = new PHPMailer();
+               $mail->IsSMTP();
+               $mail->CharSet = 'UTF-8';
+               $mail->Host = "mailhost.cecs.pdx.edu";
+               $mail->SMTPDebug = 0;
+               $mail->SMTPAuth = true;
+               $mail->Port = 25;
+               $mail->Username = {$dbconf['mail_username']};
+               $mail->Password = {$dbconf['mail_pass']};
+          // --
+          */
 
           mail($to, $subject, $message, $headers);
      }

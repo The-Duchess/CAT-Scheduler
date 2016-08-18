@@ -59,7 +59,7 @@ if (!($CONNECTION = fido_db_connect())) {
 
           <?php
           foreach ($student_res as $student_uname) {
-                         echo "<input type=\"checkbox\" checked=\"checked\" name=$student_uname value=\"TRUE\">";
+                         echo "<input type=\"checkbox\" checked=\"checked\" name="students[]" value=$student_uname>";
                          echo "<label for=$student_uname> $student_uname </label>";
                          echo "<br>";
           }
@@ -89,22 +89,29 @@ if (!($CONNECTION = fido_db_connect())) {
 </html>
 
 <?php
-     foreach ($_POST as $name => $value) {
-          // if name is any of the other settings then do not do student_uname push
-          // otherwise push $name onto $student_list if the checkbox was checked
-          if ($name == "subject") {
-               $subject_text = $value;
-          } else if ($name == "text") {
-               $email_text = $value;
-          } else if ($name == "email_information") {
-               // do nothing
-          } else if ($name == "termSelect") {
 
-          } else {
-               if ($value == "TRUE") {
-                    array_push($student_list, $name);
+     if(isset($_POST['Submit'])) {
+          foreach ($_POST as $name => $value) {
+               // if name is any of the other settings then do not do student_uname push
+               // otherwise push $name onto $student_list if the checkbox was checked
+               if ($name == "subject") {
+                    $subject_text = $value;
+               } else if ($name == "text") {
+                    $email_text = $value;
+               } else if ($name == "email_information") {
+                    // do nothing
+               } else if ($name == "termSelect") {
+
+               } else {
+
                }
           }
+
+          foreach ($_POST['students'] as $uname) {
+               array_push($student_list, $uname);
+          }
+
+          send_mail ($admin_uname, $student_list, $email_text, $subject_text);
      }
 
 ?>
