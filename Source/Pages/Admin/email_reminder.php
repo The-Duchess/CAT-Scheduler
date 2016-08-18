@@ -68,6 +68,7 @@ if (!($CONNECTION = fido_db_connect())) {
      to the email
 -->
      <form action="" method="post">
+          <div class="panel-body">
           <div style="height:300px;
           width:300px;border1px solid
           #0F0; overflow:auto"> <!--  begin scrollbox  -->
@@ -79,6 +80,7 @@ if (!($CONNECTION = fido_db_connect())) {
           }
           ?>
      </div> <!--  end scrollbox  -->
+     </div>
                     <br>
      <label>Subject:</label>
      <input type="text" name="subject" size="80"><br>
