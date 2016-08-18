@@ -66,7 +66,11 @@ require_once dirname(__FILE__) . "/../../API/Admin.php";
      $student_res = get_student_uname_no_availability($term_id);
 
      if (!($student_res = get_student_uname_no_availability($term_id))) { ?>
-
+          <div class="alert alert-danger text-center" role="alert">
+              <strong>FAILURE!</strong>
+              <br>
+              ERROR: unable to fetch students
+          </div>
      <?php }
 
      //$student_res_unames = pg_fetch_all($student_res);
@@ -194,22 +198,22 @@ require_once dirname(__FILE__) . "/../../API/Admin.php";
           }
 
           if (empty($student_list)) {
-               ?>
+          ?>
                <div class="alert alert-danger text-center" role="alert">
                    <strong>You Must Have Students Selected</strong>
                    <br>
                    ERROR: unable to connect to database
                </div>
-               <?php
+          <?php
           } else {
                @send_mail($admin_uname, $student_list, $email_text, $subject_text);
-               ?>
+          ?>
                <div class="alert alert-success text-center" role="alert">
                    <strong>SUCCESS!</strong>
                    <br>
                    <?php echo "Emails "; ?> Sent
                </div>
-               <?php
+          <?php
           }
      }
 
