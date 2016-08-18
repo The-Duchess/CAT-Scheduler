@@ -41,6 +41,8 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
 <html>
     <head>
         <link href="../../css/bootstrap_current/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/custom/custom-buttons.css" rel="stylesheet">
+        <link href="../../css/custom/custom-label.css" rel="stylesheet">
         <link href="../../css/custom/custom-list-group.css" rel="stylesheet">
         <link href="../../css/custom/custom-table.css" rel="stylesheet">
         <title>View Availability</title>
@@ -209,13 +211,13 @@ if (!empty($selected_term)) {
                                               //display preffered availabilities first
                                               foreach($block as $name => $pref){
                                                 if($pref == 'Preferred') {
-                                                  echo "<font color = 'blue'>$name</font><br>";
+                                                  echo "<span class=\"btn btn-success btn-xs\">$name</span><br>";
                                                 }
                                               }
                                               //then display normal availabilities
                                               foreach($block as $name => $pref){
                                                 if($pref == 'Available') {
-                                                  echo "<font color = 'green'>$name</font><br>";
+                                                  echo "<span class=\"btn btn-available btn-xs\">$name</span><br>";
                                                 }
                                               }
                                             }
