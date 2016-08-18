@@ -106,7 +106,8 @@ if (!($CONNECTION = fido_db_connect())) {
 -->
 
      <div class="form-group has-error"> <!--  begin subject form group  -->
-          <textarea name="text" class="form-control" rows="10" style'float: left' placeholder='Message body'></textarea>
+          <span class="input-group-addon" id='subject-addon'>Body</span>
+          <textarea name="text" class="form-control" id="text" rows="10" style'float: left' placeholder='Message body'></textarea>
      </div> <!--  end subject form group  -->
 
 <!--
