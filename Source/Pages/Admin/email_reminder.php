@@ -82,7 +82,7 @@ if (!($CONNECTION = fido_db_connect())) {
                     <span class='input-group-addon'>
                          <input type="checkbox" name="students[]" value="<?php echo $student_uname; ?>" checked />
                     </span>
-                    <span class='input-group-addon'><?php echo $student_uname; ?></span>
+                    <span class='input-group-addon' style='min-width: 100px'><?php echo $student_uname; ?></span>
                </div> <?php
           }
           ?>
