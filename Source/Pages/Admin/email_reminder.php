@@ -45,8 +45,9 @@ require_once dirname(__FILE__) . "/../../API/Admin.php";
                              <strong>FAILURE!</strong>
                              <br>
                              ERROR: unable to connect to database
-                         </div><?php
-                    } else {?>
+                         </div>
+                    <?php
+                    } else {
 
                     }
                ?>
