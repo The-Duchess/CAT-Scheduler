@@ -26,6 +26,7 @@ $hours = array(
 );
 $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 
+
 ?>
 
 <html>
@@ -44,14 +45,18 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
                 <h1>Submit Availabilities</h1>
             </div>
             <div class="row">
+
 <?php
 
 //generate the dropdown form for selecting a term to submit availability for
 echo "<form class=\"form-inline\" action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
 $selected_term = dropdown_select_term("termSelect");
 
-echo "<input class=\"btn btn-default\" type=\"submit\" name=\"termSelect\" value=\"Select\" />\n";
+echo "<input class=\"btn ben-default\" type=\"submit\" name=\"termSelect\" value=\"Select\" onclick=\"\"" . ( !empty($selected_term) ? unsaved():'') . "/>\n";
+
 echo "</form>\n";
+
+
 
 // if the copy button was pressed then the selected term to edit will be erased
 // we need to set the displayed term manually
@@ -64,6 +69,7 @@ if(!empty($_POST['copy']) && !empty($_POST['original_Term'])){
             </div>
             <hr>
 <?php
+
 // page wrapper statement, we dont want to load the availability blocks until a term is selected
 if (!empty($selected_term)) {
 
@@ -114,6 +120,8 @@ if (!empty($selected_term)) {
 
     $start_date = strtotime($selected_term['start_date']);
     $end_date = strtotime($selected_term['end_date']);
+
+
 
 ?>
             <div class="row">
@@ -270,12 +278,48 @@ if (!empty($selected_term)) {
 
 } //closing the page wrapper if statement
 
+
+//Check to see if there is nay difference 
+function unsaved(){
+    if (!empty($selected_term)){
+	if ($rows) {
+	    foreach ($rows as $row) {
+		$id = $row['block_day'] . $row['block_hour'];
+		$val = "";
+		if ($row['block_preference'] == 'Available') {
+		    $val .= 'A';
+		} else if ($row['block_preference'] == 'Preferred') {
+		    $val .= 'P';
+		}
+		$saved_info[$id] = $val;
+	    }    
+	}
+	foreach($hours as $hour => $label) {
+           foreach($days as $day) {
+		//saturday has less hours so we want to skip creating blocks for those hours
+                if ($day == 'Saturday') {
+		    if ($hour == '8' || $hour == '9' || $hour == '10' || $hour == '11' || $hour == '17') {
+			continue;
+		    }
+                }
+                
+		//check if the current time block has any info from the database
+                if(isset($db_info) && array_key_exists($cur_id, $db_info)) {
+		    if($saved_info[$cur_id] == $db_info[$cur_id]){
+			echo "<script> confirm('There are unsubmitted changes! are you sure you want to continue?') </script>";
+		    }
+                }
+	    }
+	}
+    }
+    return;
+}
+
 ?>
         </div>
         <script type='text/javascript' src='../../jquery-3.0.0.min.js'></script>
         <script src="../../css/bootstrap_current/js/bootstrap.min.js"></script>
-        <script type='text/javascript'>
-
+	<script type='text/javascript'>
         // Clears all the submissions on the page (setting them to 'NA'
         // and recoloring them (white))
         function clear_submission(){
