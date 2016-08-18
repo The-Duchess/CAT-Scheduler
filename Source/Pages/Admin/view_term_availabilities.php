@@ -10,7 +10,7 @@ require_once dirname(__FILE__)."/../../Query/Student.php";
 // require_once('../../Query_retrieve_shift_preference.php');
 
 //  Database connection
-if (!($CONNECTION = cody_db_connect())) {
+if (!($CONNECTION = fido_db_connect())) {
     echo "<p>Connection Failed</p>\n";
     exit();
 }
@@ -44,8 +44,6 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
         <link href="../../css/custom/custom-list-group.css" rel="stylesheet">
         <link href="../../css/custom/custom-table.css" rel="stylesheet">
         <title>View Availability</title>
-        <script src="../../JQuery-1.2/jquery-1.12.4.js"></script>
-        <script src="../../JavaScript/Admin/view_term_availabilities.js"></script>
     </head>
     <body>
         <div class='container'>
@@ -105,18 +103,38 @@ if (!empty($selected_term)) {
     $start_date = strtotime($selected_term['start_date']);
     $end_date = strtotime($selected_term['end_date']);
 
-    echo "<h1>User: " . $_SERVER['PHP_AUTH_USER'] . "</h1>";
-    echo "<h1>" . $selected_term['term_name'] . "</h1>";
-    echo "<h2>" . date('Y-m-d', $start_date) . " - " . date('Y-m-d', $end_date) . "</h2>";
-
-    //generate the dropdown form for selecting a student to focus on
-    echo "<form id=\"studentsForm\"action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
-    $selected_student = dropdown_select_student("studentSelect", $term_id);
-    echo "<input type=\"submit\" name=\"studentSelect\" value=\"Select student\" />\n";
-    echo "<input type=\"button\" id=\"studentReset\" name=\"studentReset\" value=\"Reset focus\"/>\n";
-    echo "</form>\n";
-
 ?>
+
+            <div class="row">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title"><?=$selected_term['term_name']?></h2>
+                    </div>
+                    <div class="panel-body">
+                        <h3><?=date('F jS, Y', $start_date)?>
+                            <small><span class="glyphicon glyphicon-arrow-right"></span></small>
+                            <?=date('F jS, Y', $end_date)?>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">Highlight A Student</h2>
+                    </div>
+                    <div class="panel-body">
+                        <?php
+                        //generate the dropdown form for selecting a student to focus on
+    echo "<form id=\"studentsForm\" class=\"form-inline\" action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
+                        $selected_student = dropdown_select_student("studentSelect", $term_id);
+                        echo "<input class=\"btn btn-default\" type=\"submit\" name=\"studentSelect\" value=\"Select student\" />\n";
+                        echo "<input class=\"btn btn-primary\" type=\"button\" id=\"studentReset\" name=\"studentReset\" value=\"Reset focus\"/>\n";
+                        echo "</form>\n";
+                        ?>
+                    </div>
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-md-3">
@@ -227,5 +245,7 @@ if (!empty($selected_term)) {
 <?php
 } //closing the page wrapper if statement
 ?>
+        <script src="../../JQuery-1.2/jquery-1.12.4.js"></script>
+        <script src="../../JavaScript/Admin/view_term_availabilities.js"></script>
     </body>
 </html>
