@@ -77,7 +77,7 @@ if (!($CONNECTION = fido_db_connect())) {
                     <br>
      <label>Subject:</label>
      <input type="text" name="subject" size="80"><br>
-     <label>Text:&nbsp;&nbsp;&nbsp;</label>
+     <label>Text:&nbsp;&nbsp;&nbsp;&nbsp;</label>
      <textarea name="text" cols="80" rows="10"></textarea><br>
 
      <input type="submit" name="email_information" value="Submit">
