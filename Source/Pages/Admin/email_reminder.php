@@ -92,6 +92,7 @@ if (!($CONNECTION = fido_db_connect())) {
           </div> <!--  end checkbox form group  -->
      <!--  </div end scrollbox  -->
                     <br>
+     <div class='col-md-9'> <!--  text area  -->
      <div class="form-group"> <!--  begin form  -->
      <label>Subject:</label>
      <br>
@@ -100,6 +101,7 @@ if (!($CONNECTION = fido_db_connect())) {
      <label>Text:</label>
      <br>
      <textarea name="text" class="form-control" cols="80" rows="10" style'float: left'></textarea><br>
+     </div> <!--  end text area  --> 
      </div> <!--  form end  -->
      </div> <!--  end row  -->
           </div> <!--  end panel body  -->
