@@ -68,18 +68,15 @@ if (!($CONNECTION = fido_db_connect())) {
      to the email
 -->
 <div class="main_form">
-
-     <?php
-     foreach ($student_res as $student_uname) {
-                    echo "<input type=\"checkbox\" checked=\"checked\" name=\"students[]\" value=$student_uname />";
-                    echo "<label for=$student_uname> $student_uname </label>";
-                    echo "<br>";
-     }
-     ?>
-               <br>
-
-
      <form action="" method="post">
+          <?php
+          foreach ($student_res as $student_uname) {
+                         echo "<input type=\"checkbox\" checked=\"checked\" name=\"students[]\" value=$student_uname />";
+                         echo "<label for=$student_uname> $student_uname </label>";
+                         echo "<br>";
+          }
+          ?>
+                    <br>
      <label>Subject:</label>
      <input type="text" name="subject" size="80"><br>
      <label>Text:   </label>
