@@ -39,8 +39,9 @@ if (!($CONNECTION = fido_db_connect())) {
          <br>
           <div class='container'> <!--  begin container  -->
                <div class='panel panel-primary'> <!-- begin panel -->
-               Email Notify
-               <br>
+                    <div class='panel panel-heading'>
+                         <h2 class='panel-title'>Email Notify<h2>
+                    </div>
 
 
 <!-- generate a dropdown to select a term for selecting what students to email -->
