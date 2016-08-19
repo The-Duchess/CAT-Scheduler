@@ -4,11 +4,14 @@ Team Lead: Jonathan Castle.
 castlez.github.io: castlez@live.com
 Location: Portland, Or.
 
+Infrastructure and General Engineer: Isaac Archer
+https://github.com/The-Duchess/ iarcher@pdx.edu
+Location: Portland, OR
 
 /* THANKS */
 Jason Owen: Capstone Sponsor
 Craig Meinschein: Capstone Sponsor
-Barton Massey: Capstone Proffessor
+Barton Massey: Capstone Professor
 
 
 /* SITE */
