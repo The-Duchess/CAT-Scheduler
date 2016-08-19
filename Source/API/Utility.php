@@ -136,6 +136,85 @@ function dropdown_select_student($subIdent, $termID, $kwargs = null) {
     }
 }
 
+
+
+//  Creates a dropdown menu with a list of students
+//  and returns an associative array of that students data fields from
+//  the database, otherwise FALSE.
+//  PARAMETERS:
+//      subIdent:   identifier of submission button
+//      kwargs:     associative array of keyword arguments to change functionality,
+//                  this is also passed as a parameter to the internal query, see
+//                  Source/Query/student.php::student_retrieve_visible_by_start for more
+//                  information
+//          view_only_alert:    if the dropdown should indicate students that are
+//                              non-editable, default false
+//          all_students:          if the dropdown should also display non visible students
+//  OTHER:
+//      See test/test_Dropdown_student_student.php for an example of use
+function dropdown_select_all_student($subIdent, $kwargs=null) {
+    //  This variable ensures that multiple calls in
+    //  the same form or file won't interfere
+    static $id = 0;
+    $id++;
+
+    //  Default values
+    $view_only_alert = false;
+    $all_students = false;
+
+    //  Read from kwargs if necessary
+    if ($kwargs) {
+        if (isset($kwargs['view_only_alert'])) {
+            $view_only_alert = $kwargs['view_only_alert'];
+        }
+        if (isset($kwargs['all_students'])) {
+            $all_students = $kwargs['all_students'];
+        }
+    }
+
+    //  First we gather the students and convert them to an array
+
+      if (!($result = student_retrieve_all($kwargs))) {
+        return false;
+      } else if (!($students = pg_fetch_all($result))) {
+        return false;
+      }
+
+    //  Output HTML for the dropdown menu using our gathered students
+    //  The caller must provide the form initialization and
+    //  submission button/object
+    echo "<select class=\"form-control\" name=\"formstudent" . $id . "\">\n";
+    echo "<option value=\"\">Please select a student...</option>\n";
+    foreach ($students as $student) {
+        if ($view_only_alert and $student['active'] == "f") {
+            echo "<option value=" . $student['student_id'] . ">" . $student['student_name'] . " -- NOT ACTIVE</option>\n";
+        } else {
+            echo "<option value=" . $student['student_id'] . ">" . $student['student_name'] . "</option>\n";
+        }
+    }
+    echo "</select>\n";
+
+    //  Check to see if the user has selected a student, and then
+    //  return the array holding the data
+    if (isset($_POST[$subIdent])) {
+        $selected = $_POST['formstudent' . $id];
+
+        if (!empty($selected)) {
+            $query = "SELECT * FROM student
+            WHERE student_id=$1
+            LIMIT 1";
+            if (!($result = pg_query_params($GLOBALS['CONNECTION'], $query, array($selected)))) {
+                return false;
+            }
+            $student = pg_fetch_array($result);
+            return $student;
+        }
+    }
+}
+
+
+
+
 function fido_db_connect() {
     //  read the configuration file
     $ini_arr = parse_ini_file(dirname(__FILE__) . "/../../fidoconfig.ini", true);
