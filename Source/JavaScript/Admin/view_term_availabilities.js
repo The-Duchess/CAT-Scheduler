@@ -1,20 +1,23 @@
-var redMarker = "<font color=\"red\">-</font>";
-var emptyBlue = "<font color=\"blue\"></font>";
-var emptyGreen = "<font color=\"green\"></font>";
+var blueTag ="<span class=\"btn btn-success btn-xs\">";
+var greenTag ="<span class=\"btn btn-available btn-xs\">";
+var highlightTag ="<span class=\"btn-highlight\">";
+var endSpan = "</span>";
+var emptyBlue = "<span class=\"btn-success\">" + endSpan;
+var emptyGreen = "<span class=\"btn-available\">" + endSpan;
   
 
 $(document).ready(function () {
   
   // given the inner html of a availabilities table cell, reset any student selection
   var resetSelection = function(cellHtml) {
-    
     var coloredName;
     //check if there is a marked name we should reset
-    if(cellHtml.includes(redMarker)){
+    if(cellHtml.includes("btn-highlight")){
       //get the colored name from the cell html
-      coloredName = cellHtml.match(/(?:<font color="red">-<\/font>)(.+?<br>)/)[1];
+      coloredName = cellHtml.match(/(?:<span class="btn-highlight">)(.+?)(?:<\/span><br>)/)[1];
+      coloredName = coloredName + "<br>";
       //remove the marked name from the cell html
-      cellHtml = cellHtml.replace(/(<font color="red">-<\/font>.+?<br>)/,"");
+      cellHtml = cellHtml.replace(/(<span class="btn-highlight">.+?<\/span><br>)/,"");
       //place the colored name back where it used to be
       if(cellHtml.includes(emptyBlue)) {
         cellHtml = cellHtml.replace(emptyBlue, coloredName);
@@ -29,24 +32,23 @@ $(document).ready(function () {
     $('#studentsForm').on('submit', function(e) {
         e.preventDefault();
         var name = $(this).children().first().children(":selected").text();
-        var blueName = "<font color=\"blue\">"+name+"</font><br>";
-        var greenName = "<font color=\"green\">"+name+"</font><br>";
+        var blueName = blueTag + name + endSpan;
+        var greenName = greenTag + name + endSpan;
         if (name !== "Select a student to focus on...") {
           $("#termAvailabilities tbody").find("tr").each(function() {
             $(this).children(":not(:first)").each(function() {
               var cell = $(this).html();
               //first reset marked name in this cell if there is one
               var newCell = resetSelection(cell);
-              
               //remove name from the font tag it is in
-              newCell = newCell.replace(blueName, emptyBlue);
-              newCell = newCell.replace(greenName, emptyGreen);
-              
+              newCell = newCell.replace(blueName + "<br>", emptyBlue);
+              newCell = newCell.replace(greenName + "<br>", emptyGreen);
+
               //if the name has been removed from its font tag, place it back at the top with a red marker
               if (newCell.includes(emptyBlue)) {
-                newCell = redMarker + blueName + newCell;
+                newCell = highlightTag + blueName + endSpan + "<br>" + newCell;
               } else if (newCell.includes(emptyGreen)) {
-                newCell = redMarker + greenName + newCell;
+                newCell = highlightTag + greenName + endSpan + "<br>" + newCell;
               }
               $(this).html(newCell);
             });

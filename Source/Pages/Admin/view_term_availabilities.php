@@ -42,7 +42,6 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
     <head>
         <link href="../../css/bootstrap_current/css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/custom/custom-buttons.css" rel="stylesheet">
-        <link href="../../css/custom/custom-label.css" rel="stylesheet">
         <link href="../../css/custom/custom-list-group.css" rel="stylesheet">
         <link href="../../css/custom/custom-table.css" rel="stylesheet">
         <title>View Availability</title>
@@ -107,7 +106,7 @@ if (!empty($selected_term)) {
 
 ?>
 
-            <div class="row">
+            <div class="row"> 
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title"><?=$selected_term['term_name']?></h2>
@@ -210,7 +209,7 @@ if (!empty($selected_term)) {
                                               $block = $db_blocks[$cur_id];
                                               //display preffered availabilities first
                                               foreach($block as $name => $pref){
-                                                if($pref == 'Preferred') {
+                                                  if($pref == 'Preferred') {
                                                   echo "<span class=\"btn btn-success btn-xs\">$name</span><br>";
                                                 }
                                               }
