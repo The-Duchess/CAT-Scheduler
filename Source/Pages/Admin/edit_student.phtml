@@ -1,0 +1,114 @@
+<?php
+session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 'on');
+
+require_once dirname(__FILE__) . "/../../Query/student.php";
+require_once dirname(__FILE__) . "/../../API/Utility.php";
+
+$report = "";
+
+// Database connection
+if (!($CONNECTION = fido_db_connect())) {
+    echo "<p>Connection Failed</p>\n";
+    exit();
+}
+?>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Edit a Student</title>
+    <link rel="stylesheet" href="../../JQuery-1.2/UI/jquery-ui-darkness/jquery-ui.min.css">
+    <script src="../../JQuery-1.2/jquery-1.12.4.js"></script>
+    <script src="../../JQuery-1.2/UI/jquery-ui-darkness/jquery-ui.min.js"></script>
+    <script src="../../JavaScript/Admin/edit_student.js"></script>
+</head>
+
+<body>
+    <a href="../login_home.php">Return Home</a><br><br>
+    
+<?php
+  //generate the dropdown form for selecting a student to edit 
+  echo "<form action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
+  echo "<label>Select which student you would like to edit</label><br>\n";
+  $args['all_students'] = true;
+  $selected_student = dropdown_select_all_student("studentSelect", $args);
+  echo "<input type=\"submit\" id=\"studentSubmit\" name=\"studentSelect\" value=\"Select\" />\n";
+  echo "</form>\n";
+?>
+    
+    
+<?php
+  if (!empty($selected_student)) {
+    //get all of the student's current fields once it is selected
+    $_SESSION['studentID'] = (int)$selected_student['student_id'];
+    $student_username = $selected_student['student_username'];
+    $join_date = strtotime($selected_student['join_date']);
+    $leave_date = strtotime($selected_student['leave_date']);
+    $editable = $selected_student['editable'];
+    $active = $selected_student['active'];
+    //then create the form
+?>
+    <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST" name="studentForm" id="studentForm">
+        <label for="studentName">student Name:</label><br>
+        <input type="text" id="studentName" name="studentName" /><br>
+        <label for="startDate">Start Date:</label><br>
+        <input readonly type="text" id="startDate" name="startDate"/><br>
+        <label for="endDate">End Date:</label><br>
+        <input readonly type="text" id="endDate" name="endDate"/><br>
+        <label for="active">Active:</label>
+        <input type="radio" name="active" value="t">True
+        <input type="radio" name="active" value="f">False
+        <input type="submit" name="submit" value="Update student" />
+    </form>
+    <script>
+      //update forms inputs with selected student info
+      $("#studentName").val("<?php echo $student_name;?>");
+      $("#startDate").val(formatDate(<?php echo $join_date;?>));
+      $("#endDate").val(formatDate(<?php echo $leave_date;?>));
+      var editable = "<?php echo $editable;?>";
+      document.studentForm.editable.value = editable;
+      var active = "<?php echo $active;?>";
+      document.studentForm.active.value = active;
+    </script>
+<?php   
+  }//closing form if bracket
+    if (isset($_POST['submit'])) {
+      if (isset($_POST['studentName']) and $_POST['studentName'] != "" and isset($_POST['startDate']) and $_POST['startDate'] != "" and isset($_POST['endDate']) and $_POST['endDate'] != "" and isset($_POST['active'])) {
+          //get all of the student's post variables
+          $student_id = $_SESSION['studentID'];
+          $name = $_POST['studentName'];
+          $start = new DateTime($_POST['startDate']);
+          $end = new DateTime($_POST['endDate']);
+
+          if($_POST['active'] === 't') {
+            $vis = true;
+          } else {
+            $vis = false;
+          }
+          //get the fields ready in an array
+          $fields = array();
+          $fields['student_name'] = $name;
+          $fields['join_date'] = $start;
+          $fields['leave_date'] = $end;
+          $fields['active'] = $vis;
+          //  update student or report errors
+          if (!student_update($student_id, $fields)) {
+              $report = "ERROR: Failed to update student in database";
+          } else {
+              $report = "student Updated, reloading page...";
+              //refresh the page after updating the student
+              //this ensures that the dropdown reflects updated student names
+              header("Refresh:0");
+          }
+      } else {
+          $report = "ERROR: Cannot update a student with empty fields";
+      }
+    }
+  
+?>
+  
+   <p><?php echo $report; ?></p> 
+</body>
+</html>
