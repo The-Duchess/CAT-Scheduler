@@ -1,0 +1,19 @@
+/* TEAM */
+
+Team Lead: Jonathan Castle.
+castlez.github.io: castlez@live.com
+Location: Portland, Or.
+
+
+/* THANKS */
+Jason Owen: Capstone Sponsor
+Craig Meinschein: Capstone Sponsor
+Barton Massey: Capstone Proffessor
+
+
+/* SITE */
+Last update: YYYY/MM/DD 
+Standards: HTML5, CSS3, PHP, Javascript
+Software: Used to schedule desk volunteers (DOGS) 
+          for the CAT Team at 
+          Portland State University
