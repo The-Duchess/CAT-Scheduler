@@ -48,11 +48,14 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
 
 <?php
 
+$unsaved_flag=false;
 //generate the dropdown form for selecting a term to submit availability for
 echo "<form class=\"form-inline\" action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
 $selected_term = dropdown_select_term("termSelect");
 
-echo "<input class=\"btn ben-default\" type=\"submit\" name=\"termSelect\" value=\"Select\" onclick=\"\"" . ( !empty($selected_term) ? unsaved():'') . "/>\n";
+
+echo "<input class=\"btn ben-default\" type=\"submit\" name=\"termSelect\" value=\"Select\" onclick=\"\"" . ($unsaved_flag ? unsaved_prompt():''). " />\n";
+//echo "<input class=\"btn ben-default\" type=\"submit\" name=\"termSelect\" value=\"Select\" onclick=\"\"" . ( !empty($selected_term) ? unsaved():'') . "/>\n";
 
 echo "</form>\n";
 
@@ -185,13 +188,13 @@ if (!empty($selected_term)) {
                                     </div>
                                     <div class="panel-body">
                                         <fieldset id="shift-pref"<?= ($editable == false ? ' disabled="disabled" ':'')?>>
-                                            <input type='radio' id='4h' value='One 4-Hour' name='shift_pref' <?= ($pref == '4h' ? ' checked ' :' ')?>>
+                                            <input type='radio' id='4h' value='One 4-Hour' name='shift_pref' <?= ($pref == '4h' ? ' checked ' :' ')?> onchange="unsaved()">
                                             <label for='4h'>One 4 Hour Shift</label>
                                             <br>
-                                            <input type='radio' id='2h' value='Two 2-Hour' name='shift_pref' <?= ($pref == '2h' ? ' checked ' :' ')?>>
+                                            <input type='radio' id='2h' value='Two 2-Hour' name='shift_pref' <?= ($pref == '2h' ? ' checked ' :' ')?> onchange="unsaved()">
                                             <label for='2h'>Two 2 Hour Shifts</label>
                                             <br>
-                                            <input type='radio' id='0h' value='No Preference' name='shift_pref' <?= ($pref == '0h' ? ' checked ' :' ')?>>
+                                            <input type='radio' id='0h' value='No Preference' name='shift_pref' <?= ($pref == '0h' ? ' checked ' :' ')?> onchange="unsaved()">
                                             <label for='0h'>No Preference</label>
                                         </fieldset>
                                     </div>
@@ -278,40 +281,9 @@ if (!empty($selected_term)) {
 
 } //closing the page wrapper if statement
 
-
 //Check to see if there is nay difference 
-function unsaved(){
-    if (!empty($selected_term)){
-	if ($rows) {
-	    foreach ($rows as $row) {
-		$id = $row['block_day'] . $row['block_hour'];
-		$val = "";
-		if ($row['block_preference'] == 'Available') {
-		    $val .= 'A';
-		} else if ($row['block_preference'] == 'Preferred') {
-		    $val .= 'P';
-		}
-		$saved_info[$id] = $val;
-	    }    
-	}
-	foreach($hours as $hour => $label) {
-           foreach($days as $day) {
-		//saturday has less hours so we want to skip creating blocks for those hours
-                if ($day == 'Saturday') {
-		    if ($hour == '8' || $hour == '9' || $hour == '10' || $hour == '11' || $hour == '17') {
-			continue;
-		    }
-                }
-                
-		//check if the current time block has any info from the database
-                if(isset($db_info) && array_key_exists($cur_id, $db_info)) {
-		    if($saved_info[$cur_id] == $db_info[$cur_id]){
-			echo "<script> confirm('There are unsubmitted changes! are you sure you want to continue?') </script>";
-		    }
-                }
-	    }
-	}
-    }
+function unsaved_prompt(){
+	echo "<script> confirm('There are unsubmitted changes! are you sure you want to continue?') </script>";
     return;
 }
 
@@ -356,7 +328,7 @@ function unsaved(){
             document.getElementById("0h").checked = 'true';
         }
         </script>
-        <script type='text/javascript'>
+        <script>
             function confirmCopy(){
                 return confirm('Are you sure you want to overwrite the entries of the current term with the selected one? (This will not effect your saved availability until you submit)');
             }
@@ -399,5 +371,10 @@ function unsaved(){
                 });
             });
         </script>
+	<script>
+	function unsaved(){
+	    document.getElementbyId('unsaved_flag').id=true;
+	}
+	</script>
     </body>
 </html>
