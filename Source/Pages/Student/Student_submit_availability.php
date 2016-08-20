@@ -4,6 +4,7 @@
 require_once dirname(__FILE__) . "/../../Query/Student.php";
 require_once dirname(__FILE__) . "/../../Query/Availability.php";
 require_once dirname(__FILE__) . "/../../API/Utility.php";
+require_once dirname(__FILE__) . "/process_availability_submission.php";
 
 //  Database connection
 if (!($CONNECTION = fido_db_connect())) {
@@ -41,6 +42,25 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
             <br>
             <div class="row">
                 <a class="btn btn-primary" href="../login_home.php">Back to Home</a>
+<?php
+    if(isset($_POST['submit_main'])) {
+        $submission_result = process_submissions();
+        $term_name = unserialize($_POST['original_Term']);
+        $message = "";
+        if($submission_result) {
+            echo "<div class=\"alert alert-success alert-dismissible\" role=\"alert\">\n";
+            $message = "Your availability for term \"" . $term_name['term_name'] . "\" was updated successfully!";
+        } else {
+            echo "<div class=\"alert alert-danger alert-dismissible\" role=\"alert\">\n";
+            $message = "There was an error in processing your availability update for " . $term_name['term_name'] . "...";
+        }
+        echo "<button class=\"close\" type=\"button\" data-dismiss=\"alert\" aria-label=\"Close\">";
+        echo "<span aria-hidden=\"true\">x</span>\n";
+        echo "</button>\n";
+        echo $message;
+        echo "</div>\n";
+    }
+?>
                 <h1>Submit Availabilities</h1>
             </div>
             <div class="row">
@@ -55,8 +75,10 @@ echo "</form>\n";
 
 // if the copy button was pressed then the selected term to edit will be erased
 // we need to set the displayed term manually
-if(!empty($_POST['copy']) && !empty($_POST['original_Term'])){
-    $selected_term = unserialize($_POST['original_Term']);
+if(!empty($_POST['copy']) || !empty($_POST['submit_main'])){
+    if(!empty($_POST['original_Term'])) {
+        $selected_term = unserialize($_POST['original_Term']);
+    }
 }
 
 ?>
@@ -169,7 +191,7 @@ if (!empty($selected_term)) {
                                     </div>
                                 </div>
                             </div> <!-- end of row 1.2-->
-                <form action="process_availability_submission.php" method="POST">
+                            <form action="<?=htmlentities($_SERVER['PHP_SELF'])?>" method="POST">
                             <div class="row"> <!-- beginning of column 1 row 3-->
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
@@ -261,7 +283,11 @@ if (!empty($selected_term)) {
                         </div> <!-- end of column 2-->
                     </div> <!-- end of row 1-->
                     <div class="row"> <!-- beginning of row 2-->
-                        <input class="btn btn-default" type='submit' value='Submit' name='Submit'<?= ($editable == false ? ' disabled="disabled" ':'')?>/>
+                        <?php
+                        $original_term = htmlentities(serialize($selected_term));
+                        ?>
+                            <input type="hidden" name="original_Term" value="<?=$original_term?>" />
+                        <input class="btn btn-default" type='submit' value='Submit' name='submit_main'<?= ($editable == false ? ' disabled="disabled" ':'')?>/>
                         <input class="btn btn-primary" type='button' value='Clear' onclick="clear_submission()"<?= ( $editable == false ? ' disabled=disabled ':'')?>/>
                     </div> <!-- end of row 2-->
                 </form>
