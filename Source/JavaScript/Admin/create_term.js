@@ -1,13 +1,3 @@
-/**********  JQuery Includes are Scary  **********/
-$.getScript("../../JavaScript/Utility/input_validation.js");
-
-
-/**********  Object Initialization  **********/
-$("#startDate").datepicker();
-$("#endDate").datepicker();
-$("#dueDate").datepicker();
-
-
 /**********  New Methods for Built in Objects  **********/
 Date.prototype.toPaddedLocaleDateString = function() {
     var day = this.getDate().toString();
@@ -21,6 +11,38 @@ Date.prototype.toPaddedLocaleDateString = function() {
 
 
 /**********  Functions  **********/
+function isLeapYear(year) {
+    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function dateIsValid(date_string) {
+    var regex_array = ( /^(\d{2})\/(\d{2})\/(\d{4})$/ ).exec(date_string);
+    
+    if (!regex_array) { return false; }
+    
+    var month = parseInt(regex_array[1], 10);
+    var day = parseInt(regex_array[2], 10);
+    var year = parseInt(regex_array[3], 10);
+
+    if (year < 1946) {
+        return false;
+    } else if (month < 0 || month > 12) {
+        return false;
+    } else if (day < 0 || day > 31) {
+        return false;
+    } else if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30) {
+        return false;
+    } else if (month == 2 && day > (isLeapYear(year) ? 29 : 28)) {
+        return false;
+    }
+    
+    return true;
+}
+
 //  function to validate input before enabling the submit button
 function validateInput() {
     if ($("#termName").val().length > 0 &&
@@ -126,17 +148,25 @@ $("#startDate").change( function() {
         dueMax.setDate(currentStart.getDate() - 1);
 
         //  enable end date, set default date and min date
-        $("#endDate").datepicker("option", {
-            defaultDate: defaultEnd,
-            minDate: endMin,
-            disabled: false
-        });
+        if (!dateIsValid($("#endDate").val())) {
+            $("#endDate").datepicker("option", {
+                defaultDate: defaultEnd,
+                minDate: endMin
+            });
+            $("#endDate").prop("disabled", false);
+        } else {
+            $("#endDate").datepicker("option", "minDate", endMin);
+        }
         //enable due date, set default date and max date
-        $("#dueDate").datepicker("option", {
-            defaultDate: defaultDue,
-            maxDate: dueMax,
-            disabled: false
-        });
+        if (!dateIsValid($("#dueDate").val())) {
+            $("#dueDate").datepicker("option", {
+                defaultDate: defaultDue,
+                maxDate: dueMax
+            });
+            $("#dueDate").prop("disabled", false);
+        } else {
+            $("#dueDate").datepicker("option", "maxDate", dueMax);
+        }
      
         //  update objects
         $("#startGroup").removeClass("has-error");
@@ -226,6 +256,22 @@ $("#dueDateClear").click( function() {
     }
 });
 
+//  click handler for mentoring button
+$("#mentoringButton").click( function() {
+    if ($("#mentoringCheckbox").prop("checked")) {
+        $(this).removeClass("btn-success");
+        $("#mentoringGlyphicon").removeClass("glyphicon-ok");
+        $(this).addClass("btn-warning");
+        $("#mentoringGlyphicon").addClass("glyphicon-remove");
+    } else {
+        $(this).removeClass("btn-warning");
+        $("#mentoringGlyphicon").removeClass("glyphicon-remove");
+        $(this).addClass("btn-success");
+        $("#mentoringGlyphicon").addClass("glyphicon-ok");
+    }
+    $("#mentoringCheckbox").prop("checked", function(index, oldval) { return !oldval; });
+});
+
 //  click handler for autofill button
 $("#autofillButton").click( function() {
     //  variables
@@ -261,8 +307,33 @@ $("#autofillButton").click( function() {
 
 //  click handler for reset button
 $("#resetButton").click( function() {
+    //  reset values
+    $("#termName").val("");
+    $("#startDate").val("");
+    $("#endDate").val("");
+    $("#dueDate").val("");
+    $("#mentoringCheckbox").prop("checked", false);
+
+    //  reset datepickers
+    $("#startDate").datepicker("setDate", null);
+    $("#endDate").datepicker("setDate", null);
+    $("#endDate").datepicker("option", {
+        defaultDate: null,
+        minDate: null
+    });
+    $("#dueDate").datepicker("setDate", null);
+    $("#dueDate").datepicker("option", {
+        defaultDate: null,
+        maxDate: null
+    });
+
+    //  disabled inputs
     $("#endDate").prop("disabled", true);
     $("#dueDate").prop("disabled", true);
+    $("#submitButton").prop("disabled", true);
+    $("#autofillButton").prop("disabled", true);
+
+    //  assign appropriate classes to input groups and displays
     $("#nameGroup").removeClass("has-success");
     $("#nameGroup").addClass("has-error");
     $("#startGroup").removeClass("has-success");
@@ -271,10 +342,97 @@ $("#resetButton").click( function() {
     $("#endGroup").addClass("has-error");
     $("#dueGroup").removeClass("has-success");
     $("#dueGroup").addClass("has-error");
-    $("#submitButton").prop("disabled", true);
-    $("#autofillButton").prop("disabled", true);
-    $("#statsDueToStart").text("Due Date: UNKNOWN");
+    $("#mentoringButton").removeClass("btn-success");
+    $("#mentoringButton").addClass("btn-warning");
+    $("#mentoringGlyphicon").removeClass("glyphicon-ok");
+    $("#mentoringGlyphicon").addClass("glyphicon-remove");
+
+    //  reset term info
     $("#termDuration").hide();
     $("#dueOffset").hide();
     $("#termInfoWarning").show();
+});
+
+
+/**********  Object Initialization  **********/
+///*
+if ($("#termName").val().length > 0) {
+    $("#nameGroup").removeClass("has-error");
+    $("#nameGroup").addClass("has-success");
+}
+
+if (dateIsValid($("#startDate").val())) {
+    //  initialize start date
+    $("#startDate").datepicker({
+        defaultDate: $("#startDate").val()
+    });
+
+    //  variables
+    var currentStart = $("#startDate").datepicker("getDate");
+    var defaultEnd = new Date(currentStart);
+    var endMin = new Date(currentStart);
+    var defaultDue = new Date(currentStart);
+    var dueMax = new Date(currentStart);
+
+    //  calculate default dates for end and due dates
+    defaultEnd.setDate(currentStart.getDate() + 1);
+    endMin.setDate(currentStart.getDate() + 1);
+    defaultDue.setDate(currentStart.getDate() - 1);
+    dueMax.setDate(currentStart.getDate() - 1);
+
+    //  enable end date, set default date and min date
+    if (dateIsValid($("#endDate").val())) {
+        $("#endDate").datepicker({
+            minDate: endMin
+        });
+        $("#endDate").datepicker("setDate", $("#endDate").val());
+        $("#endDate").prop("disabled", false);
+        $("#endGroup").removeClass("has-error");
+        $("#endGroup").addClass("has-success");
+    } else {
+        $("#endDate").datepicker("option", {
+            defaultDate: defaultEnd,
+            minDate: endMin
+        });
+        $("#endDate").prop("disabled", false);
+    }
+    //enable due date, set default date and max date
+    if (dateIsValid($("#dueDate").val())) {
+        $("#dueDate").datepicker({
+            maxDate: dueMax
+        });
+        $("#dueDate").datepicker("setDate", $("#dueDate").val());
+        $("#dueDate").prop("disabled", false);
+        $("#dueGroup").removeClass("has-error");
+        $("#dueGroup").addClass("has-success");
+    } else {
+        $("#dueDate").datepicker("option", {
+            defaultDate: defaultDue,
+            maxDate: dueMax
+        });
+        $("#dueDate").prop("disabled", false);
+    }
+ 
+    //  update objects
+    $("#startGroup").removeClass("has-error");
+    $("#startGroup").addClass("has-success");
+    $("#autofillButton").prop("disabled", false);
+} else {
+    $("#startDate").datepicker();
+    $("#endDate").datepicker();
+    $("#dueDate").datepicker();
+}
+
+updateInfo();
+validateInput();
+
+
+//  when document fully loaded
+$(document).ready( function() {
+    //  Fade out alert if its being shown
+    if ($("#pageAlert").prop("hidden") == false) {
+        $("#pageAlert").fadeTo(7000, 500).slideUp(2000, function() {
+            $("#pageAlert").slideUp(2000);
+        });
+    }
 });
