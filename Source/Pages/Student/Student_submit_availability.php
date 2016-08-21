@@ -54,7 +54,7 @@ echo "<form class=\"form-inline\" action=\"" . htmlentities($_SERVER['PHP_SELF']
 $selected_term = dropdown_select_term("termSelect");
 
 
-echo "<input class=\"btn ben-default\" type=\"submit\" name=\"termSelect\" value=\"Select\" onclick=\"\"" . ($unsaved_flag ? unsaved_prompt():''). " />\n";
+echo "<input class=\"btn ben-default\" type=\"submit\" name=\"termSelect\" value=\"Select\" onclick=\"unsaved()\"" . ($unsaved_flag ? unsaved_prompt():''). " />\n";
 //echo "<input class=\"btn ben-default\" type=\"submit\" name=\"termSelect\" value=\"Select\" onclick=\"\"" . ( !empty($selected_term) ? unsaved():'') . "/>\n";
 
 echo "</form>\n";
@@ -334,9 +334,10 @@ function unsaved_prompt(){
             }
         </script>
         <script type='text/javascript'>
+            var val_change = false;
+
             var colorCell = function (cell) {
                 var selected = cell.find('input[type=radio]:checked');
-                console.log("Given cell: " + selected.val());
                 if (selected.val() == "A") {
                     //cell.css("background-color", "green");
                     cell.children("label").attr("class", "btn btn-xs btn-available");
@@ -359,22 +360,26 @@ function unsaved_prompt(){
                     }
                 });
             };
+            function unsaved(){
+                if (val_change == true) {
+                    alert(val_change);
+                }
+	        }
 
-                $(document).ready(function() {
+            $(document).ready(function() {
                 recolorCalendar();
 
+
                 $('fieldset').change(function () {
-                    console.log($(this).attr("id"));
+                    val_change = true;
                     if ($(this).attr("id") != "shift-pref") {
                         colorCell($(this));
                     }
+                    console.log
                 });
             });
         </script>
 	<script>
-	function unsaved(){
-	    document.getElementbyId('unsaved_flag').id=true;
-	}
 	</script>
     </body>
 </html>
