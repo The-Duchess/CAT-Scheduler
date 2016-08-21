@@ -48,15 +48,11 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
 
 <?php
 
-$unsaved_flag=false;
 //generate the dropdown form for selecting a term to submit availability for
 echo "<form class=\"form-inline\" action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
 $selected_term = dropdown_select_term("termSelect");
 
-
-echo "<input class=\"btn ben-default\" type=\"submit\" name=\"termSelect\" value=\"Select\" onclick=\"unsaved()\"" . ($unsaved_flag ? unsaved_prompt():''). " />\n";
-//echo "<input class=\"btn ben-default\" type=\"submit\" name=\"termSelect\" value=\"Select\" onclick=\"\"" . ( !empty($selected_term) ? unsaved():'') . "/>\n";
-
+echo "<input class=\"btn ben-default\" type=\"submit\" name=\"termSelect\" value=\"Select\" onclick=\"unsaved()\"/>\n";
 echo "</form>\n";
 
 
@@ -188,13 +184,13 @@ if (!empty($selected_term)) {
                                     </div>
                                     <div class="panel-body">
                                         <fieldset id="shift-pref"<?= ($editable == false ? ' disabled="disabled" ':'')?>>
-                                            <input type='radio' id='4h' value='One 4-Hour' name='shift_pref' <?= ($pref == '4h' ? ' checked ' :' ')?> onchange="unsaved()">
+                                            <input type='radio' id='4h' value='One 4-Hour' name='shift_pref' <?= ($pref == '4h' ? ' checked ' :' ')?>>
                                             <label for='4h'>One 4 Hour Shift</label>
                                             <br>
-                                            <input type='radio' id='2h' value='Two 2-Hour' name='shift_pref' <?= ($pref == '2h' ? ' checked ' :' ')?> onchange="unsaved()">
+                                            <input type='radio' id='2h' value='Two 2-Hour' name='shift_pref' <?= ($pref == '2h' ? ' checked ' :' ')?>>
                                             <label for='2h'>Two 2 Hour Shifts</label>
                                             <br>
-                                            <input type='radio' id='0h' value='No Preference' name='shift_pref' <?= ($pref == '0h' ? ' checked ' :' ')?> onchange="unsaved()">
+                                            <input type='radio' id='0h' value='No Preference' name='shift_pref' <?= ($pref == '0h' ? ' checked ' :' ')?>>
                                             <label for='0h'>No Preference</label>
                                         </fieldset>
                                     </div>
@@ -281,11 +277,6 @@ if (!empty($selected_term)) {
 
 } //closing the page wrapper if statement
 
-//Check to see if there is nay difference 
-function unsaved_prompt(){
-	echo "<script> confirm('There are unsubmitted changes! are you sure you want to continue?') </script>";
-    return;
-}
 
 ?>
         </div>
@@ -362,7 +353,7 @@ function unsaved_prompt(){
             };
             function unsaved(){
                 if (val_change == true) {
-                    alert(val_change);
+		    confirm('There are unsubmitted changes! are you sure you want to continue?');
                 }
 	        }
 
