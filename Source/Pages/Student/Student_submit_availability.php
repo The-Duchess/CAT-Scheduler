@@ -79,6 +79,7 @@ if (!empty($selected_term)) {
         $term_id_new = (int)$selected_term['term_id'];
     }
     $editable = ($selected_term['editable'] == "t" ? true:false);
+    $mentoring = ($selected_term['mentoring'] == "t" ? true : false);
 
     // TODO: This formatting step should be done in a API function, make a Story about it ****
     $result = retrieve_availability_for_student($student_id, $term_id_new);
@@ -176,7 +177,8 @@ if (!empty($selected_term)) {
                                         <h3 class="panel-title">Shift Preference</h3>
                                     </div>
                                     <div class="panel-body">
-                                        <fieldset id="shift-pref"<?= ($editable == false ? ' disabled="disabled" ':'')?>>
+                                        <fieldset id="shift-pref"<?= ($editable == false ? ' disabled="disabled" ':'')?>
+                                                  <?php echo ($mentoring ? "hidden" : ""); ?>>
                                             <input type='radio' id='4h' value='One 4-Hour' name='shift_pref' <?= ($pref == '4h' ? ' checked ' :' ')?>>
                                             <label for='4h'>One 4 Hour Shift</label>
                                             <br>
@@ -186,6 +188,12 @@ if (!empty($selected_term)) {
                                             <input type='radio' id='0h' value='No Preference' name='shift_pref' <?= ($pref == '0h' ? ' checked ' :' ')?>>
                                             <label for='0h'>No Preference</label>
                                         </fieldset>
+                                        <div class="alert alert-warning text-center"
+                                             <?php echo ($mentoring ? "" : "hidden"); ?>>
+                                            <strong>This is a Mentoring Term</strong>
+                                            <br>
+                                            You will be assigned 2 hour shifts for the duration of this term
+                                        </div>
                                     </div>
                                 </div>
                             </div> <!-- end of column 1 row 3-->

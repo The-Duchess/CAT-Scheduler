@@ -5,17 +5,19 @@ require_once dirname(__FILE__) . "/../../API/Utility.php";
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Create New Term</title>
+    <title>Create Term</title>
     <link rel="stylesheet" href="../../JQuery-1.2/UI/jquery-ui-darkness/jquery-ui.min.css">
     <link rel="stylesheet" href="../../css/bootstrap_current/css/bootstrap.min.css">
     <style type="text/css">
-        .input-group-addon { min-width: 100px; }
+        .input-group-addon-label { min-width: 128px; }
+        .min-width-button { min-width: 128px; }
     </style>
 </head>
-
 <body>
     <br>
     <div class="container"> <!-- begin container -->
+        <!--  begin page alert -->
+        <div id="pageAlert"
         <?php
         //  check for submission
         if (isset($_POST['submit'])) {
@@ -23,109 +25,273 @@ require_once dirname(__FILE__) . "/../../API/Utility.php";
             $start = new DateTime($_POST['startDate']);
             $end = new DateTime($_POST['endDate']);
             $due = new DateTime($_POST['dueDate']);
-
-            //  Database connection
-            if (!($CONNECTION = @fido_db_connect())) {?>
-                <div class="alert alert-danger text-center" role="alert">
-                    <strong>FAILURE!</strong>
-                    <br>
-                    ERROR: unable to connect to database
-                </div><?php
-            } else if (!@add_term($name, $start, $end, $due)) {?>
-                <div class="alert alert-danger text-center" role="alert">
-                    <strong>FAILURE!</strong>
-                    <br>
-                    <?php echo pg_last_error();?>
-                </div><?php
-            } else {?>
-                <div class="alert alert-success text-center" role="alert">
-                    <strong>SUCCESS!</strong>
-                    <br>
-                    <?php echo $name; ?> added to FIDO system
-                </div><?php
+            $mentor = (isset($_POST['mentoringCheckbox']) ? true : false);
+            
+            if (!($CONNECTION = @fido_db_connect())) {
+                echo "\nclass=\"alert alert-danger text-center\"
+                role=\"alert\">
+                <strong>FAILURE!</strong>
+                <br>
+                ERROR: unable to connect to database";
+            } else if (!@add_term($name, $start, $end, $due, $mentor)) {
+                echo "\nclass=\"alert alert-danger text-center\"
+                role=\"alert\">
+                <strong>FAILURE!</strong>
+                <br>\n";
+                echo pg_last_error();
+            } else {
+                echo "\nclass=\"alert alert-success text-center\"
+                role=\"alert\">
+                <strong>SUCCESS!</strong>
+                <br>\n";
+                echo "{$name} added to FIDO system";
+                unset($_POST['termName']);
+                unset($_POST['startDate']);
+                unset($_POST['endDate']);
+                unset($_POST['dueDate']);
+                unset($_POST['mentoringCheckbox']);
             }
+        } else {
+            echo "\nhidden";
         }
-        ?>
-        <form id="termForm" action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST">
-            <div class="row"> <!--  begin row 1  -->
-                <div class="col-md-9"> <!--  begin row 1 column 1  -->
-                    <div class="panel panel-primary"> <!--  begin create term panel  -->
-                        <div class="panel panel-heading"> <!--  begin create term panel heading  -->
-                            <h2 class="panel-title">Create Term</h2>
-                        </div> <!--  end create term panel heading  -->
-                        <div class="panel-body"> <!--  begin create term panel body  -->
-                            <div class="form-group has-error" id="nameGroup"> <!--  begin term name form group  -->
-                                <div class="input-group">  <!--  begin term name input group  -->
-                                    <span class="input-group-addon" id="termNameAddon">Term Name</span>
-                                    <input class="form-control" type="text" id="termName" name="termName" maxlength="20" placeholder="Name of term" aria-describedby="termNameAddon" />
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-danger" type="button" id="termNameClear">Clear</button>
-                                    </span>
-                                </div> <!--  end term name input group  -->
-                            </div> <!--  end term name form group  -->
-                            <div class="form-group has-error" id="startGroup"> <!--  begin start date form group  -->
-                                <div class="input-group"> <!--  begin start date input group  -->
-                                    <span class="input-group-addon" id="startDateAddon">Start Date</span>
-                                    <input class="form-control" type="text" id="startDate" name="startDate" readonly="true" placeholder="Starting date" aria-describedby="startDateAddon" />
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-danger" type="button" id="startDateClear">Clear</button>
-                                    </span>
-                                </div> <!--  end start date input group  -->
-                            </div> <!--  end start date form group  -->
-                            <div class="form-group has-error" id="endGroup"> <!--  begin end date form group  -->
-                                <div class="input-group"> <!--  begin end date input group  -->
-                                    <span class="input-group-addon" id="endDateAddon">End Date</span>
-                                    <input class="form-control" type="text" id="endDate" name="endDate" readonly="true" disabled="true" placeholder="Ending date" aria-describedby="endDateAddon" />
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-danger" type="button" id="endDateClear">Clear</button>
-                                    </span>
-                                </div> <!--  end end date input group  -->
-                            </div> <!--  end end date form group  -->
-                            <div class="form-group has-error" id="dueGroup"> <!--  begin due date form group  -->
-                                <div class="input-group"> <!--  begin due date input group  -->
-                                    <span class="input-group-addon" id="dueDateAddon">Due Date</span>
-                                    <input class="form-control" type="text" id="dueDate" name="dueDate" readonly="true" disabled="true" placeholder="Submission deadline" aria-describedby="dueDateAddon" />
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-danger" type="button" id="dueDateClear">Clear</button>
-                                    </span>
-                                </div> <!--  end due date input group  -->
-                            </div> <!--  end due date form group -->
-                            <br><br>
-                        </div> <!--  end create term panel body  -->
-                    </div> <!--  end create term panel  -->
-                </div> <!--  end row 1 column 1  -->
-                <div class="col-md-3"> <!--  begin row 1 column 2  -->
-                    <div class="panel panel-info" id="termInfo"> <!--  begin term info panel  -->
-                        <div class="panel panel-heading"> <!--  begin term info panel heading  -->
-                            <h2 class="panel-title">Term Information</h2>
-                        </div> <!--  end term info panel heading  -->
-                        <div class="panel-body"> <!--  begin term info panel body  -->
-                            <div class="alert alert-warning text-center" role="alert" id="termInfoWarning">
-                                <strong>Not Enough Data</strong>
-                                <br>
-                                Fill out the <mark>start date</mark> and either <mark>end date</mark> or <mark>due date</mark> for term information
-                            </div>
-                            <div class="alert alert-info text-center" role="alert" id="termDuration" hidden>
-                                <strong>Duration:</strong><div id="statsStartToEnd1"></div><div id="statsStartToEnd2"></div>
-                            </div>
-                            <div class="alert alert-info text-center" role="alert" id="dueOffset" hidden>
-                                <strong>Due Date:</strong><div id="statsDueToStart"></div>
-                            </div>
-                        </div> <!--  end term info panel body -->
-                    </div> <!--  end term info panel  -->
-                </div> <!--  end row 1 column 2  -->
-            </div> <!--  end row 1  -->
-            <div class="row"> <!--  begin row 2  -->
-                <div class="col-md-9"> <!--  begin row 2 column 1  -->
-                    <button class="btn btn-primary" type="submit" id="submitButton" name="submit" disabled="true">Submit</button>
-                    <button class="btn btn-primary" type="button" id="autofillButton" disabled="true">Autofill</button>
-                    <button class="btn btn-danger" type="reset" id="resetButton">Reset</button>
-                    <a class="btn btn-primary" href="../login_home.php" style="float: right">Return Home</a>
-                </div> <!--  end row 2 column 1  -->
-            </div> <!--  end row 2  -->
-        </form>
+        ?>>
+        </div> <!--  end page alert -->
+        <div class="row"> <!--  begin row 1  -->
+            <div class="col-md-9"> <!--  begin row 1 column 1  -->
+                <div class="panel panel-primary"> <!--  begin create term panel  -->
+                    <div class="panel panel-heading"> <!--  begin create term panel heading  -->
+                        <h2 class="panel-title">Create Term</h2>
+                    </div> <!--  end create term panel heading  -->
+                    <div class="panel-body"> <!--  begin create term panel body  -->
+                        <form id="termForm"
+                              action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>"
+                              method="POST">
+                            <div class="row"> <!--  begin row 1 column 1 row 1  -->
+                                <div class="col-md-8"> <!--  begin row 1 column 1 row 1 column 1  -->
+                                    <div class="form-group has-error"
+                                         id="nameGroup"> <!--  begin term name form group  -->
+                                        <div class="input-group">  <!--  begin term name input group  -->
+                                            <span class="input-group-addon input-group-addon-label"
+                                                  id="termNameAddon">
+                                                Term Name
+                                            </span>
+                                            <input class="form-control"
+                                                   type="text"
+                                                   id="termName"
+                                                   name="termName"
+                                                   value="<?php
+                                                          echo (isset($_POST['termName']) ? $_POST['termName'] : "");
+                                                          ?>"
+                                                   placeholder="Name of term"
+                                                   aria-describedby="termNameAddon" >
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-danger"
+                                                        type="button"
+                                                        id="termNameClear">
+                                                    Clear
+                                                </button>
+                                            </span>
+                                        </div> <!--  end term name input group  -->
+                                    </div> <!--  end term name form group  -->
+                                </div> <!--  end row 1 column 1 row 1 column 1  -->
+                                <div class="col-md-3 col-md-offset-1"> <!--  begin row 1 column 1 row 1 column 2  -->
+                                    <div class="form group"
+                                         id="mentoringGroup"> <!--  begin mentoring form group  -->
+                                         <button class="<?php
+                                                        echo (isset($_POST['mentoringCheckbox']) ? "btn btn-success" :
+                                                                                                   "btn btn-warning");
+                                                        ?> min-width-button"
+                                                type="button"
+                                                id="mentoringButton"
+                                                name="mentoringButton">
+                                            Mentoring
+                                            &nbsp;
+                                            <span class="<?php
+                                                         echo (isset($_POST['mentoringCheckbox']) ? "glyphicon glyphicon-ok" :
+                                                                                                    "glyphicon glyphicon-remove");
+                                                         ?>"
+                                                  id="mentoringGlyphicon"
+                                                  aria-hidden="true"></span>
+                                            <input type="checkbox"
+                                                   id="mentoringCheckbox"
+                                                   name="mentoringCheckbox"
+                                                   <?php echo (isset($_POST['mentoringCheckbox']) ? "checked" : ""); ?>
+                                                   hidden>
+                                        </button>
+                                    </div> <!--  end mentoring form group  -->
+                                </div> <!--  end row 1 column 1 row 1 column 2  -->
+                            </div> <!--  end row 1 column 1 row 1  -->
+                            <div class="row"> <!--  begin row 1 column 1 row 2 -->
+                                <div class="col-md-8"> <!--  begin row 1 column 1 row 2 column 1  -->
+                                    <div class="form-group has-error"
+                                         id="startGroup"> <!--  begin start date form group  -->
+                                        <div class="input-group"> <!--  begin start date input group  -->
+                                            <span class="input-group-addon input-group-addon-label"
+                                                  id="startDateAddon">
+                                                Start Date
+                                            </span>
+                                            <input class="form-control"
+                                                   type="text"
+                                                   id="startDate"
+                                                   name="startDate"
+                                                   value="<?php
+                                                          echo (isset($_POST['startDate']) ? $_POST['startDate'] : "");
+                                                          ?>"
+                                                   readonly
+                                                   placeholder="Starting date"
+                                                   aria-describedby="startDateAddon">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-danger"
+                                                        type="button"
+                                                        id="startDateClear">
+                                                    Clear
+                                                </button>
+                                            </span>
+                                        </div> <!--  end start date input group  -->
+                                    </div> <!--  end start date form group  -->
+                                </div> <!--  end row 1 column 1 row 2 column 1  -->
+                            </div> <!--  end row 1 column 1 row 2 -->
+                            <div class="row"> <!--  begin row 1 column 1 row 3  -->
+                                <div class="col-md-8"> <!--  begin row 1 column 1 row 3 column 1  -->
+                                    <div class="form-group has-error"
+                                         id="endGroup"> <!--  begin end date form group  -->
+                                        <div class="input-group"> <!--  begin end date input group  -->
+                                            <span class="input-group-addon input-group-addon-label"
+                                                  id="endDateAddon">
+                                                End Date
+                                            </span>
+                                            <input class="form-control"
+                                                   type="text"
+                                                   id="endDate"
+                                                   name="endDate"
+                                                   value="<?php
+                                                          echo (isset($_POST['endDate']) ? $_POST['endDate'] : "");
+                                                          ?>"
+                                                   readonly
+                                                   disabled
+                                                   placeholder="Ending date"
+                                                   aria-describedby="endDateAddon">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-danger"
+                                                        type="button"
+                                                        id="endDateClear">
+                                                    Clear
+                                                </button>
+                                            </span>
+                                        </div> <!--  end end date input group  -->
+                                    </div> <!--  end end date form group  -->
+                                </div> <!--  end row 1 column 1 row 3 column 1  -->
+                            </div> <!--  end row 1 column 1 row 3  -->
+                            <div class="row"> <!--  begin row 1 column 1 row 4 -->
+                                <div class="col-md-8"> <!--  begin row 1 column 1 row 4 column 1 -->
+                                    <div class="form-group has-error"
+                                         id="dueGroup"> <!--  begin due date form group  -->
+                                        <div class="input-group"> <!--  begin due date input group  -->
+                                            <span class="input-group-addon input-group-addon-label"
+                                                  id="dueDateAddon">
+                                                Due Date
+                                            </span>
+                                            <input class="form-control"
+                                                   type="text"
+                                                   id="dueDate"
+                                                   name="dueDate"
+                                                   value="<?php
+                                                          echo (isset($_POST['dueDate']) ? $_POST['dueDate'] : "");
+                                                          ?>"
+                                                   readonly
+                                                   disabled
+                                                   placeholder="Submission deadline"
+                                                   aria-describedby="dueDateAddon"> 
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-danger"
+                                                        type="button"
+                                                        id="dueDateClear">
+                                                    Clear
+                                                </button>
+                                            </span>
+                                        </div> <!--  end due date input group  -->
+                                    </div> <!--  end due date form group -->
+                                </div> <!--  end row 1 column 1 row 4 column 1 -->
+                                <div class="col-md-3 col-md-offset-1"> <!--  begin row 1 column 1 row 4 column 2  -->
+                                    <button class="btn btn-primary min-width-button"
+                                            type="button"
+                                            id="autofillButton"
+                                            disabled>
+                                        Autofill
+                                    </button>
+                                </div> <!--  end row 1 column 1 row 4 column 2  -->
+                            </div> <!--  end row 1 column 1 row 4  -->
+                        </form>
+                    </div> <!--  end create term panel body  -->
+                </div> <!--  end create term panel  -->
+            </div> <!--  end row 1 column 1  -->
+            <div class="col-md-3"> <!--  begin row 1 column 2  -->
+                <div class="panel panel-info" id="termInfo"> <!--  begin term info panel  -->
+                    <div class="panel panel-heading"> <!--  begin term info panel heading  -->
+                        <h2 class="panel-title">Term Information</h2>
+                    </div> <!--  end term info panel heading  -->
+                    <div class="panel-body"> <!--  begin term info panel body  -->
+                        <div class="alert alert-warning text-center"
+                             id="termInfoWarning"
+                             role="alert">
+                            <strong>Not Enough Data</strong>
+                            <br>
+                            Fill out the <mark>start date</mark> and either 
+                            <mark>end date</mark> or <mark>due date</mark> 
+                            for term information
+                        </div>
+                        <div class="alert alert-info text-center"
+                             id="termDuration" 
+                             role="alert"
+                             hidden>
+                            <strong>Duration:</strong>
+                            <div id="statsStartToEnd1"></div>
+                            <div id="statsStartToEnd2"></div>
+                        </div>
+                        <div class="alert alert-info text-center"
+                             id="dueOffset"
+                             role="alert"
+                             hidden>
+                            <strong>Due Date:</strong>
+                            <div id="statsDueToStart"></div>
+                        </div>
+                    </div> <!--  end term info panel body -->
+                </div> <!--  end term info panel  -->
+            </div> <!--  end row 1 column 2  -->
+        </div> <!--  end row 1  -->
+        <div class="row"> <!--  begin row 2  -->
+            <div class="col-md-7"> <!--  begin row 2 column 1  -->
+                <button class="btn btn-primary"
+                        type="submit"
+                        id="submitButton"
+                        name="submit"
+                        form="termForm"
+                        disabled>
+                    Submit
+                </button>
+                <button class="btn btn-danger"
+                        type="button"
+                        id="resetButton">
+                    Reset Form
+                </button>
+            </div> <!--  end row 2 column 1  -->
+            <div class="col-md-2"> <!--  begin row 2 column 2  -->
+                <a class="btn btn-primary min-width-buttoni pull-right"
+                   href="../login_home.php"
+                   style="float: right">
+                    Return Home
+                </a>
+            </div> <!--  end row 2 column 2  -->
+        </div> <!--  end row 2  -->
     </div> <!-- end container -->
 </body>
+<?php
+unset($_POST['termName']);
+unset($_POST['startDate']);
+unset($_POST['endDate']);
+unset($_POST['dueDate']);
+unset($_POST['mentoringCheckbox']);
+?>
 <script src="../../JQuery-1.2/jquery-1.12.4.js"></script>
 <script src="../../JQuery-1.2/UI/jquery-ui-darkness/jquery-ui.min.js"></script>
 <script src="../../JavaScript/Admin/create_term.js"></script>

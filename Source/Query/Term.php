@@ -204,7 +204,7 @@ function term_retrieve_visible_by_start($kwargs=null) {
 }
 
 
-//  Updates a term in the database, returns FALSE on a failure
+//  Updates a term in the database.  Returns TRUE on success, otherwise FALSE
 //  PARAMETERS:
 //      id:     the id of the term to update
 //      fields: an associative array of db data fields and their
@@ -213,10 +213,16 @@ function term_retrieve_visible_by_start($kwargs=null) {
 //      check:  whether to verify there are no invalid fields in
 //              the fields parameter, small hit to performance.
 //              default TRUE
+//  EXCEPTIONS:
+//      Will raise an exception containing an error message if an error occurs
+//      before querying the database.
+//  RETURN VALUES:
+//      true:   success
+//      false:  failure
 function term_update($id, $fields) {
     //  Check for validity
     if (!is_int($id)) {
-        return false;
+        throw new Exception("ERROR: term id is not a string");
     }
     $check_string = function ($var) { return ((is_string($var)) ? true : false); };
     $check_DateTime = function ($var) { return (($var instanceof DateTime) ? true : false); };
@@ -227,22 +233,27 @@ function term_update($id, $fields) {
         "end_date" => $check_DateTime,
         "due_date" => $check_DateTime,
         "visible" => $check_boolean,
-        "editable" => $check_boolean);
+        "editable" => $check_boolean,
+        "mentoring" => $check_boolean
+    );
     foreach ($fields as $field => $val) {
-        if (!is_string($field) or
-            !array_key_exists(strtolower($field), $valid_fields) or
-            is_null($val) or
-            !($valid_fields[$field]($val))) {
-            return false;
+        if (!is_string($field)) {
+            throw new Exception("ERROR: non-string used as index for fields array");
+        } else if (!array_key_exists(strtolower($field), $valid_fields)) {
+            throw new Exception("ERROR: {$field} is not a valid field");
+        } else if (is_null($val)) {
+            throw new Exception("ERROR: {$field} cannot be assigned to null");
+        } else if (!($valid_fields[$field]($val))) {
+            throw new Exception("ERROR: incorrect type assigned to {$field} field");
         }
     }
 
     //  Generate the query and its parameters
     $field_arr = array();
-    $params = array($id);
-    $counter = 2;
+    $params = array();
+    $counter = 1;
     foreach ($fields as $field => $val) {
-        array_push($field_arr, $field . "=$" . $counter);
+        array_push($field_arr, "{$field}=\${$counter}");
         if ($val instanceof DateTime) {
             array_push($params, $val->format("Y-m-d"));
         } else if (is_bool($val)) {
@@ -252,7 +263,9 @@ function term_update($id, $fields) {
         }
         $counter++;
     }
-    $query = "UPDATE Term SET " . implode(", ", $field_arr) . " WHERE term_id=$1";
+    array_push($params, $id);
+    $assignments = implode(", ", $field_arr);
+    $query = "UPDATE Term SET {$assignments} WHERE term_id=\${$counter}";
 
     return pg_query_params($GLOBALS['CONNECTION'], $query, $params);
 }
@@ -260,11 +273,11 @@ function term_update($id, $fields) {
 // --
 
 //  Returns result object of query if successful, FALSE otherwise
-function add_term($name, $start, $end, $due) {
+function add_term($name, $start, $end, $due, $mentor=false) {
     //  Assumes we want the default values for visible and editable fields
-    $query = 'INSERT into Term (term_name, start_date, end_date, due_date) VALUES($1, $2, $3, $4)';
+    $query = "INSERT INTO term (term_name, start_date, end_date, due_date, mentoring) VALUES($1, $2, $3, $4, $5)";
 
-    return pg_query_params($GLOBALS['CONNECTION'], $query, array($name, $start->format("Y-m-d"), $end->format("Y-m-d"), $due->format("Y-m-d")));
+    return pg_query_params($GLOBALS['CONNECTION'], $query, array($name, $start->format("Y-m-d"), $end->format("Y-m-d"), $due->format("Y-m-d"), var_export($mentor, true)));
 }
 
 // deactivate a student in the students table
@@ -297,6 +310,12 @@ function deactivate_term($id) {
     $query = "UPDATE term SET editable=false WHERE term_id=$1";
 
     //  return pg_query($GLOBALS['CONNECTION'], $query);
+    return pg_query_params($GLOBALS['CONNECTION'], $query, array($id));
+}
+
+function term_retrieve_by_id($id) {
+    $query = "SELECT * FROM term WHERE term_id=$1 LIMIT 1";
+
     return pg_query_params($GLOBALS['CONNECTION'], $query, array($id));
 }
 

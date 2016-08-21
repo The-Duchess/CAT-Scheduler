@@ -1,130 +1,576 @@
 <?php
-session_start();
-error_reporting(E_ALL);
-ini_set('display_errors', 'on');
-
 require_once dirname(__FILE__) . "/../../Query/Term.php";
 require_once dirname(__FILE__) . "/../../API/Utility.php";
-
-$report = "";
-
-// Database connection
-if (!($CONNECTION = fido_db_connect())) {
-    echo "<p>Connection Failed</p>\n";
-    exit();
-}
 ?>
-
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Edit a Term</title>
+    <title>Edit Term</title>
     <link rel="stylesheet" href="../../JQuery-1.2/UI/jquery-ui-darkness/jquery-ui.min.css">
-    <script src="../../JQuery-1.2/jquery-1.12.4.js"></script>
-    <script src="../../JQuery-1.2/UI/jquery-ui-darkness/jquery-ui.min.js"></script>
-    <script src="../../JavaScript/Admin/edit_term.js"></script>
+    <link rel="stylesheet" href="../../css/bootstrap_current/css/bootstrap.min.css">
+    <style type="text/css">
+        .input-group-addon-label { min-width: 128px; }
+        .min-width-button { min-width: 128px; }
+    </style>
 </head>
-
 <body>
-    <a href="../login_home.php">Return Home</a><br><br>
-    
-<?php
-  //generate the dropdown form for selecting a term to edit 
-  echo "<form action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
-  echo "<label>Select which term you would like to edit</label><br>\n";
-  $args['all_terms'] = true;
-  $selected_term = dropdown_select_term("termSelect", $args);
-  echo "<input type=\"submit\" id=\"termSubmit\" name=\"termSelect\" value=\"Select\" />\n";
-  echo "</form>\n";
-?>
-    
-    
-<?php
-  if (!empty($selected_term)) {
-    //get all of the term's current fields once it is selected
-    $_SESSION['termID'] = (int)$selected_term['term_id'];
-    $term_name = $selected_term['term_name'];
-    $start_date = strtotime($selected_term['start_date']);
-    $end_date = strtotime($selected_term['end_date']);
-    $due_date = strtotime($selected_term['due_date']);
-    $editable = $selected_term['editable'];
-    $visible = $selected_term['visible'];
-    //then create the form
-?>
-    <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="POST" name="termForm" id="termForm">
-        <label for="termName">Term Name:</label><br>
-        <input type="text" id="termName" name="termName" /><br>
-        <label for="startDate">Start Date:</label><br>
-        <input readonly type="text" id="startDate" name="startDate"/><br>
-        <label for="endDate">End Date:</label><br>
-        <input readonly type="text" id="endDate" name="endDate"/><br>
-        <label for="dueDate">Due Date:</label><br>
-        <input readonly type="text" id="dueDate" name="dueDate"/><br>
-        <label for="editable">Editable:</label>
-        <input type="radio" name="editable" value="t">True
-        <input type="radio" name="editable" value="f">False<br>
-        <label for="visible">Visible:</label>
-        <input type="radio" name="visible" value="t">True
-        <input type="radio" name="visible" value="f">False
-        <p id="statsStartToEnd">Term Duration: UNKNOWN</p>
-        <p id="statsDueToStart">Due Date: UNKNOWN</p>
-        <input type="submit" name="submit" value="Update Term" />
-    </form>
-    <script>
-      //update forms inputs with selected term info
-      $("#termName").val("<?php echo $term_name;?>");
-      $("#startDate").val(formatDate(<?php echo $start_date;?>));
-      $("#endDate").val(formatDate(<?php echo $end_date;?>));
-      $("#dueDate").val(formatDate(<?php echo $due_date;?>));
-      var editable = "<?php echo $editable;?>";
-      document.termForm.editable.value = editable;
-      var visible = "<?php echo $visible;?>";
-      document.termForm.visible.value = visible;
-    </script>
-<?php   
-  }//closing form if bracket
-    if (isset($_POST['submit'])) {
-      if (isset($_POST['termName']) and $_POST['termName'] != "" and isset($_POST['startDate']) and $_POST['startDate'] != "" and isset($_POST['endDate']) and $_POST['endDate'] != ""and isset($_POST['dueDate']) and $_POST['dueDate'] != "" and isset($_POST['visible']) and isset($_POST['editable'])) {
-          //get all of the term's post variables
-          $term_id = $_SESSION['termID'];
-          $name = $_POST['termName'];
-          $start = new DateTime($_POST['startDate']);
-          $end = new DateTime($_POST['endDate']);
-          $due = new DateTime($_POST['dueDate']);
-          if($_POST['editable'] === 't') {
-            $edit = true;
-          } else {
-            $edit = false;
-          }
-          if($_POST['visible'] === 't') {
-            $vis = true;
-          } else {
-            $vis = false;
-          }
-          //get the fields ready in an array
-          $fields = array();
-          $fields['term_name'] = $name;
-          $fields['start_date'] = $start;
-          $fields['end_date'] = $end;
-          $fields['due_date'] = $due;
-          $fields['editable'] = $edit;
-          $fields['visible'] = $vis;
-          //  update term or report errors
-          if (!term_update($term_id, $fields)) {
-              $report = "ERROR: Failed to update term in database";
-          } else {
-              $report = "Term Updated, reloading page...";
-              //refresh the page after updating the term
-              //this ensures that the dropdown reflects updated term names
-              header("Refresh:0");
-          }
-      } else {
-          $report = "ERROR: Cannot update a term with empty fields";
-      }
-    }
-  
-?>
-  
-   <p><?php echo $report; ?></p> 
+    <br>
+    <div class="container"> <!-- begin container -->
+        <!--  begin page alert -->
+        <div id="pageAlert"
+        <?php
+//  check for submission
+        $had_error = false;
+
+        if (!($CONNECTION = @fido_db_connect())) {
+            $attrs = "\nclass=\"alert alert-danger text-center\"
+            role=\"alert\"";
+            $message = "<strong>FAILURE!</strong>
+            <br>
+            ERROR: unable to connect to database";
+            $had_error = true;
+        } else if (!($result = @term_retrieve_all())) {
+            $attrs = "\nclass=\"alert alert-danger text-center\"
+            role=\"alert\"";
+            $message = "<strong>FAILURE!</strong>
+            <br>\n" . pg_last_error();
+            $had_error = true;
+        } else if (!($terms = @pg_fetch_all($result))) {
+            $attrs = "\nclass=\"alert alert-danger text-center\"
+            role=\"alert\"";
+            $message = "<strong>FAILURE!</strong>
+            <br>
+            ERROR: no terms in FIDO system";
+            $had_error = true;
+        } else if (isset($_POST['selectTerm'])) {
+            if (!($result = @term_retrieve_by_id($_POST['selectTerm']))) {
+                $attrs = "\nclass=\"alert alert-danger text-center\"
+                role=\"alert\"";
+                $message = "<strong>FAILURE!</strong>
+                <br>\n" . pg_last_error();
+                $had_error = true;
+            } else if (!($selected_term = @pg_fetch_array($result))) {
+                $attrs = "\nclass=\"alert alert-danger text-center\"
+                role=\"alert\"";
+                $message = "<strong>FAILURE!</strong>
+                <br>
+                 ERROR: unable to retrieve term data";
+                $had_error = true;
+            }
+        }
+        
+        if (!$had_error and isset($selected_term) and isset($_POST['submit'])) {
+            $name = $_POST['termName'];
+            $start = new DateTime($_POST['startDate']);
+            $end = new DateTime($_POST['endDate']);
+            $due = new DateTime($_POST['dueDate']);
+            $mentor = (isset($_POST['mentoringCheckbox']) ? true : false);
+            $visible = (isset($_POST['visibleCheckbox']) ? true : false);
+            $editable = (isset($_POST['editableCheckbox']) ? true : false);
+            $fields = array(
+                "term_name" => $name,
+                "start_date" => $start,
+                "end_date" => $end,
+                "due_date" => $due,
+                "visible" => $visible,
+                "editable" => $editable,
+                "mentoring" => $mentor
+            );
+            try {
+                if (!@term_update(intval($selected_term['term_id']), $fields)) {
+                    $attrs = "\nclass=\"alert alert-danger text-center\"
+                    role=\"alert\"";
+                    $message = "<strong>FAILURE!</strong>
+                    <br>\n" . pg_last_error();
+                    $had_error = true;
+                } else {
+                    $attrs = "\nclass=\"alert alert-success text-center\"
+                    role=\"alert\"";
+                    $message = "<strong>SUCCESS!</strong>
+                    <br>\n";
+                    if ($_POST['termName'] == $selected_term['term_name']) {
+                        $message .= "{$name} updated";
+                    } else {
+                        $message .= "{$name} (formerly {$selected_term['term_name']}) updated";
+                    }
+                    unset($selected_term);
+                    unset($_POST['selectTerm']);
+                    unset($_POST['termName']);
+                    unset($_POST['startDate']);
+                    unset($_POST['endDate']);
+                    unset($_POST['dueDate']);
+                    unset($_POST['mentoringCheckbox']);
+                    unset($_POST['visibileCheckbox']);
+                    unset($_POST['editableCheckbox']);
+                }
+            } catch (Exception $e) {
+                $attr = "\nclass=\"alert alert-danger text-center\"
+                role=\"alert\"";
+                $message = "<strong>FAILURE!</strong>
+                <br>\n" . $e->getMessage();
+                $had_error = true;
+            }
+        }
+        if (isset($attrs)) {
+            echo $attrs;
+        }
+        ?>>
+        <?php
+        if (isset($message)) {
+            echo $message;
+        }
+        ?>
+        </div> <!--  end page alert -->
+        <div class="row">
+            <div class="col-md-7">
+                <form id="termSelectForm"
+                      action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>"
+                      method="POST">
+                    <select class="form-control"
+                            name="selectTerm"
+                            style="width: 100%">
+                        <!--  <option value="">Select a term to edit</option>  -->
+                        <?php
+                        uasort($terms, function ($a, $b) {
+                            return (($a['term_id'] < $b['term_id']) ? -1 : 1);
+                        });
+                        foreach($terms as $term) {
+                            if (isset($_POST['selectTerm']) and $_POST['selectTerm'] == $term['term_id']) {?>
+                                <option value="<?php echo $term['term_id']; ?>" selected><?php echo $term['term_name']; ?></option><?php
+                            } else {?>
+                                <option value="<?php echo $term['term_id']; ?>"><?php echo $term['term_name']; ?></option><?php
+                            }
+                        }
+                        ?>
+                    </select>
+                    <input type="checkbox"
+                           name="switched"
+                           <?php echo ((isset($selected_term) and !isset($_POST['submit'])) ? "checked" : ""); ?>
+                           hidden>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary pull-right min-width-button"
+                        type="submit"
+                        name="selectSubmit"
+                        form="termSelectForm">
+                    Select
+                </button>
+            </div>
+        </div>
+        <div class="row"> <!--  begin row 1  -->
+            <div class="col-md-9"> <!--  begin row 1 column 1  -->
+                <div <?php
+                     if (!isset($_POST['switched']) and isset($selected_term) and !isset($_POST['submit'])) {
+                         echo "id=\"createTermPanelSlider\"
+                         class=\"beginSlide\"
+                         style=\"display: none\"";
+                     } else if (isset($_POST['submit']) and !$had_error) {
+                         echo "id=\"createTermPanelSlider\"
+                         style=\"display: none\"";
+                     } else if (isset($selected_term)) {
+                         echo "id=\"createTermPanelSlider\"";
+                     } else {
+                         echo "id=\"createTermPanelSlider\"
+                         style=\"display: none\"";
+                     }
+                     ?>> <!--  begin create term panel slider  -->
+                    <div class="panel panel-primary"> <!--  begin create term panel  -->
+                        <div class="panel panel-heading"> <!--  begin create term panel heading  -->
+                            <h2 class="panel-title">Edit Term</h2>
+                        </div> <!--  end create term panel heading  -->
+                        <div class="panel-body"> <!--  begin create term panel body  -->
+                            <form id="termForm"
+                                  action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>"
+                                  method="POST">
+                                <input type="text"
+                                       name="selectTerm"
+                                       value="<?php echo (isset($_POST['selectTerm']) ? $_POST['selectTerm'] : ""); ?>"
+                                       hidden>
+                                <div class="row"> <!--  begin row 1 column 1 row 1  -->
+                                    <div class="col-md-8"> <!--  begin row 1 column 1 row 1 column 1  -->
+                                        <div class="form-group has-error"
+                                             id="nameGroup"> <!--  begin term name form group  -->
+                                            <div class="input-group">  <!--  begin term name input group  -->
+                                                <span class="input-group-addon input-group-addon-label"
+                                                      id="termNameAddon">
+                                                    Term Name
+                                                </span>
+                                                <input class="form-control"
+                                                       type="text"
+                                                       id="termName"
+                                                       name="termName"
+                                                       value="<?php
+                                                              if (isset($_POST['termName'])) {
+                                                                  echo $_POST['termName'];
+                                                              } else if (isset($selected_term)) {
+                                                                  echo $selected_term['term_name'];
+                                                              }
+                                                              ?>"
+                                                       placeholder="Name of term"
+                                                       aria-describedby="termNameAddon" >
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-danger"
+                                                            type="button"
+                                                            id="termNameClear">
+                                                        Clear
+                                                    </button>
+                                                </span>
+                                            </div> <!--  end term name input group  -->
+                                        </div> <!--  end term name form group  -->
+                                    </div> <!--  end row 1 column 1 row 1 column 1  -->
+                                    <div class="col-md-3 col-md-offset-1"> <!--  begin row 1 column 1 row 1 column 2  -->
+                                        <div class="form-group"
+                                             id="mentoringGroup"> <!--  begin mentoring form group  -->
+                                             <button class="<?php
+                                                            if (isset($_POST['mentoringCheckbox'])) {
+                                                                echo "btn btn-success";
+                                                            } else if (isset($selected_term)) {
+                                                                echo ($selected_term['mentoring'] == "t" ? "btn btn-success" : "btn btn-warning");
+                                                            } else {
+                                                                echo "btn btn-warning";
+                                                            }
+                                                            ?> min-width-button"
+                                                    type="button"
+                                                    id="mentoringButton"
+                                                    name="mentoringButton">
+                                                Mentoring
+                                                &nbsp;
+                                                <span class="<?php
+                                                             if (isset($_POST['mentoringCheckbox'])) {
+                                                                 echo "glyphicon glyphicon-ok";
+                                                             } else 
+                                                             if (isset($selected_term)) {
+                                                                 echo ($selected_term['mentoring'] == "t" ? "glyphicon glyphicon-ok" :
+                                                                                                       "glyphicon glyphicon-remove");
+                                                             } else {
+                                                                 echo "glyphicon glyphicon-remove";
+                                                             }
+                                                             ?>"
+                                                      id="mentoringGlyphicon"
+                                                      aria-hidden="true"></span>
+                                                <input type="checkbox"
+                                                       id="mentoringCheckbox"
+                                                       name="mentoringCheckbox"
+                                                       <?php
+                                                       if (isset($_POST['mentoringCheckbox'])) {
+                                                           echo "checked";
+                                                       } else if (isset($selected_term)) {
+                                                           echo ($selected_term['mentoring'] == "t" ? "checked" :
+                                                                                                 "");
+                                                       }
+                                                       ?>
+                                                       hidden>
+                                            </button>
+                                        </div> <!--  end mentoring form group  -->
+                                    </div> <!--  end row 1 column 1 row 1 column 2  -->
+                                </div> <!--  end row 1 column 1 row 1  -->
+                                <div class="row"> <!--  begin row 1 column 1 row 2 -->
+                                    <div class="col-md-8"> <!--  begin row 1 column 1 row 2 column 1  -->
+                                        <div class="form-group has-error"
+                                             id="startGroup"> <!--  begin start date form group  -->
+                                            <div class="input-group"> <!--  begin start date input group  -->
+                                                <span class="input-group-addon input-group-addon-label"
+                                                      id="startDateAddon">
+                                                    Start Date
+                                                </span>
+                                                <input class="form-control"
+                                                       type="text"
+                                                       id="startDate"
+                                                       name="startDate"
+                                                       value="<?php
+                                                              if (isset($_POST['startDate'])) {
+                                                                  echo $_POST['startDate'];
+                                                              } else if (isset($selected_term)) {
+                                                                  echo (new DateTime($selected_term['start_date']))->format("m/d/Y");
+                                                              }
+                                                              ?>"
+                                                       readonly
+                                                       placeholder="Starting date"
+                                                       aria-describedby="startDateAddon">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-danger"
+                                                            type="button"
+                                                            id="startDateClear">
+                                                        Clear
+                                                    </button>
+                                                </span>
+                                            </div> <!--  end start date input group  -->
+                                        </div> <!--  end start date form group  -->
+                                    </div> <!--  end row 1 column 1 row 2 column 1  -->
+                                    <div class="col-md-3 col-md-offset-1"> <!--  begin row 1 column 1 row 2 column 2  -->
+                                        <div class="form-group"
+                                             id="visibleGroup"> <!--  begin visible form group  -->
+                                             <button class="<?php
+                                                            if (isset($_POST['visibleCheckbox'])) {
+                                                                echo "btn btn-success";
+                                                            } else if (isset($selected_term)) {
+                                                                echo ($selected_term['visible'] == "t" ? "btn btn-success" : "btn btn-warning");
+                                                            } else {
+                                                                echo "btn btn-warning";
+                                                            }
+                                                            ?> min-width-button"
+                                                    type="button"
+                                                    id="visibleButton"
+                                                    name="visibleButton">
+                                                Visible
+                                                &nbsp;
+                                                <span class="<?php
+                                                             if (isset($_POST['visibleCheckbox'])) {
+                                                                 echo "glyphicon glyphicon-ok";
+                                                             } else if (isset($selected_term)) {
+                                                                 echo ($selected_term['visible'] == "t" ? "glyphicon glyphicon-ok" :
+                                                                                                     "glyphicon glyphicon-remove");
+                                                             } else {
+                                                                 echo "glyphicon glyphicon-remove";
+                                                             }
+                                                             ?>"
+                                                      id="visibleGlyphicon"
+                                                      aria-hidden="true"></span>
+                                                <input type="checkbox"
+                                                       id="visibleCheckbox"
+                                                       name="visibleCheckbox"
+                                                       <?php
+                                                       if (isset($_POST['visibleCheckbox'])) {
+                                                           echo "checked";
+                                                       } else if (isset($selected_term)) {
+                                                           echo ($selected_term['visible'] == "t" ? "checked" :
+                                                                                               "");
+                                                       }
+                                                       ?>
+                                                       hidden>
+                                            </button>
+                                        </div> <!--  end visible form group  -->
+                                    </div> <!--  end row 1 column 1 row 2 column 2  -->
+                                </div> <!--  end row 1 column 1 row 2 -->
+                                <div class="row"> <!--  begin row 1 column 1 row 3  -->
+                                    <div class="col-md-8"> <!--  begin row 1 column 1 row 3 column 1  -->
+                                        <div class="form-group has-error"
+                                             id="endGroup"> <!--  begin end date form group  -->
+                                            <div class="input-group"> <!--  begin end date input group  -->
+                                                <span class="input-group-addon input-group-addon-label"
+                                                      id="endDateAddon">
+                                                    End Date
+                                                </span>
+                                                <input class="form-control"
+                                                       type="text"
+                                                       id="endDate"
+                                                       name="endDate"
+                                                       value="<?php
+                                                              if (isset($_POST['endDate'])) {
+                                                                  echo $_POST['endDate'];
+                                                              } else if (isset($selected_term)) {
+                                                                  echo (new DateTime($selected_term['end_date']))->format("m/d/Y");
+                                                              }
+                                                              ?>"
+                                                       readonly
+                                                       disabled
+                                                       placeholder="Ending date"
+                                                       aria-describedby="endDateAddon">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-danger"
+                                                            type="button"
+                                                            id="endDateClear">
+                                                        Clear
+                                                    </button>
+                                                </span>
+                                            </div> <!--  end end date input group  -->
+                                        </div> <!--  end end date form group  -->
+                                    </div> <!--  end row 1 column 1 row 3 column 1  -->
+                                    <div class="col-md-3 col-md-offset-1"> <!--  begin row 1 column 1 row 3 column 2  -->
+                                        <div class="form-group"
+                                             id="visibleGroup"> <!--  begin editable form group  -->
+                                             <button class="<?php
+                                                            if (isset($_POST['editableCheckbox'])) {
+                                                                echo "btn btn-success";
+                                                            } else if (isset($selected_term)) {
+                                                                echo ($selected_term['editable'] == "t" ? "btn btn-success" : "btn btn-warning");
+                                                            } else {
+                                                                echo "btn btn-warning";
+                                                            }
+                                                            ?> min-width-button"
+                                                    type="button"
+                                                    id="editableButton"
+                                                    name="editableButton">
+                                                Editable
+                                                &nbsp;
+                                                <span class="<?php
+                                                             if (isset($_POST['editableCheckbox'])) {
+                                                                 echo "glyphicon glyphicon-ok";
+                                                             } else if (isset($selected_term)) {
+                                                                 echo ($selected_term['editable'] == "t" ? "glyphicon glyphicon-ok" :
+                                                                                                      "glyphicon glyphicon-remove");
+                                                             } else {
+                                                                 echo "glyphicon glyphicon-remove";
+                                                             }
+                                                             ?>"
+                                                      id="editableGlyphicon"
+                                                      aria-hidden="true"></span>
+                                                <input type="checkbox"
+                                                       id="editableCheckbox"
+                                                       name="editableCheckbox"
+                                                       <?php
+                                                       if (isset($_POST['editableCheckbox'])) {
+                                                           echo "checked";
+                                                       } else if (isset($selected_term)) {
+                                                           echo ($selected_term['editable'] == "t" ? "checked" :
+                                                                                                "");
+                                                       }
+                                                       ?>
+                                                       hidden>
+                                            </button>
+                                        </div> <!--  end editable form group  -->
+                                    </div> <!--  end row 1 column 1 row 3 column 2  -->
+                                </div> <!--  end row 1 column 1 row 3  -->
+                                <div class="row"> <!--  begin row 1 column 1 row 4 -->
+                                    <div class="col-md-8"> <!--  begin row 1 column 1 row 4 column 1 -->
+                                        <div class="form-group has-error"
+                                             id="dueGroup"> <!--  begin due date form group  -->
+                                            <div class="input-group"> <!--  begin due date input group  -->
+                                                <span class="input-group-addon input-group-addon-label"
+                                                      id="dueDateAddon">
+                                                    Due Date
+                                                </span>
+                                                <input class="form-control"
+                                                       type="text"
+                                                       id="dueDate"
+                                                       name="dueDate"
+                                                       value="<?php
+                                                              if (isset($_POST['dueDate'])) {
+                                                                  echo $_POST['dueDate'];
+                                                              } else if (isset($selected_term)) {
+                                                                  echo (new DateTime($selected_term['due_date']))->format("m/d/Y");
+                                                              }
+                                                              ?>"
+                                                       readonly
+                                                       disabled
+                                                       placeholder="Submission deadline"
+                                                       aria-describedby="dueDateAddon"> 
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-danger"
+                                                            type="button"
+                                                            id="dueDateClear">
+                                                        Clear
+                                                    </button>
+                                                </span>
+                                            </div> <!--  end due date input group  -->
+                                        </div> <!--  end due date form group -->
+                                    </div> <!--  end row 1 column 1 row 4 column 1 -->
+                                    <div class="col-md-3 col-md-offset-1"> <!--  begin row 1 column 1 row 4 column 2  -->
+                                        <button class="btn btn-primary min-width-button"
+                                                type="button"
+                                                id="autofillButton"
+                                                disabled>
+                                            Autofill
+                                        </button>
+                                    </div> <!--  end row 1 column 1 row 4 column 2  -->
+                                </div> <!--  end row 1 column 1 row 4  -->
+                            </form>
+                        </div> <!--  end create term panel body  -->
+                    </div> <!--  end create term panel  -->
+                </div> <!--  end create term panel slider  -->
+            </div> <!--  end row 1 column 1  -->
+            <div class="col-md-3"> <!--  begin row 1 column 2  -->
+                <div <?php
+                     if (!isset($_POST["switched"]) and isset($selected_term) and !isset($_POST['submit'])) {
+                         echo "id=\"termInfoPanelSlider\"
+                         class=\"beginSlide\"
+                         style=\"display: none\"";
+                     } else if (isset($_POST['submit']) and !$had_error) {
+                         echo "id=\"termInfoPanelSlider\"
+                         style=\"display: none\"";
+                     } else if (isset($selected_term)) {
+                         echo "id=\"termInfoPanelSlider\"";
+                     } else {
+                         echo "id=\"termInfoPanelSlider\"
+                         style=\"display: none\"";
+                     }
+                     ?>> <!--  begin term info panel slider -->
+                    <div class="panel panel-info" id="termInfo"> <!--  begin term info panel  -->
+                        <div class="panel panel-heading"> <!--  begin term info panel heading  -->
+                            <h2 class="panel-title">Term Information</h2>
+                        </div> <!--  end term info panel heading  -->
+                        <div class="panel-body"> <!--  begin term info panel body  -->
+                            <div class="alert alert-warning text-center"
+                                 id="termInfoWarning"
+                                 role="alert">
+                                <strong>Not Enough Data</strong>
+                                <br>
+                                Fill out the <mark>start date</mark> and either 
+                                <mark>end date</mark> or <mark>due date</mark> 
+                                for term information
+                            </div>
+                            <div class="alert alert-info text-center"
+                                 id="termDuration" 
+                                 role="alert"
+                                 hidden>
+                                <strong>Duration:</strong>
+                                <div id="statsStartToEnd1"></div>
+                                <div id="statsStartToEnd2"></div>
+                            </div>
+                            <div class="alert alert-info text-center"
+                                 id="dueOffset"
+                                 role="alert"
+                                 hidden>
+                                <strong>Due Date:</strong>
+                                <div id="statsDueToStart"></div>
+                            </div>
+                        </div> <!--  end term info panel body -->
+                    </div> <!--  end term info panel  -->
+                </div> <!--  end term info panel slider -->
+            </div> <!--  end row 1 column 2  -->
+        </div> <!--  end row 1  -->
+        <div class="row"> <!--  begin row 2  -->
+            <div class="col-md-7"> <!--  begin row 2 column 1  -->
+                <div <?php
+                     if (!isset($_POST['switched']) and isset($selected_term) and !isset($_POST['submit'])) {
+                         echo "id=\"buttonSlider\"
+                         class=\"beginSlide\"
+                         style=\"display: none\"";
+                     } else if (isset($_POST['submit']) and !$had_error) {
+                         echo "id=\"buttonSlider\"
+                         style=\"display: none\"";
+                     } else if (isset($selected_term)) {
+                         echo "id=\"buttonSlider\"";
+                     } else {
+                         echo "id=\"buttonSlider\"
+                         style=\"display: none\"";
+                     }
+                     ?>> <!--  begin button slider  -->
+                    <button class="btn btn-primary"
+                            type="submit"
+                            id="submitButton"
+                            name="submit"
+                            form="termForm"
+                            disabled>
+                        Submit
+                    </button>
+                    <button class="btn btn-danger"
+                            type="button"
+                            id="resetButton">
+                        Reset Form
+                    </button>
+                </div> <!--  end button slider -->
+            </div> <!--  end row 2 column 1  -->
+            <div class="col-md-2"> <!--  begin row 2 column 2  -->
+                <a class="btn btn-primary min-width-button pull-right"
+                   href="../login_home.php">
+                    Return Home
+                </a>
+            </div> <!--  end row 2 column 2  -->
+        </div> <!--  end row 2  -->
+    </div> <!-- end container -->
 </body>
+<?php
+unset($_POST['termName']);
+unset($_POST['startDate']);
+unset($_POST['endDate']);
+unset($_POST['dueDate']);
+unset($_POST['mentoringCheckbox']);
+unset($_POST['visibleCheckbox']);
+unset($_POST['editableCheckbox']);
+?>
+<script src="../../JQuery-1.2/jquery-1.12.4.js"></script>
+<script src="../../JQuery-1.2/UI/jquery-ui-darkness/jquery-ui.min.js"></script>
+<script src="../../JavaScript/Admin/edit_term.js"></script>
 </html>
