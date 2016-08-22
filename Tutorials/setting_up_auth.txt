@@ -1,4 +1,4 @@
-Apache can be have settings set outside of the main configuration directory with distributed configuration files, named ".htaccess". These configs are only applied to the base directory the file is placed in and the directories below it. Currently, two htaccess files are in place, one ii
+Apache can be have settings set outside of the main configuration directory with distributed configuration files, named ".htaccess". These configs are only applied to the base directory the file is placed in and the directories below it. Currently, two htaccess files are in place, one in
 
 Source/Pages/.htaccess
 
@@ -6,7 +6,12 @@ the other in
 
 Source/Pages/Admin/.htaccess
 
-These two are configured to require http basic auth against these directories. The one in "Pages"will allow anyone in the configured password file to login, the Admin currently only allows user "bowzr". Because the path to the password file has to be hardcoded and absolute, each of you will need to configure your own password file somewhere outside of the repository (for security reasons). Your home directory will be fine. There is a file
+These two are configured to require http basic auth against these directories. The one in "Pages" will allow anyone in the configured password file to login, the Admin currently only allows user "bowzr". Because the path to the password file has to be HARDCODED and ABSOLUTE, each of you will need to configure your own password file somewhere outside of the repository (for security reasons). Your home directory will be fine.
+
+NOTE: Because of the various operating system environments in MCECS, you will need to use a specific path for your homedir
+EXAMPLE: /home/$USER/$OS/.htpasswd ($OS depends on which homedir the file is in, most likely will be "ubuntu")
+
+There is a file
 
 Templates/htpasswd_sample
 
@@ -29,3 +34,9 @@ command  path to file  new username
 
 You will be prompted to set a password, once you do the new user will be appended to the file.
 
+==============================================================================================
+
+If you dont want to use a personal custom one, just point both htaccess files to fido's password files.
+
+/home/fido/ubuntu/.htpasswd
+/home/fido/ubuntu/.htpasswd_admins
