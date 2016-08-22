@@ -4,8 +4,3 @@ AuthUserFile /home/fido/ubuntu/.htpasswd
 AuthName "Please enter your username and password:"
 AuthType Basic
 Require valid-user
-
-<Files ~ "\.inc$">
-  Order allow,deny
-  Deny from all
-</Files>
