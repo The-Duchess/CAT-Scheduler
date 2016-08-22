@@ -390,8 +390,7 @@ if (dateIsValid($("#startDate").val())) {
         $("#endGroup").removeClass("has-error");
         $("#endGroup").addClass("has-success");
     } else {
-        $("#endDate").datepicker();
-        $("#endDate").datepicker("option", {
+        $("#endDate").datepicker({
             defaultDate: defaultEnd,
             minDate: endMin
         });
@@ -407,8 +406,7 @@ if (dateIsValid($("#startDate").val())) {
         $("#dueGroup").removeClass("has-error");
         $("#dueGroup").addClass("has-success");
     } else {
-        $("#dueDate").datepicker();
-        $("#dueDate").datepicker("option", {
+        $("#dueDate").datepicker({
             defaultDate: defaultDue,
             maxDate: dueMax
         });

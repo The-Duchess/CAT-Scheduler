@@ -220,8 +220,7 @@ if (dateIsValid($("#joinDate").val())) {
         $("#leaveGroup").removeClass("has-warning");
         $("#leaveGroup").addClass("has-success");
     } else {
-        $("#leaveDate").datepicker();
-        $("#leaveDate").datepicker("option", {
+        $("#leaveDate").datepicker({
             defaultDate: defaultLeave,
             minDate: leaveMin
         });
