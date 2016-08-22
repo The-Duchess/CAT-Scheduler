@@ -29,19 +29,6 @@ require_once dirname(__FILE__) . "/../../API/Utility.php";
             <br>
             ERROR: unable to connect to database";
             $had_error = true;
-        } else if (!($result = @term_retrieve_all())) {
-            $attrs = "\nclass=\"alert alert-danger text-center\"
-            role=\"alert\"";
-            $message = "<strong>FAILURE!</strong>
-            <br>\n" . pg_last_error();
-            $had_error = true;
-        } else if (!($terms = @pg_fetch_all($result))) {
-            $attrs = "\nclass=\"alert alert-danger text-center\"
-            role=\"alert\"";
-            $message = "<strong>FAILURE!</strong>
-            <br>
-            ERROR: no terms in FIDO system";
-            $had_error = true;
         } else if (isset($_POST['selectTerm'])) {
             if (!($result = @term_retrieve_by_id($_POST['selectTerm']))) {
                 $attrs = "\nclass=\"alert alert-danger text-center\"
@@ -77,7 +64,7 @@ require_once dirname(__FILE__) . "/../../API/Utility.php";
                 "mentoring" => $mentor
             );
             try {
-                if (!@term_update(intval($selected_term['term_id']), $fields)) {
+                if (!@term_update($selected_term['term_id'], $fields)) {
                     $attrs = "\nclass=\"alert alert-danger text-center\"
                     role=\"alert\"";
                     $message = "<strong>FAILURE!</strong>
@@ -104,12 +91,36 @@ require_once dirname(__FILE__) . "/../../API/Utility.php";
                     unset($_POST['editableCheckbox']);
                 }
             } catch (Exception $e) {
-                $attr = "\nclass=\"alert alert-danger text-center\"
+                $attrs = "\nclass=\"alert alert-danger text-center\"
                 role=\"alert\"";
                 $message = "<strong>FAILURE!</strong>
                 <br>\n" . $e->getMessage();
                 $had_error = true;
             }
+        }
+        if (!($result = @term_retrieve_all())) {
+            if (isset($attrs) and strstr($attrs, "alert-success") !== false) {
+                $attrs = "\nclass=\"alert alert-warning text-center\"
+                role=\"alert\"";
+            } else {
+                $attrs = "\nclass=\"alert alert-danger text-center\"
+                role=\"alert\"";
+            }
+            $message = "<strong>FAILURE!</strong>
+            <br>\n" . pg_last_error();
+            $had_error = true;
+        } else if (!($terms = @pg_fetch_all($result))) {
+            if (isset($attrs) and strstr($attrs, "alert-success") !== false) {
+                $attrs = "\nclass=\"alert alert-warning text-center\"
+                role=\"alert\"";
+            } else {
+                $attrs = "\nclass=\"alert alert-danger text-center\"
+                role=\"alert\"";
+            }
+            $message = "<strong>FAILURE!</strong>
+            <br>
+            ERROR: no terms in FIDO system";
+            $had_error = true;
         }
         if (isset($attrs)) {
             echo $attrs;
@@ -162,16 +173,16 @@ require_once dirname(__FILE__) . "/../../API/Utility.php";
             <div class="col-md-9"> <!--  begin row 1 column 1  -->
                 <div <?php
                      if (!isset($_POST['switched']) and isset($selected_term) and !isset($_POST['submit'])) {
-                         echo "id=\"createTermPanelSlider\"
+                         echo "id=\"editTermPanelSlider\"
                          class=\"beginSlide\"
                          style=\"display: none\"";
                      } else if (isset($_POST['submit']) and !$had_error) {
-                         echo "id=\"createTermPanelSlider\"
+                         echo "id=\"editTermPanelSlider\"
                          style=\"display: none\"";
                      } else if (isset($selected_term)) {
-                         echo "id=\"createTermPanelSlider\"";
+                         echo "id=\"editTermPanelSlider\"";
                      } else {
-                         echo "id=\"createTermPanelSlider\"
+                         echo "id=\"editTermPanelSlider\"
                          style=\"display: none\"";
                      }
                      ?>> <!--  begin create term panel slider  -->

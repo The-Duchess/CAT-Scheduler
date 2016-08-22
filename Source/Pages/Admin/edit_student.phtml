@@ -1,0 +1,399 @@
+<?php
+require_once dirname(__FILE__) . "/../../Query/Student.php";
+require_once dirname(__FILE__) . "/../../API/Utility.php";
+?>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Edit Student</title>
+    <link rel="stylesheet" href="../../JQuery-1.2/UI/jquery-ui-darkness/jquery-ui.min.css">
+    <link rel="stylesheet" href="../../css/bootstrap_current/css/bootstrap.min.css">
+    <style type="text/css">
+        .input-group-addon-label { min-width: 128px; }
+        .min-width-button { min-width: 128px; }
+    </style>
+</head>
+<body>
+    <br>
+    <div class="container"> <!-- begin container -->
+        <!--  begin page alert -->
+        <div id="pageAlert"
+        <?php
+//  check for submission
+        $had_error = false;
+
+        if (!($CONNECTION = @fido_db_connect())) {
+            $attrs = "\nclass=\"alert alert-danger text-center\"
+            role=\"alert\"";
+            $message = "<strong>FAILURE!</strong>
+            <br>
+            ERROR: unable to connect to database";
+            $had_error = true;
+        } else if (isset($_POST['selectStudent'])) {
+            if (!($result = @student_retrieve_by_id($_POST['selectStudent']))) {
+                $attrs = "\nclass=\"alert alert-danger text-center\"
+                role=\"alert\"";
+                $message = "<strong>FAILURE!</strong>
+                <br>\n" . pg_last_error();
+                $had_error = true;
+            } else if (!($selected_student = @pg_fetch_array($result))) {
+                $attrs = "\nclass=\"alert alert-danger text-center\"
+                role=\"alert\"";
+                $message = "<strong>FAILURE!</strong>
+                <br>
+                 ERROR: unable to retrieve student data";
+                $had_error = true;
+            }
+        }
+        
+        if (!$had_error and isset($selected_student) and isset($_POST['submit'])) {
+            $username = $_POST['studentUsername'];
+            $join = new DateTime($_POST['joinDate']);
+            $leave = ($_POST['leaveDate'] ? new DateTime($_POST['leaveDate']) : "");
+            $active = (isset($_POST['activeCheckbox']) ? true : false);
+            $fields = array(
+                "student_username" => $username,
+                "join_date" => $join,
+                "active" => $active
+            );
+            if ($leave != "") {
+                $fields['leave_date'] = $leave;
+            }
+            try {
+                if (!@student_update($selected_student['student_id'], $fields)) {
+                    $attrs = "\nclass=\"alert alert-danger text-center\"
+                    role=\"alert\"";
+                    $message = "<strong>FAILURE!</strong>
+                    <br>\n" . pg_last_error();
+                    $had_error = true;
+                } else {
+                    $attrs = "\nclass=\"alert alert-success text-center\"
+                    role=\"alert\"";
+                    $message = "<strong>SUCCESS!</strong>
+                    <br>\n";
+                    if ($_POST['studentUsername'] == $selected_student['student_username']) {
+                        $message .= "{$username} updated";
+                    } else {
+                        $message .= "{$username} (formerly {$selected_student['student_username']}) updated";
+                    }
+                    unset($selected_student);
+                    unset($_POST['selectStudent']);
+                    unset($_POST['studentUsername']);
+                    unset($_POST['joinDate']);
+                    unset($_POST['leaveDate']);
+                    unset($_POST['activeCheckbox']);
+                }
+            } catch (Exception $e) {
+                $attrs = "\nclass=\"alert alert-danger text-center\"
+                role=\"alert\"";
+                $message = "<strong>FAILURE!</strong>
+                <br>\n" . $e->getMessage();
+                $had_error = true;
+            }
+        }
+        
+        if (!($result = @student_retrieve_all())) {
+            if (isset($attrs) and strstr($attrs, "alert-success") !== false) {
+                $attrs = "\nclass=\"alert alert-warning text-center\"
+                role=\"alert\"";
+            } else {
+                $attrs = "\nclass=\"alert alert-danger text-center\"
+                role=\"alert\"";
+            }
+            $message = "<strong>FAILURE!</strong>
+            <br>\n" . pg_last_error();
+            $had_error = true;
+        } else if (!($students = @pg_fetch_all($result))) {
+            if (isset($attrs) and strstr($attrs, "alert-success") !== false) {
+                $attrs = "\nclass=\"alert alert-warning text-center\"
+                role=\"alert\"";
+            } else {
+                $attrs = "\nclass=\"alert alert-danger text-center\"
+                role=\"alert\"";
+            }
+            $message = "<strong>FAILURE!</strong>
+            <br>
+            ERROR: no students in FIDO system";
+            $had_error = true;
+        }
+
+        if (isset($attrs)) {
+            echo $attrs;
+        }
+        ?>>
+        <?php
+        if (isset($message)) {
+            echo $message;
+        }
+        ?>
+        </div> <!--  end page alert -->
+        <div class="row">
+            <div class="col-md-7">
+                <form id="studentSelectForm"
+                      action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>"
+                      method="POST">
+                    <select class="form-control"
+                            name="selectStudent"
+                            style="width: 100%">
+                        <!--  <option value="">Select a term to edit</option>  -->
+                        <?php
+                        uasort($students, function ($a, $b) {
+                            return ((strtolower($a['student_username']) < strtolower($b['student_username'])) ? -1 : 1);
+                        });
+                        foreach($students as $student) {
+                            if (isset($_POST['selectStudent']) and $_POST['selectStudent'] == $student['student_id']) {?>
+                                <option value="<?php echo $student['student_id']; ?>" selected><?php echo $student['student_username']; ?></option><?php
+                            } else {?>
+                                <option value="<?php echo $student['student_id']; ?>"><?php echo $student['student_username']; ?></option><?php
+                            }
+                        }
+                        ?>
+                    </select>
+                    <input type="checkbox"
+                           name="switched"
+                           <?php echo ((isset($selected_student) and !isset($_POST['submit'])) ? "checked" : ""); ?>
+                           hidden>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary pull-right min-width-button"
+                        type="submit"
+                        name="selectSubmit"
+                        form="studentSelectForm">
+                    Select
+                </button>
+            </div>
+        </div>
+        <div class="row"> <!--  begin row 1  -->
+            <div class="col-md-9"> <!--  begin row 1 column 1  -->
+                <div <?php
+                     if (!isset($_POST['switched']) and isset($selected_student) and !isset($_POST['submit'])) {
+                         echo "id=\"editStudentPanelSlider\"
+                         class=\"beginSlide\"
+                         style=\"display: none\"";
+                     } else if (isset($_POST['submit']) and !$had_error) {
+                         echo "id=\"editStudentPanelSlider\"
+                         style=\"display: none\"";
+                     } else if (isset($selected_student)) {
+                         echo "id=\"editStudentPanelSlider\"";
+                     } else {
+                         echo "id=\"editStudentPanelSlider\"
+                         style=\"display: none\"";
+                     }
+                     ?>> <!--  begin create term panel slider  -->
+                    <div class="panel panel-primary"> <!--  begin create term panel  -->
+                        <div class="panel panel-heading"> <!--  begin create term panel heading  -->
+                            <h2 class="panel-title">Edit Student</h2>
+                        </div> <!--  end create term panel heading  -->
+                        <div class="panel-body"> <!--  begin create term panel body  -->
+                            <form id="termForm"
+                                  action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>"
+                                  method="POST">
+                                <input type="text"
+                                       name="selectStudent"
+                                       value="<?php echo (isset($_POST['selectStudent']) ? $_POST['selectStudent'] : ""); ?>"
+                                       hidden>
+                                <div class="row"> <!--  begin row 1 column 1 row 1  -->
+                                    <div class="col-md-8"> <!--  begin row 1 column 1 row 1 column 1  -->
+                                        <div class="form-group has-error"
+                                             id="nameGroup"> <!--  begin term name form group  -->
+                                            <div class="input-group">  <!--  begin term name input group  -->
+                                                <span class="input-group-addon input-group-addon-label"
+                                                      id="studentUsernameAddon">
+                                                    Student Username
+                                                </span>
+                                                <input class="form-control"
+                                                       type="text"
+                                                       id="studentUsername"
+                                                       name="studentUsername"
+                                                       value="<?php
+                                                              if (isset($_POST['studentUsername'])) {
+                                                                  echo $_POST['studentUsername'];
+                                                              } else if (isset($selected_student)) {
+                                                                  echo $selected_student['student_username'];
+                                                              }
+                                                              ?>"
+                                                       placeholder="Username of student"
+                                                       aria-describedby="studentUsernameAddon" >
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-danger"
+                                                            type="button"
+                                                            id="studentUsernameClear">
+                                                        Clear
+                                                    </button>
+                                                </span>
+                                            </div> <!--  end term name input group  -->
+                                        </div> <!--  end term name form group  -->
+                                    </div> <!--  end row 1 column 1 row 1 column 1  -->
+                                    <div class="col-md-3 col-md-offset-1"> <!--  begin row 1 column 1 row 1 column 2  -->
+                                        <div class="form-group"
+                                             id="activeGroup"> <!--  begin active form group  -->
+                                             <button class="<?php
+                                                            if (isset($_POST['activeCheckbox'])) {
+                                                                echo "btn btn-success";
+                                                            } else if (isset($selected_student)) {
+                                                                echo ($selected_student['active'] == "t" ? "btn btn-success" : "btn btn-warning");
+                                                            } else {
+                                                                echo "btn btn-warning";
+                                                            }
+                                                            ?> min-width-button"
+                                                    type="button"
+                                                    id="activeButton"
+                                                    name="activeButton">
+                                                Active
+                                                &nbsp;
+                                                <span class="<?php
+                                                             if (isset($_POST['activeCheckbox'])) {
+                                                                 echo "glyphicon glyphicon-ok";
+                                                             } else 
+                                                             if (isset($selected_student)) {
+                                                                 echo ($selected_student['active'] == "t" ? "glyphicon glyphicon-ok" :
+                                                                                                            "glyphicon glyphicon-remove");
+                                                             } else {
+                                                                 echo "glyphicon glyphicon-remove";
+                                                             }
+                                                             ?>"
+                                                      id="activeGlyphicon"
+                                                      aria-hidden="true"></span>
+                                                <input type="checkbox"
+                                                       id="activeCheckbox"
+                                                       name="activeCheckbox"
+                                                       <?php
+                                                       if (isset($_POST['activeCheckbox'])) {
+                                                           echo "checked";
+                                                       } else if (isset($selected_student)) {
+                                                           echo ($selected_student['active'] == "t" ? "checked" :
+                                                                                                 "");
+                                                       }
+                                                       ?>
+                                                       hidden>
+                                            </button>
+                                        </div> <!--  end active form group  -->
+                                    </div> <!--  end row 1 column 1 row 1 column 2  -->
+                                </div> <!--  end row 1 column 1 row 1  -->
+                                <div class="row"> <!--  begin row 1 column 1 row 2 -->
+                                    <div class="col-md-8"> <!--  begin row 1 column 1 row 2 column 1  -->
+                                        <div class="form-group has-error"
+                                             id="joinGroup"> <!--  begin start date form group  -->
+                                            <div class="input-group"> <!--  begin start date input group  -->
+                                                <span class="input-group-addon input-group-addon-label"
+                                                      id="joinDateAddon">
+                                                    Join Date
+                                                </span>
+                                                <input class="form-control"
+                                                       type="text"
+                                                       id="joinDate"
+                                                       name="joinDate"
+                                                       value="<?php
+                                                              if (isset($_POST['joinDate'])) {
+                                                                  echo $_POST['joinDate'];
+                                                              } else if (isset($selected_student)) {
+                                                                  echo (new DateTime($selected_student['join_date']))->format("m/d/Y");
+                                                              }
+                                                              ?>"
+                                                       readonly
+                                                       placeholder="Date student joined the CAT"
+                                                       aria-describedby="joinDateAddon">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-danger"
+                                                            type="button"
+                                                            id="joinDateClear">
+                                                        Clear
+                                                    </button>
+                                                </span>
+                                            </div> <!--  end start date input group  -->
+                                        </div> <!--  end start date form group  -->
+                                    </div> <!--  end row 1 column 1 row 2 column 1  -->
+                                </div> <!--  end row 1 column 1 row 2 -->
+                                <div class="row"> <!--  begin row 1 column 1 row 3  -->
+                                    <div class="col-md-8"> <!--  begin row 1 column 1 row 3 column 1  -->
+                                        <div class="form-group has-warning"
+                                             id="leaveGroup"> <!--  begin end date form group  -->
+                                            <div class="input-group"> <!--  begin end date input group  -->
+                                                <span class="input-group-addon input-group-addon-label"
+                                                      id="leaveDateAddon">
+                                                    Leave Date
+                                                </span>
+                                                <input class="form-control"
+                                                       type="text"
+                                                       id="leaveDate"
+                                                       name="leaveDate"
+                                                       value="<?php
+                                                              if (isset($_POST['leaveDate'])) {
+                                                                  echo $_POST['leaveDate'];
+                                                              } else if (isset($selected_student) and $selected_student['leave_date']) {
+                                                                  echo (new DateTime($selected_student['leave_date']))->format("m/d/Y");
+                                                              }
+                                                              ?>"
+                                                       readonly
+                                                       disabled
+                                                       placeholder="Date student left the CAT"
+                                                       aria-describedby="leaveDateAddon">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-danger"
+                                                            type="button"
+                                                            id="leaveDateClear">
+                                                        Clear
+                                                    </button>
+                                                </span>
+                                            </div> <!--  end end date input group  -->
+                                        </div> <!--  end end date form group  -->
+                                    </div> <!--  end row 1 column 1 row 3 column 1  -->
+                                </div> <!--  end row 1 column 1 row 3  -->
+                            </form>
+                        </div> <!--  end create term panel body  -->
+                    </div> <!--  end create term panel  -->
+                </div> <!--  end create term panel slider  -->
+            </div> <!--  end row 1 column 1  -->
+        </div> <!--  end row 1  -->
+        <div class="row"> <!--  begin row 2  -->
+            <div class="col-md-7"> <!--  begin row 2 column 1  -->
+                <div <?php
+                     if (!isset($_POST['switched']) and isset($selected_student) and !isset($_POST['submit'])) {
+                         echo "id=\"buttonSlider\"
+                         class=\"beginSlide\"
+                         style=\"display: none\"";
+                     } else if (isset($_POST['submit']) and !$had_error) {
+                         echo "id=\"buttonSlider\"
+                         style=\"display: none\"";
+                     } else if (isset($selected_student)) {
+                         echo "id=\"buttonSlider\"";
+                     } else {
+                         echo "id=\"buttonSlider\"
+                         style=\"display: none\"";
+                     }
+                     ?>> <!--  begin button slider  -->
+                    <button class="btn btn-primary"
+                            type="submit"
+                            id="submitButton"
+                            name="submit"
+                            form="termForm"
+                            disabled>
+                        Submit
+                    </button>
+                    <button class="btn btn-danger"
+                            type="button"
+                            id="resetButton">
+                        Reset Form
+                    </button>
+                </div> <!--  end button slider -->
+            </div> <!--  end row 2 column 1  -->
+            <div class="col-md-2"> <!--  begin row 2 column 2  -->
+                <a class="btn btn-primary min-width-button pull-right"
+                   href="../login_home.php">
+                    Return Home
+                </a>
+            </div> <!--  end row 2 column 2  -->
+        </div> <!--  end row 2  -->
+    </div> <!-- end container -->
+</body>
+<?php
+unset($_POST['studentUsername']);
+unset($_POST['joinDate']);
+unset($_POST['leaveDate']);
+unset($_POST['activeCheckbox']);
+?>
+<script src="../../JQuery-1.2/jquery-1.12.4.js"></script>
+<script src="../../JQuery-1.2/UI/jquery-ui-darkness/jquery-ui.min.js"></script>
+<script src="../../JavaScript/Admin/edit_student.js"></script>
+</html>

@@ -221,9 +221,6 @@ function term_retrieve_visible_by_start($kwargs=null) {
 //      false:  failure
 function term_update($id, $fields) {
     //  Check for validity
-    if (!is_int($id)) {
-        throw new Exception("ERROR: term id is not a string");
-    }
     $check_string = function ($var) { return ((is_string($var)) ? true : false); };
     $check_DateTime = function ($var) { return (($var instanceof DateTime) ? true : false); };
     $check_boolean = function ($var) { return ((is_bool($var)) ? true : false); };
@@ -265,7 +262,7 @@ function term_update($id, $fields) {
     }
     array_push($params, $id);
     $assignments = implode(", ", $field_arr);
-    $query = "UPDATE Term SET {$assignments} WHERE term_id=\${$counter}";
+    $query = "UPDATE term SET {$assignments} WHERE term_id=\${$counter}";
 
     return pg_query_params($GLOBALS['CONNECTION'], $query, $params);
 }

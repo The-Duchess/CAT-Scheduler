@@ -479,9 +479,9 @@ $(document).ready( function() {
     }
 
     //  slide down term editing panels if term selected first time
-    if ($("#createTermPanelSlider").hasClass("beginSlide") == true) {
-        $("#createTermPanelSlider").removeClass("beginSlide");
-        $("#createTermPanelSlider").slideDown(2000, function () {
+    if ($("#editTermPanelSlider").hasClass("beginSlide") == true) {
+        $("#editTermPanelSlider").removeClass("beginSlide");
+        $("#editTermPanelSlider").slideDown(2000, function () {
             if ($("#buttonSlider").hasClass("beginSlide") == true) {
                 $("#buttonSlider").removeClass("beginSlide");
                 $("#buttonSlider").slideDown(500);
