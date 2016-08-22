@@ -17,6 +17,7 @@ CREATE TABLE term
   due_date timestamp with time zone DEFAULT NULL,
   visible boolean DEFAULT true,
   editable boolean DEFAULT true,
+  mentoring boolean DEFAULT false,
   CONSTRAINT term_pkey PRIMARY KEY (term_id),
   UNIQUE(term_name)
 );
