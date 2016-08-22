@@ -52,7 +52,7 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
 echo "<form class=\"form-inline\" action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
 $selected_term = dropdown_select_term("termSelect");
 
-echo "<input class=\"btn ben-default\" type=\"submit\" name=\"termSelect\" value=\"Select\" onclick=\"unsaved()\"/>\n";
+echo "<input class=\"btn ben-default\" type=\"submit\" name=\"termSelect\" value=\"Select\" onclick=\"unsaved(event)\"/>\n";
 echo "</form>\n";
 
 
@@ -351,9 +351,12 @@ if (!empty($selected_term)) {
                     }
                 });
             };
-            function unsaved(){
+            function unsaved(e){
                 if (val_change == true) {
-		    confirm('There are unsubmitted changes! are you sure you want to continue?');
+                    var result = confirm('There are unsubmitted changes! are you sure you want to continue?');
+                    if (result == false) {
+                        e.preventDefault();
+                    }
                 }
 	        }
 
