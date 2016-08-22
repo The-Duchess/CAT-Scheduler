@@ -36,6 +36,7 @@ require_once dirname(__FILE__) . "/login_handler.php";
                         <h2 class="panel-title">Manage Students</h2>
                     </div>
                     <div class="panel-body">
+                        <a class="btn btn-default" href='Admin/edit_student.phtml'>Edit Student</a>
                         <a class="btn btn-default" href='Admin/view_term_availabilities.php'>View Submissions</a>
                     </div>
                 </div>
