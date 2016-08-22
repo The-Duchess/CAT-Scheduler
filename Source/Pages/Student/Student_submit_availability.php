@@ -27,6 +27,7 @@ $hours = array(
 );
 $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 
+
 ?>
 
 <html>
@@ -64,14 +65,17 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
                 <h1>Submit Availabilities</h1>
             </div>
             <div class="row">
+
 <?php
 
 //generate the dropdown form for selecting a term to submit availability for
 echo "<form class=\"form-inline\" action=\"" . htmlentities($_SERVER['PHP_SELF']) . "\" method=\"post\">\n";
 $selected_term = dropdown_select_term("termSelect");
 
-echo "<input class=\"btn btn-default\" type=\"submit\" name=\"termSelect\" value=\"Select\" />\n";
+echo "<input class=\"btn ben-default\" type=\"submit\" name=\"termSelect\" value=\"Select\" onclick=\"unsaved(event)\"/>\n";
 echo "</form>\n";
+
+
 
 // if the copy button was pressed then the selected term to edit will be erased
 // we need to set the displayed term manually
@@ -86,6 +90,7 @@ if(!empty($_POST['copy']) || !empty($_POST['submit_main'])){
             </div>
             <hr>
 <?php
+
 // page wrapper statement, we dont want to load the availability blocks until a term is selected
 if (!empty($selected_term)) {
 
@@ -137,6 +142,8 @@ if (!empty($selected_term)) {
 
     $start_date = strtotime($selected_term['start_date']);
     $end_date = strtotime($selected_term['end_date']);
+
+
 
 ?>
             <div class="row">
@@ -304,12 +311,12 @@ if (!empty($selected_term)) {
 
 } //closing the page wrapper if statement
 
+
 ?>
         </div>
         <script type='text/javascript' src='../../jquery-3.0.0.min.js'></script>
         <script src="../../css/bootstrap_current/js/bootstrap.min.js"></script>
-        <script type='text/javascript'>
-
+	<script type='text/javascript'>
         // Clears all the submissions on the page (setting them to 'NA'
         // and recoloring them (white))
         function clear_submission(){
@@ -346,15 +353,16 @@ if (!empty($selected_term)) {
             document.getElementById("0h").checked = 'true';
         }
         </script>
-        <script type='text/javascript'>
+        <script>
             function confirmCopy(){
                 return confirm('Are you sure you want to overwrite the entries of the current term with the selected one? (This will not effect your saved availability until you submit)');
             }
         </script>
         <script type='text/javascript'>
+            var val_change = false;
+
             var colorCell = function (cell) {
                 var selected = cell.find('input[type=radio]:checked');
-                console.log("Given cell: " + selected.val());
                 if (selected.val() == "A") {
                     //cell.css("background-color", "green");
                     cell.children("label").attr("class", "btn btn-xs btn-available");
@@ -377,17 +385,29 @@ if (!empty($selected_term)) {
                     }
                 });
             };
+            function unsaved(e){
+                if (val_change == true) {
+                    var result = confirm('There are unsubmitted changes! are you sure you want to continue?');
+                    if (result == false) {
+                        e.preventDefault();
+                    }
+                }
+	        }
 
-                $(document).ready(function() {
+            $(document).ready(function() {
                 recolorCalendar();
 
+
                 $('fieldset').change(function () {
-                    console.log($(this).attr("id"));
+                    val_change = true;
                     if ($(this).attr("id") != "shift-pref") {
                         colorCell($(this));
                     }
+                    console.log
                 });
             });
         </script>
+	<script>
+	</script>
     </body>
 </html>
