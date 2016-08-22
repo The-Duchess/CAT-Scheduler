@@ -6,6 +6,9 @@
 --  due date
 --  visible to students
 --  editable (can set availability)
+--ATTENTION: To use the create table code for term first the command
+--     CREATE EXTENSION citext;
+--  Must be used before
 
 DROP TABLE IF EXISTS term;
 CREATE TABLE term
