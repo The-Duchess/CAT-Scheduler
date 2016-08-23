@@ -83,7 +83,7 @@ if (!empty($selected_term)) {
             foreach(pg_fetch_all($data) as $student_id => $student){
               $id = $student['block_day'] . $student['block_hour'];
               $uname = $student['student_username'];
-              $pref = $student['block_preference']; 
+              $pref = $student['block_preference'];
               if(!in_array($uname, $students)){
                 $res = get_student_id_by_username($uname);
                 $arr = pg_fetch_array($res);
@@ -98,7 +98,7 @@ if (!empty($selected_term)) {
     foreach($students as $student_id => $student_uname){
       $res = retrieve_shift_preference((int) $student_id, $term_id);
       $arr = pg_fetch_array($res);
-      $pref_info[$student_uname] = $arr['shift_preference'];      
+      $pref_info[$student_uname] = $arr['shift_preference'];
     }
 
     $start_date = strtotime($selected_term['start_date']);
@@ -106,7 +106,7 @@ if (!empty($selected_term)) {
 
 ?>
 
-            <div class="row"> 
+            <div class="row">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title"><?=$selected_term['term_name']?></h2>
@@ -231,6 +231,11 @@ if (!empty($selected_term)) {
                     </div>
                 </div>
             </div>
+            <?php
+               $term_data = array(
+                   "term_id" => $term_id
+               );
+            ?>
     <!--Display student usernames who have yet to submit availability for this term-->
             <div class="col-md-6 col-md-offset-3">
                 <div class="panel panel-default text-center">
@@ -242,6 +247,9 @@ if (!empty($selected_term)) {
                     ?>
                 </div>
             </div>
+            <div class="col-md-3">
+                <a href="email_reminder.php?<?php echo http_build_query($term_data); ?>" class="btn btn-primary">Email Reminder</a>
+           </div>
         </div>
 <?php
 } //closing the page wrapper if statement
