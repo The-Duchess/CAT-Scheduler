@@ -23,7 +23,7 @@ function get_student_array($result=null) {
 
 
 //  Echos an html list of all students in the database.
-//  Returns TRUE if successful, otherwise FALSE 
+//  Returns TRUE if successful, otherwise FALSE
 function display_students_list($students=null) {
     if (!$students and !($students = get_student_array())) {
         return false;
@@ -32,7 +32,7 @@ function display_students_list($students=null) {
     echo "<ul>";
     foreach ($students as $student) {
 	echo "<li>";
-        echo $student['student_firstname'] . " " . $student['student_lastname']; 
+        echo $student['student_firstname'] . " " . $student['student_lastname'];
         echo "</li>";
     }
     echo "</ul>";

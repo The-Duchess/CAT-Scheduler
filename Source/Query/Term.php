@@ -140,7 +140,7 @@ function term_retrieve_by_start($kwargs=null) {
         $query .= " LIMIT $2";
         array_push($params, $limit);
     }
-    
+
     //  Return the results.
     return pg_query_params($GLOBALS['CONNECTION'], $query, $params);
 
@@ -197,7 +197,7 @@ function term_retrieve_visible_by_start($kwargs=null) {
         $query .= " LIMIT $2";
         array_push($params, $limit);
     }
-    
+
     //  Return the results.
     return pg_query_params($GLOBALS['CONNECTION'], $query, $params);
 
@@ -269,6 +269,13 @@ function term_update($id, $fields) {
 
 // --
 
+//  adds a term to the database
+//        PARAMETERS:
+//             - name
+//             - start date
+//             - end date
+//             - due date
+//             - mentor session
 //  Returns result object of query if successful, FALSE otherwise
 function add_term($name, $start, $end, $due, $mentor=false) {
     //  Assumes we want the default values for visible and editable fields
@@ -280,6 +287,9 @@ function add_term($name, $start, $end, $due, $mentor=false) {
 // deactivate a student in the students table
 // set the Visible value to false
 // all other values can be default and are not required to change
+//        PARAMETERS:
+//             - student id
+//
 function deactivate_term($id) {
 
     //Throw an error if student does not exist in the data base
@@ -291,7 +301,7 @@ function deactivate_term($id) {
         echo "Term Does not exist<br>";
         return false;
     }
-    
+
     //Throw an error if the student is already activated
     //  $query = "SELECT * FROM term WHERE term_id = '$id' AND editable is FALSE";
     $query = "SELECT * FROM term WHERE term_id=$1 AND editable is FALSE";
@@ -310,6 +320,9 @@ function deactivate_term($id) {
     return pg_query_params($GLOBALS['CONNECTION'], $query, array($id));
 }
 
+// performs a query to get a term row by id
+//        PARAMETERS:
+//             - term id
 function term_retrieve_by_id($id) {
     $query = "SELECT * FROM term WHERE term_id=$1 LIMIT 1";
 

@@ -86,7 +86,7 @@ function dropdown_select_term($subIdent, $kwargs=null) {
 }
 
 //  Creates a dropdown menu with a list of students with availability submissions
-//  for a specified termand returns an associative array of that students data 
+//  for a specified termand returns an associative array of that students data
 //  fields from the database, otherwise FALSE.
 //  PARAMETERS:
 //      subIdent:   identifier of submission button
@@ -136,6 +136,8 @@ function dropdown_select_student($subIdent, $termID, $kwargs = null) {
     }
 }
 
+
+// uses the fidoconfig.ini in the dir root to set the connection data
 function fido_db_connect() {
     //  read the configuration file
     $ini_arr = parse_ini_file(dirname(__FILE__) . "/../../fidoconfig.ini", true);
@@ -153,7 +155,7 @@ function fido_db_connect() {
     return pg_connect($conn);
 }
 
-
+// deprecated function to use cody's db
 function cody_db_connect() {
 	//  Cody's DB Connection Info
     $host = "capstonecatteam.hopto.org";
@@ -161,13 +163,17 @@ function cody_db_connect() {
     $database = "Cat";
     $username = "guest";
     $password = "Fido";
-	
+
 	//  Generate connection string
     $conn_string = "host={$host} port={$port} dbname={$database} user={$username} password={$password}";
 
     return pg_connect($conn_string);
 }
 
+// given a term check if it is editable by id
+//        PARAMETERS:
+//             - term id
+//
 function is_term_editable($termid) {
     $kwargs = array(
         'term_id' => $termid
