@@ -9,10 +9,9 @@
 //				Specifying both will allow for selecting a specific day and time for the student
 //
 //  NOTE: if specifying kwargs, if specifying both will allow for selecting a specific day and time for the studentstudent_username.
+//  Return:
+//		array of indexes which holds the block_day and Block_hour
 function retrieve_availability_for_student($student_id, $term_id, $kwargs=null) {
-	// initializing variables for the query, will take default environment varibles
-    // if kwargs arent given
-	
 	// Return false if two main given parameters are not integers
 	if (!is_int($student_id) OR (!is_int($term_id))) {
 		return false;
@@ -78,9 +77,9 @@ function retrieve_availability_for_student($student_id, $term_id, $kwargs=null) 
 //          student_id: specify if want to use a student id different from the logged in user
 //
 //  NOTE: if specifying kwargs, if both student_username and student_id are specified, student_id will override student_username.
+// Return:
+//	   array with term_id, day, hour, pref in this order. 
 function insert_availability_block($input_term_id, $input_day, $input_hour, $input_pref, $kwargs=null) {
-    // REMOVE THIS PRINT
-    //print("insert availability");
     // initializing variables for the query, will take default environment varibles
     // if kwargs arent given
     $student_user = null;
@@ -135,8 +134,9 @@ function insert_availability_block($input_term_id, $input_day, $input_hour, $inp
 //          student_id: specify if want to use a student id different from the logged in user
 //
 //  NOTE: if specifying kwargs, if both student_username and student_id are specified, student_id will override student_username.
+//  Return:
+//	boolean result depends on the success of the updating the availability
 function update_availability_blocks($input_term_id, $input_blocks, $kwargs=null) {
-    //print("update availability");// REMOVE THIS PRINT
     // initializing variables for the query, will take default environment varibles
     // if kwargs arent given
     $student_user = null;
@@ -191,6 +191,8 @@ function update_availability_blocks($input_term_id, $input_blocks, $kwargs=null)
 	//  PARAMETERS:
 	//		studentid: The id of the student to retrieve shift preference for
 	//      input_term_id: the id of the term to retrieve shift preference for
+	//  return:
+	//		returns the shift pref of the specific student_id for specific termn	
 function retrieve_shift_preference($studentid, $termid) {
 
     //Selecet the shift preference from the shift preference table when
@@ -208,6 +210,8 @@ function retrieve_shift_preference($studentid, $termid) {
 	//			Choices:    'One 4-Hour'
 	//						'Two 2-Hour'
 	//						'No Preference'
+	//  Return:
+	//		boolean return depends on the success
 function add_student_shift_preference($student_id, $term_id, $pref) {
 
     //BEGIN TRANSACTION before making any changes to ensure atomicity
@@ -236,26 +240,29 @@ function add_student_shift_preference($student_id, $term_id, $pref) {
 	//      term_id:	The id of the term to retrieve availability for
 	//      kwargs: associative array of keyword arguments
 	//			None used (Could remove from this function?)
+	//  Return:
+	//		Query of the availibility of each term indexed by the student id 
 function retrieve_availability_for_term($term_id, $kwargs=null) {
 	// Default values
-	if (!is_int($term_id)) {
-		    return false;
-			}
+	if (!is_int($term_id))
+	{
+	    return false;
+	}
 
-	    //get the list of all studnet ids
-	    $list = "SELECT student_id FROM student";
-		$students = pg_query_params($GLOBALS['CONNECTION'], $list, array());
+	//get the list of all studnet ids
+	$list = "SELECT student_id FROM student";
+	$students = pg_query_params($GLOBALS['CONNECTION'], $list, array());
 		    
-		    //fetch student ids one by one and then get their availability
-		    //save the avaialabity in an array
-		    for($i=0; $i < pg_num_rows($students); $i++)
-			    {
-				        $student = pg_fetch_row($students);
-					        $studentid = (int) $student[0];
-						        $query[$studentid] = retrieve_availability_for_student($studentid, $term_id);        
-							    }
-		        //return the array of the availabilities
-		        return $query;
+	//fetch student ids one by one and then get their availability
+	//save the avaialabity in an array
+	for($i=0; $i < pg_num_rows($students); $i++)
+	{
+	    $student = pg_fetch_row($students);
+	    $studentid = (int) $student[0];
+	    $query[$studentid] = retrieve_availability_for_student($studentid, $term_id);        
+	}
+	//return the array of the availabilities
+	return $query;
 }
 
 ?>

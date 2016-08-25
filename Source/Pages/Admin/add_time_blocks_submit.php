@@ -9,7 +9,7 @@
 // to use have your form use
 // form action="add_time_blocks_submit.php" method="post"
 // onclick="test()"
-// this will pass the $_POST and check it it was setup and then run the term add
+// this will pass the $_POST and check to see if it was setup and then run the term add
 // then you will get back the return value
 
 error_reporting(E_ALL);
@@ -24,6 +24,7 @@ if (!($CONNECTION = fido_db_connect())) {
     exit();
 }
 
+//Check to see if the $_POST is setup
 function test() {
 	if (isset($_POST[])) {
 		return submit();
@@ -34,6 +35,7 @@ function test() {
 	}
 }
 
+//Run to add the term
 function submit() {
 	add_term($_POST["name"], $_POST["start"], $_POST["end"], $_POST["due"]);
 }
