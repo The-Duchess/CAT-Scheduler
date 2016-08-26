@@ -8,9 +8,13 @@ Infrastructure and General Engineer: Isaac Archer
 https://github.com/The-Duchess/ iarcher@pdx.edu
 Location: Portland, OR
 
-Risk Management and General Enginner: Seyed Nima Sajadpour
+Risk Management and General Engineer: Seyed Nima Sajadpour
 https://github.com/nimasns/  nimasns@gmail.com
 Location: Portland, OR
+
+Product Owner and General Engineer: Eiyad Alkadi
+https://github.com/ealkadi/ eok4000@gmail.com
+Location: Beaverton, OR
 
 /* THANKS */
 Jason Owen: Capstone Sponsor
