@@ -10,15 +10,10 @@ if (!($CONNECTION = fido_db_connect())) {
     exit();
 }
 
-//simulating user session
-// TODO: remove this when we have a true user auth
-if (empty($_SERVER['PHP_AUTH_USER'])) {
-    echo "cant find user...";
-    $_SERVER['PHP_AUTH_USER'] = "dog01";
-}
-
+//this function handles the formattiong of the submitted form to be fed into the update availbility functions
 function process_submissions() {
 
+    //prepare the variables
     $student_uname = $_SERVER['PHP_AUTH_USER'];
     $res = get_student_id_by_username($student_uname);
     $arr = pg_fetch_array($res);
@@ -26,16 +21,10 @@ function process_submissions() {
     $input_term_id = $_POST['term_id'];
     $pref = "";
     $input_blocks = array();
-    
-    //console.log("initialized");
-    
-    // things needed for time submission
-    // insert_availability_block($input_term_id, $input_day, $input_hour, $input_pref, $kwargs=null)
-    
+
     foreach ($_POST as $key => $val) {
-    
-        //console.log("creating blocks");
-    
+
+        // other than these four, the values in post will be availability submissions, these need to be handled differently
         if ($key == "term_name" || $key == "term_id" || $key == "shift_pref" || $key == "Submit") {
             // do nothing if the key is term_id, shift_pref, or Submit
             if ($key == "shift_pref") {
@@ -47,7 +36,7 @@ function process_submissions() {
             // get term_id
             // get input pref
             // get student_id
-    
+
             // this is sort of a hack
             // TODO: if it is possible make this clean
             $pos = strpos($key, 'y');
@@ -55,11 +44,8 @@ function process_submissions() {
             $input_hour    = (int)substr($key, ($pos + 1), strlen($key));
             $input_pref    = $val;
             $args          = array("student_id" => $student_id);
-    
-            //console.log($input_day);
-            //console.log($input_hour);
-            //console.log($input_pref);
-    
+
+            //create input array for the update availability script
             if ($val == "A") {
                 array_push($input_blocks, array("block_day" => $input_day, "block_hour" => $input_hour, "block_preference" => 'Available'));
             } elseif ($val == "P") {
@@ -67,26 +53,16 @@ function process_submissions() {
             } else {
                 // do nothing
             }
-    
+
         }
-    
-        //console.log("finished creating blocks");
-    
+
     }
-    
-    //print_r($student_id);
-    //print(" - ");
-    //print($input_term_id);
-    //print_r($input_blocks);
-    
+
+    //return false if either of the availability updates to the database fail
     if(!update_availability_blocks($input_term_id, $input_blocks)){
         return false;
     }
-    echo "<br>";
-    //print(" - ");
-    //print_r($res);
-    //print(" end");
-    
+
     if(!add_student_shift_preference($student_id, $input_term_id, $pref)) {
         return false;
     }

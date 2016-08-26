@@ -1,5 +1,6 @@
 <?php
 
+// handle the logic of determining whether logged in user is an admin or not
 require_once dirname(__FILE__) . "/login_handler.php";
 
 ?>
@@ -19,7 +20,7 @@ require_once dirname(__FILE__) . "/login_handler.php";
             // a scheduler admin.
             if (isset($admin) && $admin) {
             ?>
-            <div class="row">
+            <div class="row"><!-- beginning of row 1 -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title">Manage Terms</h2>
@@ -29,8 +30,8 @@ require_once dirname(__FILE__) . "/login_handler.php";
                         <a class="btn btn-default" href='Admin/edit_term.phtml'>Edit Term</a>
                     </div>
                 </div>
-            </div>
-            <div class="row">
+            </div><!-- end of row 1 -->
+            <div class="row"><!-- beginning of row 2 -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title">Manage Students</h2>
@@ -40,11 +41,11 @@ require_once dirname(__FILE__) . "/login_handler.php";
                         <a class="btn btn-default" href='Admin/view_term_availabilities.php'>View Submissions</a>
                     </div>
                 </div>
-            </div>
+            </div><!-- end of row 1 -->
             <?php
             }
             ?>
-            <div class="row">
+            <div class="row"><!-- beginning of row 3 -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title">Student Pages</h2>
@@ -53,7 +54,7 @@ require_once dirname(__FILE__) . "/login_handler.php";
                         <a class="btn btn-default" href='Student/Student_submit_availability.php'>Submit Availability</a>
                     </div>
                 </div>
-            </div>
+            </div><!-- end of row 1 -->
         </div>
     </body>
 </html>

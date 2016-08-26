@@ -15,11 +15,6 @@ if (!($CONNECTION = fido_db_connect())) {
     exit();
 }
 
-//simulating user session
-if(empty($_SERVER['PHP_AUTH_USER'])) {
-    $_SERVER['PHP_AUTH_USER'] = "ealkadi";
-}
-
 //these arrays will be used for generating the calendar grid
 $hours = array(
     '8'  => '8AM - 9AM',
@@ -40,6 +35,7 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
 
 <html>
     <head>
+        <!-- Bootstrap -->
         <link href="../../css/bootstrap_current/css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/custom/custom-buttons.css" rel="stylesheet">
         <link href="../../css/custom/custom-list-group.css" rel="stylesheet">
@@ -49,12 +45,11 @@ $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
     <body>
         <div class='container'>
             <br>
-            <div class="row">
+            <div class="row"><!-- beginning of row 1 -->
                 <a class="btn btn-primary" href="../login_home.php">Return Home</a><br>
                 <h1>View Availability Submissions</h1>
-            </div>
-            <!--<h1>USING Cody's DB</h1>-->
-            <div class="row">
+            </div><!-- end of row 1 -->
+            <div class="row"><!-- beginning of row 2 -->
 <?php
 
 //generate the dropdown form for selecting a term to submit availability for
@@ -64,7 +59,7 @@ echo "<input class=\"btn btn-default\" type=\"submit\" name=\"termSelect\" value
 echo "</form>\n";
 ?>
 
-            </div>
+            </div><!-- end of row 2 -->
             <hr>
 
 <?php
@@ -76,7 +71,7 @@ if (!empty($selected_term)) {
     $db_blocks = array();
     $pref_info = array();
     $students = array();
-    //get all the availabilities and shift prefs ready to be echoed
+    //get all the availabilities and shift prefs ready to be echoed for the selected term
     if ($info) {
         foreach ($info as $data) {
           if(pg_fetch_all($data)){
@@ -95,6 +90,7 @@ if (!empty($selected_term)) {
           }
         }
     }
+    //get all of the submitted shift preferences for each student for the selected term
     foreach($students as $student_id => $student_uname){
       $res = retrieve_shift_preference((int) $student_id, $term_id);
       $arr = pg_fetch_array($res);
@@ -106,7 +102,7 @@ if (!empty($selected_term)) {
 
 ?>
 
-            <div class="row">
+            <div class="row"><!-- beginning of row 3 -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title"><?=$selected_term['term_name']?></h2>
@@ -118,8 +114,8 @@ if (!empty($selected_term)) {
                         </h3>
                     </div>
                 </div>
-            </div>
-            <div class="row">
+            </div><!-- end of row 3 -->
+            <div class="row"><!-- beginning of row 4 -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title">Highlight A Student</h2>
@@ -135,11 +131,11 @@ if (!empty($selected_term)) {
                         ?>
                     </div>
                 </div>
-            </div>
+            </div><!-- end of row 4 -->
 
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="row">
+            <div class="row"><!-- beginning of row 5 -->
+                <div class="col-md-3"><!-- beginning of row 5 column 1 -->
+                    <div class="row"><!-- beginning of row 5 column 1 row 1 -->
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Key</h3>
@@ -149,8 +145,8 @@ if (!empty($selected_term)) {
                                 <li class="list-group-item list-group-item-preferred">P  - Preferred</li>
                             </ul>
                         </div>
-                    </div>
-                    <div class="row">
+                    </div><!-- end of row 5 column 1 row 1 -->
+                    <div class="row"><!-- beginning of row 5 column 1 row 2 -->
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Shift Preferences</h3>
@@ -168,75 +164,76 @@ if (!empty($selected_term)) {
                                 ?>
                             </ul>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-9">
+                    </div><!-- end of row 5 column 1 row 2 -->
+                </div><!-- end of row 5 column 1 -->
+                <div class="col-md-9"><!-- beginning of row 5 column 2 -->
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">Shift Preferences</h3>
                         </div>
-                    <div class="panel-body">
-                        <table id='termAvailabilities' class="table table-scrollable table-condensed table-bordered table-responsive">
-                            <thead>
-                                <tr>
-                                    <td></td>
-                                    <td>Monday</td>
-                                    <td>Tuesday</td>
-                                    <td>Wednesday</td>
-                                    <td>Thursday</td>
-                                    <td>Friday</td>
-                                    <td>Saturday</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                    foreach($hours as $hour => $label) {
-                                        echo "<tr>";
-                                        echo "<td>$label</td>";
-                                        foreach($days as $day) {
-                                            //saturday has less hours so we want to skip creating blocks for those hours
-                                            if ($day == 'Saturday') {
-                                                if ($hour == '8' || $hour == '9' || $hour == '10' || $hour == '11' || $hour == '17') {
-                                                    continue;
+                        <div class="panel-body">
+                            <table id='termAvailabilities' class="table table-scrollable table-condensed table-bordered table-responsive">
+                                <thead>
+                                    <tr>
+                                        <td></td>
+                                        <td>Monday</td>
+                                        <td>Tuesday</td>
+                                        <td>Wednesday</td>
+                                        <td>Thursday</td>
+                                        <td>Friday</td>
+                                        <td>Saturday</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                        // display each of the timeslots, filling in the student entries where they belong
+                                        foreach($hours as $hour => $label) {
+                                            echo "<tr>";
+                                            echo "<td>$label</td>";
+                                            foreach($days as $day) {
+                                                //saturday has less hours so we want to skip creating blocks for those hours
+                                                if ($day == 'Saturday') {
+                                                    if ($hour == '8' || $hour == '9' || $hour == '10' || $hour == '11' || $hour == '17') {
+                                                        continue;
+                                                    }
                                                 }
-                                            }
 
-                                            //generate the id string for the table element
-                                            $cur_id = $day . $hour;
-                                            echo "<td id=$cur_id>";
-                                            //populate the table element with names of available students if there are any
-                                            if(array_key_exists($cur_id, $db_blocks)){
-                                              $block = $db_blocks[$cur_id];
-                                              //display preffered availabilities first
-                                              foreach($block as $name => $pref){
-                                                  if($pref == 'Preferred') {
-                                                  echo "<span class=\"btn btn-success btn-xs\">$name</span><br>";
+                                                //generate the id string for the table element
+                                                $cur_id = $day . $hour;
+                                                echo "<td id=$cur_id>";
+                                                //populate the table element with names of available students if there are any
+                                                if(array_key_exists($cur_id, $db_blocks)){
+                                                  $block = $db_blocks[$cur_id];
+                                                  //display preffered availabilities first
+                                                  foreach($block as $name => $pref){
+                                                      if($pref == 'Preferred') {
+                                                      echo "<span class=\"btn btn-success btn-xs\">$name</span><br>";
+                                                    }
+                                                  }
+                                                  //then display normal availabilities
+                                                  foreach($block as $name => $pref){
+                                                    if($pref == 'Available') {
+                                                      echo "<span class=\"btn btn-available btn-xs\">$name</span><br>";
+                                                    }
+                                                  }
                                                 }
-                                              }
-                                              //then display normal availabilities
-                                              foreach($block as $name => $pref){
-                                                if($pref == 'Available') {
-                                                  echo "<span class=\"btn btn-available btn-xs\">$name</span><br>";
-                                                }
-                                              }
+                                                echo "</td>";
                                             }
-                                            echo "</td>";
+                                            echo "</tr>";
                                         }
-                                        echo "</tr>";
-                                    }
-                                ?>
-                            </tbody>
-                        </table>
+                                    ?>
+                                    </tbody>
+                            </table>
+                        </div>
                     </div>
-                    </div>
-                </div>
+                </div><!-- end of row 5 column 2 -->
             </div>
             <?php
                $term_data = array(
                    "term_id" => $term_id
                );
             ?>
-    <!--Display student usernames who have yet to submit availability for this term-->
+            <!--Display student usernames who have yet to submit availability for this term-->
             <div class="col-md-6 col-md-offset-3">
                 <div class="panel panel-default text-center">
                     <div class="panel-heading">
