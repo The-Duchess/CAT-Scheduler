@@ -16,6 +16,10 @@ Product Owner and General Engineer: Eiyad Alkadi
 https://github.com/ealkadi/ eok4000@gmail.com
 Location: Beaverton, OR
 
+Sponsor/Testers Communications and General Engineer: Alexander Simchuk
+https://github.com/simca114 alsim114@gmail.com
+Location: Portland, OR
+
 /* THANKS */
 Jason Owen: Capstone Sponsor
 Craig Meinschein: Capstone Sponsor
