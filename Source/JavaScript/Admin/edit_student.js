@@ -11,6 +11,7 @@ Date.prototype.toPaddedLocaleDateString = function() {
 
 
 /**********  Functions  **********/
+//  check if a given year is a leap year
 function isLeapYear(year) {
     if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
         return true;
@@ -19,15 +20,23 @@ function isLeapYear(year) {
     }
 }
 
+//  checks for a valid date string
 function dateIsValid(date_string) {
+    //  matches strings of the form:
+    //      dd/dd/dddd
+    //  where d is a decimal
     var regex_array = ( /^(\d{2})\/(\d{2})\/(\d{4})$/ ).exec(date_string);
     
+    //  incorrect string format
     if (!regex_array) { return false; }
     
+    //  parse the string to extract date values
     var month = parseInt(regex_array[1], 10);
     var day = parseInt(regex_array[2], 10);
     var year = parseInt(regex_array[3], 10);
 
+    //  logic to ensure the string is a valid date and not
+    //  an arbitrary string that matches the regex
     if (year < 1946) {
         return false;
     } else if (month < 0 || month > 12) {
@@ -235,6 +244,7 @@ if (dateIsValid($("#joinDate").val())) {
     $("#leaveDate").datepicker();
 }
 
+//  initial setup calls 
 validateInput();
 
 
