@@ -20,6 +20,10 @@ Sponsor/Testers Communications and General Engineer: Alexander Simchuk
 https://github.com/simca114 alsim114@gmail.com
 Location: Portland, OR
 
+Project Architect and General Engineer: Graham Drakeley
+https://github.com/gtdrakeley/ gt.drakeley@gmail.com
+Location: Beaverton, OR
+
 /* THANKS */
 Jason Owen: Capstone Sponsor
 Craig Meinschein: Capstone Sponsor
