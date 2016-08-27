@@ -34,7 +34,7 @@ Contents:
   Active flag
 */
 
-DROP TABLE IF EXISTS Student;
+DROP TABLE IF EXISTS student;
 CREATE TABLE student
 (
   student_id serial,
@@ -56,11 +56,11 @@ Contents:
   Schedule Preference
   
 */
-DROP TABLE IF EXISTS Shift_Preference;
-CREATE TABLE Shift_Preference
+DROP TABLE IF EXISTS shift_preference;
+CREATE TABLE shift_preference
 (
-  student_id integer REFERENCES Student(Student_id),
-  term_id integer REFERENCES Term(Term_id),
+  student_id integer REFERENCES student(student_id),
+  term_id integer REFERENCES term(term_id),
   shift_preference shift_type,
   PRIMARY KEY (student_id, term_id)
 );
@@ -80,11 +80,11 @@ Contents:
   Block Preference
 */
 
-DROP TABLE IF EXISTS Hour_Block;
-CREATE TABLE Hour_Block
+DROP TABLE IF EXISTS hour_block;
+CREATE TABLE hour_block
 (
-  student_id integer REFERENCES Student(Student_id), 
-  term_id integer REFERENCES Term(Term_id),
+  student_id integer REFERENCES student(student_id), 
+  term_id integer REFERENCES term(term_id),
   block_day days NOT NULL,
   block_hour hours NOT NULL,
   block_preference preferences NOT NULL,
